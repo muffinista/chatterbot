@@ -1,4 +1,4 @@
-module Botter
+module Chatterbot
   module DSL
 
     #
@@ -6,7 +6,7 @@ module Botter
     # otherwise create a bot and return that
     #
     def bot
-      @bot ||= if kind_of?(Botter::Bot)
+      @bot ||= if kind_of?(Chatterbot::Bot)
         self
       else
         Bot.new
@@ -31,4 +31,4 @@ module Botter
   end
 end
 
-include Botter::DSL
+include Chatterbot::DSL

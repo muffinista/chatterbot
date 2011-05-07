@@ -1,26 +1,34 @@
-module Botter
+module Chatterbot
   module Config
 
     def config=(x)
-      @@config = x
+      @config = x
     end
     def config
-      @@config
+      @config
     end   
 
     def log_tweets?
-      @@config.has_key?(:log_uri)
+      @config.has_key?(:log_uri)
     end
 
     def debug_mode?
       true
     end
+
+    def logging?
+      ! @config.nil? && @config.has_key?(:log_dest)
+    end
+
+    def log_dest
+      @config[:log_dest]
+    end
     
     def since_id=(x)
-      @@config[:since_id] = x
+      @config[:since_id] = x
     end
     def since_id
-      @@config[:since_id]
+      @config[:since_id]
     end   
     
     def update_since_id(search)
@@ -52,7 +60,6 @@ module Botter
     end
 
     def load_config
-      puts "lets load!"
       tmp = {}
       begin
         File.open( config_file ) { |yf| 
@@ -60,7 +67,7 @@ module Botter
         }
         tmp.symbolize_keys! if tmp
       rescue Exception => err
-        debug err.message
+        critical err.message
         tmp = {
           :since_id => 0
         }
@@ -73,11 +80,11 @@ module Botter
         tmp[:consumer_secret] = "wA5iqjfCf9aeGMMItqd6ylEEZAbcm7m6R7vVpaQV0s"
       end
 
-      @@config = tmp
+      @config = tmp
     end
 
     # write out our config file
-    def update_config(tmp=@@config)
+    def update_config(tmp=@config)
       # update datastore
       if ! @tmp_since_id.nil?
         tmp[:since_id] = @tmp_since_id

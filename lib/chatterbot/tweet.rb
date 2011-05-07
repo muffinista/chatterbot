@@ -1,4 +1,4 @@
-module Botter
+module Chatterbot
   module Tweet 
     # simple wrapper for sending a message
     def _tweet(txt, params = {}, original = nil)

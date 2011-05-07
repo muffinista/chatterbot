@@ -1,4 +1,4 @@
-module Botter
+module Chatterbot
   module Client
 
     def client=(x)

@@ -1,14 +1,14 @@
 require File.expand_path(File.dirname(__FILE__) + '/spec_helper')
 
-describe "Botter::Reply" do
+describe "Chatterbot::Reply" do
   it "calls require_login" do
-    bot = Botter::Bot.new
+    bot = Chatterbot::Bot.new
     bot.should_receive(:require_login).and_return(false)
     bot.replies
   end
 
   # it "calls update_since_id" do
-  #   bot = Botter::Bot.new
+  #   bot = Chatterbot::Bot.new
   #   bot.should_receive(:require_login).and_return(true)
   #   bot.stub!(:client).and_return(fake_replies(100))
   #   bot.should_receive(:update_since_id).with({'results' => []})
@@ -17,7 +17,7 @@ describe "Botter::Reply" do
   # end
 
   it "iterates results" do
-    bot = Botter::Bot.new
+    bot = Chatterbot::Bot.new
     bot.should_receive(:require_login).and_return(true)
     bot.stub!(:client).and_return(fake_replies(100, 3))
     
@@ -32,7 +32,7 @@ describe "Botter::Reply" do
   end
 
   it "checks blacklist" do
-    bot = Botter::Bot.new
+    bot = Chatterbot::Bot.new
     bot.should_receive(:require_login).and_return(true)
     bot.stub!(:client).and_return(fake_replies(100, 3))
     

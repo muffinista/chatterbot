@@ -1,4 +1,4 @@
-module Botter
+module Chatterbot
   module Search
    
     def _search(query, &block)

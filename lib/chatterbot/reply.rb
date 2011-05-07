@@ -1,4 +1,4 @@
-module Botter
+module Chatterbot
   module Reply
     
     def _replies(&block)

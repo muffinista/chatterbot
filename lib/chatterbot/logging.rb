@@ -1,7 +1,20 @@
-module Botter
+require 'logger'
+
+module Chatterbot
   module Logging
+
+    def logger
+      # log to the dest specified in the config file, rollover after 10mb of data
+      @@_logger ||= Logger.new(log_dest, 0, 1024 * 1024)
+    end
+
     def debug(s)
-      puts "***** #{s}"
+      logger.debug s unless ! logging?
+    end
+
+    def critical(s)
+      puts s
+      debug s
     end
 
     def validate_tables(db)

@@ -1,4 +1,4 @@
-module Botter
+module Chatterbot
   class Bot
     include Blacklist
     include Config
