@@ -21,15 +21,19 @@ module Chatterbot
     end
 
     def logging?
-      ! config.nil? && config.has_key?(:log_dest)
+      has_config? && config.has_key?(:log_dest)
     end
 
     def log_dest
       config[:log_dest]
     end
-    
+
+    #
+    # store since_id to a different key so that it doesn't actually
+    # get updated until the bot is done running
+    #
     def since_id=(x)
-      config[:since_id] = x
+      config[:tmp_since_id] = x
     end
     def since_id
       config[:since_id] || 0
@@ -59,46 +63,44 @@ module Chatterbot
     #
     def config_file
       filename = "#{File.basename($0,".rb")}.yml"
-      debug "load config: #{filename}"
-      File.expand_path(filename)
     end
 
-    def load_config
-      tmp = {}
-      begin
-        File.open( config_file ) { |yf| 
+    def slurp_file(f)
+      f = File.expand_path(f)
+      debug "load config: #{f}"
+
+      if File.exist?(f)
+        File.open( f ) { |yf| 
           tmp = YAML::load( yf ) 
         }
         tmp.symbolize_keys! if tmp
-      rescue Exception => err
-#        critical err.message
-        tmp = {
-          :since_id => 0
-        }
+      else
+        {}
       end
-
-      # defaults for now, obviously a big hack.  this is for botly, at:
-      # http://dev.twitter.com/apps/207151
-      if ! tmp.has_key?(:consumer_key)
-        tmp[:consumer_key] = "hjaOOEeeMpJSqZR7dvhxjg"
-        tmp[:consumer_secret] = "wA5iqjfCf9aeGMMItqd6ylEEZAbcm7m6R7vVpaQV0s"
-      end
-
-      tmp
-#      @config = tmp
+    end
+    
+    def global_config
+      @_global_config ||= slurp_file("global.yml")
+    end
+    def bot_config
+      @_bot_config ||= slurp_file(config_file)
+    end
+        
+    def load_config
+      {}.merge(global_config).merge(bot_config)
     end
 
     # write out our config file
-    def update_config #(tmp=config)
+    def update_config
       if has_config?
-        tmp = config
-      
-        # update datastore
-        if ! @tmp_since_id.nil?
-          tmp[:since_id] = @tmp_since_id
-        end
+        
+        # remove keys that are duped in the global config
+        tmp = bot_config.delete_if { |k| global_config.has_key?(k) && global_config[k] == bot_config[k] }
 
-        File.foreach(file) { |line|  }.open(config_file, 'w') { |f| YAML.dump(tmp, f) }
+        # update the since_id now
+        tmp[:since_id] = tmp.delete(:tmp_since_id)
+
+        File.open(config_file, 'w') { |f| YAML.dump(tmp, f) }
       end
 
     end
