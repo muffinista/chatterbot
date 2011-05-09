@@ -3,7 +3,7 @@ require File.expand_path(File.dirname(__FILE__) + '/spec_helper')
 describe "Chatterbot::Tweet" do
   describe "#tweet" do
     before(:each) do
-      @bot = Chatterbot::Bot.new
+      @bot = test_bot
     end
 
     it "calls require_login when tweeting" do
@@ -12,7 +12,8 @@ describe "Chatterbot::Tweet" do
     end
 
     it "calls client.update with the right values" do
-      bot = Chatterbot::Bot.new
+      bot = test_bot
+#      bot = Chatterbot::Bot.new
       bot.should_receive(:require_login).and_return(true)
       bot.stub!(:client).and_return(mock(TwitterOAuth::Client))
 
@@ -24,7 +25,8 @@ describe "Chatterbot::Tweet" do
     end
 
     it "doesn't tweet when debug_mode? is set" do
-      bot = Chatterbot::Bot.new
+      bot = test_bot
+#      bot = Chatterbot::Bot.new
       bot.should_receive(:require_login).and_return(true)
       bot.stub!(:client).and_return(mock(TwitterOAuth::Client))
 
@@ -37,14 +39,16 @@ describe "Chatterbot::Tweet" do
 
   describe "#reply" do
     it "calls require_login when replying" do
-      bot = Chatterbot::Bot.new
+#      bot = Chatterbot::Bot.new
+      bot = test_bot
       bot.should_receive(:require_login).and_return(false)
       bot.reply "reply test!", {"id" => 100}
     end
 
 
     it "calls client.update with the right values" do
-      bot = Chatterbot::Bot.new
+#      bot = Chatterbot::Bot.new
+      bot = test_bot
       bot.should_receive(:require_login).and_return(true)
       bot.stub!(:client).and_return(mock(TwitterOAuth::Client))
 
@@ -61,7 +65,8 @@ describe "Chatterbot::Tweet" do
 
 
     it "doesn't reply when debug_mode? is set" do
-      bot = Chatterbot::Bot.new
+#      bot = Chatterbot::Bot.new
+      bot = test_bot
       bot.should_receive(:require_login).and_return(true)
       bot.stub!(:client).and_return(mock(TwitterOAuth::Client))
 

@@ -11,10 +11,9 @@ module Chatterbot
     include DSL
 
     def initialize
-      load_config
       super
 
-      # Run bot if macros has been used
+      # update config when we exit
       at_exit do
         raise $! if $!
         update_config

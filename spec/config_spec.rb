@@ -14,38 +14,11 @@ describe "Chatterbot::Search" do
   end
 
   it "calls update_since_id" do
-    bot = Chatterbot::Bot.new
-
+    bot = test_bot
     bot.stub!(:client).and_return(fake_search(100))
     bot.should_receive(:update_since_id).with({'max_id' => 100, 'results' => []})
 
     bot.search("foo")
-  end
-
-  it "iterates results" do
-    bot = Chatterbot::Bot.new
-    bot.stub!(:client).and_return(fake_search(100, 3))
-    
-    indexes = []
-    bot.search("foo") do |x|
-      indexes << x[:index]
-    end
-
-    indexes.should == [1,2,3]
-  end
-
-  it "checks blacklist" do
-    bot = Chatterbot::Bot.new
-    bot.stub!(:client).and_return(fake_search(100, 3))
-    
-    bot.stub!(:on_blacklist?).and_return(true, false)
-    
-    indexes = []
-    bot.search("foo") do |x|
-      indexes << x[:index]
-    end
-
-    indexes.should == [2,3]
   end
 
 end

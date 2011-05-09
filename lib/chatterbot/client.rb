@@ -10,7 +10,7 @@ module Chatterbot
 
     def default_opts
       {
-        :since_id => since_id #@config.has_key?(:since_id) ? @config[:since_id] : 0
+        :since_id => since_id
       }
     end
     

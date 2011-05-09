@@ -11,6 +11,12 @@ RSpec.configure do |config|
   
 end
 
+def test_bot
+  bot = Chatterbot::Bot.new
+  bot.stub!(:load_config).and_return({})
+  bot
+end
+
 def fake_search(max_id = 100, result_count = 0)
   mock(TwitterOAuth::Client,
        {
@@ -29,7 +35,6 @@ def fake_replies(max_id = 100, result_count = 0)
        }
        )
 end
-
 
 def fake_tweet(index)
   {

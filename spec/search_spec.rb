@@ -8,13 +8,14 @@ describe "Chatterbot::Search" do
   end
 
   it "calls init_client" do
-    bot = Chatterbot::Bot.new
+    bot = test_bot
     bot.should_receive(:init_client).and_return(false)
     bot.search("foo")
   end
 
   it "calls update_since_id" do
-    bot = Chatterbot::Bot.new
+    bot = test_bot
+    #bot = Chatterbot::Bot.new
 
     bot.stub!(:client).and_return(fake_search(100))
     bot.should_receive(:update_since_id).with({'max_id' => 100, 'results' => []})
@@ -23,7 +24,8 @@ describe "Chatterbot::Search" do
   end
 
   it "iterates results" do
-    bot = Chatterbot::Bot.new
+    bot = test_bot
+#    bot = Chatterbot::Bot.new
     bot.stub!(:client).and_return(fake_search(100, 3))
     
     indexes = []
@@ -35,7 +37,8 @@ describe "Chatterbot::Search" do
   end
 
   it "checks blacklist" do
-    bot = Chatterbot::Bot.new
+    bot = test_bot
+#    bot = Chatterbot::Bot.new
     bot.stub!(:client).and_return(fake_search(100, 3))
     
     bot.stub!(:on_blacklist?).and_return(true, false)

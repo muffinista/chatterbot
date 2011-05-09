@@ -34,7 +34,7 @@ module Chatterbot
     end
 
     def connect_and_validate
-      db = Sequel.connect(@config[:log_uri])
+      db = Sequel.connect(config[:log_uri])
       validate_tables(db)
       db
     end
