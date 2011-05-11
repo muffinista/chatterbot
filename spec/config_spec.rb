@@ -22,7 +22,7 @@ describe "Chatterbot::Config" do
 
     it "returns a log dest" do
       @bot.should_receive(:load_config).and_return({:log_dest => :bar})    
-      @bot.config[:log_dest].should == :bar
+      @bot.log_dest.should == :bar
     end
 
     it "checks for an auth_token" do

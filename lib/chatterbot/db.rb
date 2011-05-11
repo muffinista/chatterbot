@@ -1,8 +1,28 @@
 module Chatterbot
   module DB
-    def create_tweets
-      if ! @_db.tables.include?(:tweets)
-        @_db.create_table :tweets do
+    def db
+      @_db ||= connect_and_validate
+    end
+
+    protected  
+    def get_connection
+      Sequel.connect(config[:db_uri])
+    end
+    
+    def connect_and_validate
+      conn = get_connection
+      return if conn.nil?
+
+      if ! conn.tables.include?(:blacklist)
+        conn.create_table :blacklist do
+          String :user, :primary_key => true
+          DateTime :created_at
+        end
+      end
+      
+      
+      if ! conn.tables.include?(:tweets)
+        conn.create_table :tweets do
           primary_key :id
           String :txt
           String :bot
@@ -13,11 +33,9 @@ module Chatterbot
           DateTime :created_at
         end
       end
-    end
 
-    def create_config
-      if ! @_db.tables.include?(:config)
-        @_db.create_table :config do
+      if ! conn.tables.include?(:config)
+        conn.create_table :config do
           String :id, :primary_key => true
 
           Bignum :since_id
@@ -33,15 +51,5 @@ module Chatterbot
       end
     end
 
-    def connect_and_validate
-      @_db ||= Sequel.connect(config[:log_uri])
-      create_tweets
-      create_config
-      @_db
-    end
-
-    def db
-      @_db ||= connect_and_validate
-    end
   end
 end

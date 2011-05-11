@@ -1,12 +1,7 @@
 module Chatterbot
   module Client
 
-    def client=(x)
-      @client = x
-    end
-    def client
-      @client
-    end   
+    attr_accessor :client
 
     def default_opts
       {

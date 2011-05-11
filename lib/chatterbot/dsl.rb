@@ -6,11 +6,11 @@ module Chatterbot
     # otherwise create a bot and return that
     #
     def bot
-      @bot ||= if kind_of?(Chatterbot::Bot)
-        self
-      else
-        Bot.new
-      end
+      @bot ||= if self.kind_of?(Chatterbot::Bot)
+                 self
+               else
+                 Chatterbot::Bot.new
+               end
     end
     
     def search(query, &block)
