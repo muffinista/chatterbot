@@ -2,10 +2,10 @@ module Chatterbot
   module Client
 
     def client=(x)
-      @@client = x
+      @client = x
     end
     def client
-      @@client
+      @client
     end   
 
     def default_opts
@@ -16,7 +16,7 @@ module Chatterbot
     
     
     def init_client
-      @@client = TwitterOAuth::Client.new(client_params)
+      @client = TwitterOAuth::Client.new(client_params)
     end
 
     def require_login
@@ -32,7 +32,9 @@ module Chatterbot
       if needs_auth_token?
         request_token = client.request_token
 
+        puts "Please go to the following URL and authorize the bot.\n"        
         puts "#{request_token.authorize_url}\n"
+
         puts "Paste your PIN and hit enter when you have completed authorization."
         pin = STDIN.readline.chomp
 
@@ -47,11 +49,10 @@ module Chatterbot
           config[:secret] = access_token.secret
           update_config
         else
-          debug "OOPS"
+          debug "Oops!  Looks like something went wrong there, please try again!"
           exit
         end
       end
-      true
     end
   end
 end

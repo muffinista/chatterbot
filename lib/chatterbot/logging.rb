@@ -16,32 +16,6 @@ module Chatterbot
       puts s
       debug s
     end
-
-    def validate_tables(db)
-      # create an items table
-      if ! db.tables.include?(:tweets)
-        db.create_table :tweets do
-          primary_key :id
-          String :txt
-          String :bot
-          String :user
-          String :source_id
-          String :source_tweet
-          
-          DateTime :created_at
-        end
-      end
-    end
-
-    def connect_and_validate
-      db = Sequel.connect(config[:log_uri])
-      validate_tables(db)
-      db
-    end
-
-    def db
-      @@db ||= connect_and_validate
-    end
     
     def log(txt, source=nil)
       # create a dataset from the items table

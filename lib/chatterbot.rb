@@ -19,6 +19,7 @@ module Chatterbot
   def self.load
     dir = File.dirname(__FILE__)
     require "#{dir}/chatterbot/config"
+    require "#{dir}/chatterbot/db"
     require "#{dir}/chatterbot/logging"
     require "#{dir}/chatterbot/blacklist"
     require "#{dir}/chatterbot/client"

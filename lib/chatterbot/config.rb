@@ -1,9 +1,10 @@
 module Chatterbot
   module Config
 
-#    def config=(x)
-#      @config = x
-#    end
+    #    def config=(x)
+    #      @config = x
+    #    end
+
     def config
       @_config ||= load_config
     end   
@@ -58,51 +59,83 @@ module Chatterbot
       config[:token].nil?
     end
 
+
+    def botname
+      File.basename($0,".rb")
+    end
+
     #
     # figure out what config file to load
     #
     def config_file
-      filename = "#{File.basename($0,".rb")}.yml"
+      "#{botname}.yml"
     end
 
     def slurp_file(f)
       f = File.expand_path(f)
       debug "load config: #{f}"
 
+      tmp = {}
+
       if File.exist?(f)
         File.open( f ) { |yf| 
           tmp = YAML::load( yf ) 
+          puts tmp.inspect
         }
-        tmp.symbolize_keys! if tmp
-      else
-        {}
       end
+      tmp.symbolize_keys! unless tmp == false
     end
     
     def global_config
-      @_global_config ||= slurp_file("global.yml")
+      @_global_config ||= (slurp_file("global.yml") || {})
     end
     def bot_config
-      @_bot_config ||= slurp_file(config_file)
+      @_bot_config ||= (slurp_file(config_file) || { })
     end
-        
+
+    def config_to_save
+      # remove keys that are duped in the global config
+      tmp = config.delete_if { |k| global_config.has_key?(k) && global_config[k] == config[k] }
+
+      # update the since_id now
+      tmp[:since_id] = tmp.delete(:tmp_since_id) unless ! tmp.has_key?(:tmp_since_id)
+
+      tmp
+    end
+    
     def load_config
-      {}.merge(global_config).merge(bot_config)
+      global_config.merge(bot_config)
     end
 
     # write out our config file
     def update_config
-      if has_config?
-        
-        # remove keys that are duped in the global config
-        tmp = bot_config.delete_if { |k| global_config.has_key?(k) && global_config[k] == bot_config[k] }
-
-        # update the since_id now
-        tmp[:since_id] = tmp.delete(:tmp_since_id)
-
-        File.open(config_file, 'w') { |f| YAML.dump(tmp, f) }
-      end
-
+      File.open(config_file, 'w') { |f| YAML.dump(config_to_save, f) }
+      store_database_config
     end
+
+    def store_database_config
+      return if db.nil?
+
+      configs = db[:config]
+      row = configs.filter('id = ?', botname)
+
+      data = {
+        :since_id => config[:since_id],
+        :token => config[:token],
+        :secret => config[:secret],
+        :consumer_secret => config[:consumer_secret],
+        :consumer_key => config[:consumer_key],
+        :updated_at => :NOW.sql_function
+      }
+
+      if row.count > 0
+        row.update(data)
+      else
+        data[:id] = botname
+        data[:created_at] =:NOW.sql_function
+        configs.insert data
+      end
+    end
+
   end
 end

@@ -7,6 +7,7 @@ module Chatterbot
     include Tweet
     include Reply
     include Client
+    include DB
 
     include DSL
 
