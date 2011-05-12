@@ -1,6 +1,43 @@
 = chatterbot
 
-Description goes here.
+chatterbot is a library for making bots on Twitter.  It has pretty
+basic functionality but can be used to make pretty involved bots. It
+handles searches, replies and tweets, and has a simple blacklist
+system to help keep you from spamming people who don't want to hear
+from your bot.
+
+== A quick list of features:
+
+* works via Twitter's OAuth system.
+* handles search queries and replies to your bot
+* use a simple DSL, or extend a Bot class if you need it.
+* simple blacklistling system to limit annoying users.
+* optionally log tweets to the database for metrics and tracking purposes.
+
+== Using chatterbot
+
+=== example bot
+
+Chatterbot has a very simple DSL inspired by Sinatra and Twibot, an
+earlier Twitter bot framework.  Here's an example:
+
+  require 'chatterbot'
+  search("'surely you must be joking'") do |tweet|
+    reply "@#{tweet['from_user']} I am serious, and don't call me Shirley!", tweet
+  end
+
+
+Or, you can create a bot object yourself, extend it if needed, and use
+it like so:
+
+  bot = Chatterbot::Bot.new
+  bot.search("'surely you must be joking'") do |tweet|
+   bot.reply "@#{tweet['from_user']} I am serious, and don't call me Shirley!", tweet
+  end
+
+That's it!
+
+
 
 == Contributing to chatterbot
  
@@ -9,11 +46,13 @@ Description goes here.
 * Fork the project
 * Start a feature/bugfix branch
 * Commit and push until you are happy with your contribution
-* Make sure to add tests for it. This is important so I don't break it in a future version unintentionally.
-* Please try not to mess with the Rakefile, version, or history. If you want to have your own version, or is otherwise necessary, that is fine, but please isolate to its own commit so I can cherry-pick around it.
+
 
 == Copyright
 
-Copyright (c) 2011 Colin Mitchell. See LICENSE.txt for
-further details.
+Copyright (c) 2011 Colin Mitchell. Chatterbot is distributed under the
+'Do what the fuck you want to -- but karma is a bitch' public license:
+Please see LICENSE.txt for further details.
+
+
 
