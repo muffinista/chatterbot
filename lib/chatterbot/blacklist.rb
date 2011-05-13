@@ -1,38 +1,43 @@
 module Chatterbot
+
+  #
+  # methods for preventing the bot from spamming people who don't want to hear from it
   module Blacklist
+    attr_accessor :exclude, :blacklist
 
-    # def self.included(base)
-    #   @exclude = []
-    #   @blacklist = []
-    #   @global_blacklist = []
-    # end
-
-    def exclude=(x)
-      @exclude = x
-    end
+    # return a list of text strings which we will check for in incoming tweets.
+    # If the text is listed, we won't use this tweet
     def exclude
       @exclude || []
     end
-   
+
+    # A list of Twitter users that don't want to hear from the bot.
     def blacklist
-      @_blacklist ||= bot_blacklist + load_global_blacklist
+      @blacklist || []
     end
-   
+
+    # Based on the text of this tweet, should it be skipped?
     def skip_me?(s)
       search = s.is_a?(Hash) ? s["text"] : s
       exclude.detect { |e| search.downcase.include?(e) } != nil
     end
 
+    # Is this tweet from a user on our blacklist?
     def on_blacklist?(s)
       search = s.is_a?(Hash) ? s["from_user"] : s     
-      blacklist.detect { |b| search.downcase.include?(b.downcase) } != nil
+      total_blacklist.detect { |b| search.downcase.include?(b.downcase) } != nil
+    end
+
+    # the list of users from this bot's blacklist, as well as the global
+    # db blacklist, if available
+    def total_blacklist
+      @_blacklist ||= blacklist + load_global_blacklist
     end
 
 protected
-    def bot_blacklist
-      @blacklist || []
-    end
 
+    #
+    # load our global blacklist from the database
     def load_global_blacklist
       return [] if ! has_db?
       db[:blacklist].collect{ |x| x[:user] }

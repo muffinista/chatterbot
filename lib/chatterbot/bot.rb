@@ -1,4 +1,7 @@
 module Chatterbot
+
+  #
+  # primary Bot object, includes all the other modules
   class Bot
     include Blacklist
     include Config
@@ -11,6 +14,8 @@ module Chatterbot
 
     include DSL
 
+    #
+    # Create a new bot. No options for now.
     def initialize
       super
 

@@ -17,10 +17,10 @@ describe "Chatterbot::Blacklist" do
 
   it "blacklist includes bot list and global list" do
     bot = test_bot
-    bot.should_receive(:bot_blacklist).and_return(["a"])
+    bot.should_receive(:blacklist).and_return(["a"])
     bot.should_receive(:load_global_blacklist).and_return(["b", "c"]) 
     
-    bot.blacklist.should == ["a", "b", "c"]      
+    bot.total_blacklist.should == ["a", "b", "c"]      
   end
 
   describe "skip_me?" do

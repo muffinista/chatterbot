@@ -1,14 +1,26 @@
 module Chatterbot
+
+  #
+  # routines for optionally interacting with a database for logging
+  # tweets, and storing config data there. Uses Sequel to handle the
+  # heavy lifing.
   module DB
+    #
+    # connect to the database, and generate any missing tables
     def db
       @_db ||= connect_and_validate
     end
 
     protected  
+
+    #
+    # get a DB object from Sequel
     def get_connection
       Sequel.connect(config[:db_uri])
     end
     
+    #
+    # try and connect to the DB, and create tables that are missing.
     def connect_and_validate
       conn = get_connection
       return if conn.nil?
@@ -19,7 +31,6 @@ module Chatterbot
           DateTime :created_at
         end
       end
-      
       
       if ! conn.tables.include?(:tweets)
         conn.create_table :tweets do

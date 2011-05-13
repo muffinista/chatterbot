@@ -1,6 +1,11 @@
 module Chatterbot
+
+  #
+  # handle Twitter searches
   module Search
-   
+
+protected
+    # internal search code
     def _search(query, &block)
       return unless init_client
       

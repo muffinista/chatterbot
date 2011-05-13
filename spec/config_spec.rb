@@ -1,4 +1,5 @@
 require File.expand_path(File.dirname(__FILE__) + '/spec_helper')
+require 'tempfile'
 
 describe "Chatterbot::Config" do
   before(:each) do
@@ -53,9 +54,70 @@ describe "Chatterbot::Config" do
 
     it "updates since_id" do
       @bot.config[:tmp_since_id] = 100
-      @bot.config_to_save.should == {  :since_id => 100 }
+      @bot.config_to_save[:since_id].should == 100
     end
-    
+  end
+
+  describe "global config files" do
+    it "has an array of global_config_files" do
+      ENV["chatterbot_config"] = "/tmp/foo.yml"
+      @bot.global_config_files.first.should == "/etc/chatterbot.yml"
+      @bot.global_config_files[1].should == "/tmp/foo.yml"
+      @bot.global_config_files.last.should include("/global.yml")
+    end
+
+    it "slurps in all the global_config_files" do
+      @bot.stub(:global_config_files).and_return(["config.yml", "config2.yml", "config3.yml"])
+      @bot.should_receive(:slurp_file).with("config.yml").and_return({:a => 1 })
+      @bot.should_receive(:slurp_file).with("config2.yml").and_return({:b => 2 })
+      @bot.should_receive(:slurp_file).with("config3.yml").and_return({:c => 3 })      
+      @bot.global_config.should == { :a => 1, :b => 2, :c => 3}
+    end
+
+    it "priorities last file in list" do
+      @bot.stub(:global_config_files).and_return(["config.yml", "config2.yml", "config3.yml"])
+      @bot.should_receive(:slurp_file).with("config.yml").and_return({:a => 1 })
+      @bot.should_receive(:slurp_file).with("config2.yml").and_return({:b => 2 })
+      @bot.should_receive(:slurp_file).with("config3.yml").and_return({:a => 100, :b => 50, :c => 3 })      
+      @bot.global_config.should == { :a => 100, :b => 50, :c => 3}
+    end
+  end
+
+
+  describe "file I/O" do
+    it "loads in some YAML" do
+      tmp = {:since_id => 0}
+      
+      src = Tempfile.new("config")
+      src << tmp.to_yaml
+      src.flush
+      
+      @bot.slurp_file(src.path).should == tmp
+    end
+
+    it "symbolizes keys" do
+      tmp = {'since_id' => 0}
+      
+      src = Tempfile.new("config")
+      src << tmp.to_yaml
+      src.flush
+      
+      @bot.slurp_file(src.path).should == { :since_id => 0 }
+    end
+
+  
+    it "doesn't store local file if we can store to db instead" do
+      @bot.should_receive(:has_db?).and_return(true)
+      @bot.should_receive(:store_database_config)
+      @bot.update_config     
+    end
+  
+    it "stores local file if no db" do
+      @bot.should_receive(:has_db?).and_return(false)
+      @bot.should_not_receive(:store_database_config)
+      @bot.should_receive(:store_local_config)      
+      @bot.update_config     
+    end
   end
   
 end
