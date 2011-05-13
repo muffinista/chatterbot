@@ -62,8 +62,8 @@ set them up yourselves -- it's not that hard!
 2. Choose 'Client' as the app type
 3. Choose 'Read & Write' access unless you don't need to send tweets.
 4. Take the consumer key/consumer secret values, and place them in
-global.yml or in a YAML file specific to your bot.  It should look
-like this:
+   global.yml or in a YAML file specific to your bot.  It should look
+   like this:
 
   --- 
   :consumer_secret: CONSUMER SECRET GOES HERE
