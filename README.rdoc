@@ -16,7 +16,13 @@ from your bot.
 
 == Using chatterbot
 
-=== example bot
+=== Make a twitter account
+
+First thing you'll need to do is create an account for your bot on
+Twitter.  That's the easy part.
+
+
+=== Write your bot
 
 Chatterbot has a very simple DSL inspired by Sinatra and Twibot, an
 earlier Twitter bot framework.  Here's an example:
@@ -37,6 +43,37 @@ it like so:
 
 That's it!
 
+=== Authorize your bot
+
+The first time you run your bot, it will need to setup authorization
+with Twitter. At the first run, you'll get a message asking you to go
+to a Twitter URL, where you can authorize the bot to post messages for
+your account or not.  If you accept, you'll get a PIN number back.
+You need to copy this and paste it back into the prompt for the
+bot. Hit return, and you should be all set.
+
+NOTE: Twitter requires this validation process to be via an app which
+is registered on Twitter. I have set one up which you are welcome to
+use, HOWEVER, Twitter doesn't allow developers to post the OAuth
+consumer key/secret that you will need to use. So, you should probably
+set them up yourselves -- it's not that hard!
+
+1. Setup your own app on Twitter at this URL https://twitter.com/apps/new
+2. Choose 'Client' as the app type
+3. Choose 'Read & Write' access unless you don't need to send tweets.
+4. Take the consumer key/consumer secret values, and place them in
+global.yml or in a YAML file specific to your bot.  It should look
+like this:
+
+--- 
+:consumer_secret: CONSUMER SECRET GOES HERE
+:consumer_key: CONSUMER KEY GOES HERE
+
+
+== TODO
+* make consumer secret/key generation easier
+* skeleton bot generator
+
 
 
 == Contributing to chatterbot
@@ -54,5 +91,6 @@ Copyright (c) 2011 Colin Mitchell. Chatterbot is distributed under the
 'Do what the fuck you want to -- but karma is a bitch' public license:
 Please see LICENSE.txt for further details.
 
+http://muffinlabs.com/
 
 
