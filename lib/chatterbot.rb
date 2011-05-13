@@ -1,6 +1,6 @@
 #require 'rubygems'
 
-require 'bundler'
+require 'bundler/setup'
 Bundler.require
 
 #
@@ -39,9 +39,9 @@ module Chatterbot
     require "#{dir}/chatterbot/dsl"
 
     require "#{dir}/chatterbot/bot"
-
   end
 end
+
 
 # mount up
 Chatterbot.load

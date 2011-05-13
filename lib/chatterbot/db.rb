@@ -60,6 +60,8 @@ module Chatterbot
           DateTime :updated_at
         end
       end
+      
+      conn
     end
 
   end

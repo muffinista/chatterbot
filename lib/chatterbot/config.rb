@@ -167,8 +167,7 @@ module Chatterbot
     # load the config settings from the db, if possible
     def load_config_from_db
       return {} if db.nil?
-      configs = db[:config]
-      configs.filter('id = ?', botname)
+      db[:config][:id => botname]
     end
 
     #
@@ -190,10 +189,15 @@ module Chatterbot
     # load in the config from the assortment of places it can be specified.
     def load_config
       # load the flat-files first
-      tmp = global_config.merge(bot_config)
-
+      @_config  = global_config.merge(bot_config)
+      @_config[:db_uri] ||= ENV["chatterbot_db"] unless ENV["chatterbot_db"].nil?
+      
       # if we have a key to load from the DB, do that now
-      tmp.has_key?(:db_uri) ? tmp.merge(db_config) : tmp
+      if @_config.has_key?(:db_uri) && @_config[:db_uri]
+        tmp = db_config
+        @_config = @_config.merge(tmp) unless tmp.nil?
+      end
+      @_config
     end
 
     #

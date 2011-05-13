@@ -34,6 +34,20 @@ module Chatterbot
       @_blacklist ||= blacklist + load_global_blacklist
     end
 
+    #
+    # add the specified user to the global blacklist
+    def add_to_blacklist(user)    
+      user = user.is_a?(Hash) ? user["from_user"] : user
+      return if ! has_db? || on_blacklist?(user)
+
+      # make sure we don't have an @ at the beginning of the username
+      user.gsub!(/^@/, "")
+
+      debug "adding #{user} to blacklist"
+
+      db[:blacklist].insert({ :user => user, :created_at => 'NOW()'.lit })     
+    end
+    
 protected
 
     #
