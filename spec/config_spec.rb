@@ -9,12 +9,17 @@ describe "Chatterbot::Config" do
   describe "loading" do
     it "loads config when we need a variable" do
       @bot.should_receive(:load_config).and_return({:foo => :bar})
+      @bot.config = nil
+
       @bot.config[:foo].should == :bar
     end
 
     it "loads both global config and local config" do
       @bot.should_receive(:global_config).and_return({:foo => :bar, :a => :b})
       @bot.should_receive(:bot_config).and_return({:foo => :baz, :custom => :value})
+
+      @bot.config = nil
+      
       
       @bot.config[:foo].should == :baz
       @bot.config[:a].should == :b
@@ -23,16 +28,22 @@ describe "Chatterbot::Config" do
 
     it "returns a log dest" do
       @bot.should_receive(:load_config).and_return({:log_dest => :bar})    
+      @bot.config = nil
+
       @bot.log_dest.should == :bar
     end
 
     it "checks for an auth_token" do
       @bot.should_receive(:load_config).and_return({:token => "123"})
+      @bot.config = nil
+
       @bot.needs_auth_token?.should == false
     end
 
     it "checks for an auth_token" do
       @bot.should_receive(:load_config).and_return({})
+      @bot.config = nil
+
       @bot.needs_auth_token?.should == true
     end
   end
@@ -42,6 +53,8 @@ describe "Chatterbot::Config" do
       @bot.stub!(:global_config).and_return({:foo => :bar, :a => :b})
       @bot.stub!(:bot_config).and_return({:foo => :bar, :custom => :value})      
 
+      @bot.config = nil
+      
       @bot.config_to_save.should == { :custom => :value }
     end
     
@@ -49,6 +62,8 @@ describe "Chatterbot::Config" do
       @bot.stub!(:global_config).and_return({:foo => :bar, :a => :b})
       @bot.stub!(:bot_config).and_return({:foo => :baz, :custom => :value})      
 
+      @bot.config = nil
+      
       @bot.config_to_save.should == { :foo => :baz, :custom => :value }
     end
 
@@ -71,6 +86,7 @@ describe "Chatterbot::Config" do
       @bot.should_receive(:slurp_file).with("config.yml").and_return({:a => 1 })
       @bot.should_receive(:slurp_file).with("config2.yml").and_return({:b => 2 })
       @bot.should_receive(:slurp_file).with("config3.yml").and_return({:c => 3 })      
+
       @bot.global_config.should == { :a => 1, :b => 2, :c => 3}
     end
 

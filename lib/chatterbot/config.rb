@@ -4,16 +4,18 @@ module Chatterbot
   # routines for storing config information for the bot
   module Config
 
+    attr_accessor :config
+    
     #
     # the entire config for the bot, loaded from YAML files and the DB if applicable
     def config
-      @_config ||= load_config
+      @config ||= load_config
     end   
 
     #
     # has the config been loaded yet?
     def has_config?
-      ! @_config.nil?
+      ! @config.nil?
     end   
 
     #
@@ -142,25 +144,23 @@ module Chatterbot
     #
     # get any config from our global config files
     def global_config
-      return @_global_config unless @_global_config.nil?
-
-      @_global_config = {}
+      tmp = {}
       global_config_files.each { |f|
-        @_global_config.merge!(slurp_file(f) || {})      
+        tmp.merge!(slurp_file(f) || {})      
       }
-      @_global_config
+      tmp
     end
 
     #
     # bot-specific config settings
     def bot_config
-      @_bot_config ||= (slurp_file(config_file) || { })
+      slurp_file(config_file) || { }
     end
 
     #
     # config settings that came from the DB
     def db_config
-      @_db_config ||= (load_config_from_db || { })
+      load_config_from_db || { }
     end
 
     #
@@ -189,15 +189,15 @@ module Chatterbot
     # load in the config from the assortment of places it can be specified.
     def load_config
       # load the flat-files first
-      @_config  = global_config.merge(bot_config)
-      @_config[:db_uri] ||= ENV["chatterbot_db"] unless ENV["chatterbot_db"].nil?
+      @config  = global_config.merge(bot_config)
+      @config[:db_uri] ||= ENV["chatterbot_db"] unless ENV["chatterbot_db"].nil?
       
       # if we have a key to load from the DB, do that now
-      if @_config.has_key?(:db_uri) && @_config[:db_uri]
+      if @config.has_key?(:db_uri) && @config[:db_uri]
         tmp = db_config
-        @_config = @_config.merge(tmp) unless tmp.nil?
+        @config = @config.merge(tmp) unless tmp.nil?
       end
-      @_config
+      @config
     end
 
     #

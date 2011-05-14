@@ -19,6 +19,8 @@ module Chatterbot
     def initialize
       super
 
+      @config = load_config
+      
       # update config when we exit
       at_exit do
         raise $! if $!
