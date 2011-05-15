@@ -218,7 +218,7 @@ module Chatterbot
         :secret => config[:secret],
         :consumer_secret => config[:consumer_secret],
         :consumer_key => config[:consumer_key],
-        :updated_at => :NOW.sql_function
+        :updated_at => Time.now #:NOW.sql_function
       }
 
       row = configs.filter('id = ?', botname)
@@ -227,7 +227,7 @@ module Chatterbot
         row.update(data)
       else
         data[:id] = botname
-        data[:created_at] = :NOW.sql_function
+        data[:created_at] = Time.now #:NOW.sql_function
         configs.insert data
       end
       

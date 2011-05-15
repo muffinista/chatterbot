@@ -45,10 +45,8 @@ module Chatterbot
 
       debug "adding #{user} to blacklist"
 
-      db[:blacklist].insert({ :user => user, :created_at => 'NOW()'.lit })     
+      db[:blacklist].insert({ :user => user, :created_at => Time.now }) # 'NOW()'.lit
     end
-    
-protected
 
     #
     # load our global blacklist from the database

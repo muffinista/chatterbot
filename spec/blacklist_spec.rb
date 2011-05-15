@@ -60,7 +60,29 @@ describe "Chatterbot::Blacklist" do
     it "works with result hashes" do
       @bot.on_blacklist?({"from_user" => "skippy"}).should == true
       @bot.on_blacklist?({"from_user" => "flippy"}).should == false
+    end   
+  end
+  
+  describe "load_global_blacklist" do
+    before(:each) do
+      @bot = test_bot
     end
-    
+
+    it "returns an empty array if no db" do
+      @bot.should_receive(:has_db?).and_return(false)
+      @bot.load_global_blacklist.should == []
+    end
+
+    it "collects name from the db if it exists" do
+      @bot.should_receive(:has_db?).and_return(true)
+      @bot.stub!(:db).and_return({ 
+        :blacklist => [
+                       { :user => "a" },
+                       { :user => "b" },
+                       { :user => "c" }                       
+                      ]
+      })
+      @bot.load_global_blacklist.should == ["a", "b", "c"]      
+    end
   end
 end
