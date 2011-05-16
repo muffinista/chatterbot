@@ -30,4 +30,26 @@ describe "Chatterbot::DB" do
       @bot.store_database_config.should == true
     end
   end
+
+  describe "add_to_blacklist" do
+    it "adds to the blacklist table" do
+      @bot = Chatterbot::Bot.new    
+      @bot.config[:db_uri] = @db_uri
+
+      @bot.db      
+      
+      @bot.add_to_blacklist("tester")
+    end
+
+    it "doesn't add a double entry" do
+      @bot = Chatterbot::Bot.new    
+      @bot.config[:db_uri] = @db_uri
+
+      @bot.db      
+      
+      @bot.add_to_blacklist("tester")
+      @bot.add_to_blacklist("tester")      
+    end
+    
+  end
 end

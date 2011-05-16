@@ -8,6 +8,9 @@ include Chatterbot::Config
 include Chatterbot::DB
 include Chatterbot::Logging
 
+#
+# pull in any arguments and set them as env variables
+#
 opts = OptionParser.new
 opts.on('-d', '--db [ARG]')    { |d| ENV["chatterbot_db"] = d }
 opts.on('-c', '--config [ARG]')    { |c| ENV["chatterbot_config"] = c }
@@ -18,8 +21,9 @@ if ! has_db?
   exit
 end
 
+#
+# iterate through and add anything to the blacklist.  nothing too shiny here.
+#
 $stdin.each_line do |l|
   add_to_blacklist(l.chomp)
 end
-
-#puts File.dirname(File.expand_path($0))

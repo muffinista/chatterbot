@@ -1,14 +1,6 @@
 require File.expand_path(File.dirname(__FILE__) + '/spec_helper')
 
 describe "Chatterbot::Blacklist" do
-  it "loads the global blacklist from the db" do
-
-  end
-
-  it "has a bot-specific blacklist" do
-
-  end
-  
   it "has a list of excluded phrases" do
     @bot = test_bot
     @bot.exclude = ["junk", "i hate bots", "foobar", "spam"]
@@ -32,6 +24,11 @@ describe "Chatterbot::Blacklist" do
     it "blocks tweets with phrases we don't want" do
       @bot.skip_me?("did you know that i hate bots?").should == true
     end
+
+    it "isn't case-specific" do
+      @bot.skip_me?("DID YOU KNOW THAT I HATE BOTS?").should == true
+    end
+
 
     it "allows users we do want" do
       @bot.skip_me?("a tweet without any bad content").should == false
@@ -57,12 +54,17 @@ describe "Chatterbot::Blacklist" do
       @bot.on_blacklist?("flippy").should == false
     end
 
+    it "isn't case-specific" do
+      @bot.on_blacklist?("FLIPPY").should == false
+      @bot.on_blacklist?("SKIPPY").should == true
+    end
+
     it "works with result hashes" do
       @bot.on_blacklist?({"from_user" => "skippy"}).should == true
       @bot.on_blacklist?({"from_user" => "flippy"}).should == false
     end   
   end
-  
+
   describe "load_global_blacklist" do
     before(:each) do
       @bot = test_bot

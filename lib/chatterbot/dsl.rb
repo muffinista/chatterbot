@@ -1,5 +1,4 @@
 module Chatterbot
-
   #
   # very basic DSL to handle the common stuff you would want to do with a bot.
   module DSL
@@ -15,6 +14,16 @@ module Chatterbot
                end
     end
 
+    #
+    # specify a bot-specific blacklist of users.  accepts an array, or a 
+    # comma-delimited string
+    def blacklist(b)
+      if b.is_a?(String)
+        b = b.split(",").collect { |s| s.strip }
+      end
+      bot.blacklist = b
+    end
+    
     #
     # search twitter for the specified terms
     def search(query, &block)

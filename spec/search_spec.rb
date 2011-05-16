@@ -15,7 +15,6 @@ describe "Chatterbot::Search" do
 
   it "calls update_since_id" do
     bot = test_bot
-    #bot = Chatterbot::Bot.new
 
     bot.stub!(:client).and_return(fake_search(100))
     bot.should_receive(:update_since_id).with({'max_id' => 100, 'results' => []})
@@ -23,6 +22,26 @@ describe "Chatterbot::Search" do
     bot.search("foo")
   end
 
+  it "accepts multiple searches at once" do
+    bot = test_bot
+    #bot = Chatterbot::Bot.new
+
+    bot.stub!(:client).and_return(fake_search(100))
+    bot.client.should_receive(:search).with("foo", {:since_id => 0})
+    bot.client.should_receive(:search).with("bar", {:since_id => 0})    
+
+    bot.search(["foo", "bar"])
+  end
+
+  it "accepts a single search query" do
+    bot = test_bot
+
+    bot.stub!(:client).and_return(fake_search(100))
+    bot.client.should_receive(:search).with("foo", {:since_id => 0})
+
+    bot.search("foo")
+  end
+  
   it "iterates results" do
     bot = test_bot
 #    bot = Chatterbot::Bot.new
