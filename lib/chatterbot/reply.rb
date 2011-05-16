@@ -12,6 +12,7 @@ module Chatterbot
       
       client.replies(:since_id => since_id).each { |s|
         unless !block_given? || on_blacklist?(s) || skip_me?(s)
+          s.symbolize_keys!
           update_since_id(s)
           yield s         
         end

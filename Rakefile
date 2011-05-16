@@ -35,6 +35,7 @@ end
 
 RSpec::Core::RakeTask.new(:rcov) do |spec|
   spec.pattern = 'spec/**/*_spec.rb'
+  spec.rcov_opts = %w{--exclude .bundler,.rvm}
   spec.rcov = true
 end
 

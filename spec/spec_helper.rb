@@ -3,6 +3,10 @@ $LOAD_PATH.unshift(File.dirname(__FILE__))
 require 'rspec'
 require 'chatterbot'
 
+require 'tempfile'
+require 'sqlite3'
+
+
 # Requires supporting files with custom matchers and macros, etc,
 # in ./support/ and its subdirectories.
 Dir["#{File.dirname(__FILE__)}/support/**/*.rb"].each {|f| require f}
@@ -38,6 +42,7 @@ end
 
 def fake_tweet(index)
   {
+    :from_user => "chatterbot",
     :index => index
   }
 end

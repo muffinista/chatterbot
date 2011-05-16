@@ -1,6 +1,4 @@
 require File.expand_path(File.dirname(__FILE__) + '/spec_helper')
-require 'tempfile'
-require 'sqlite3'
 
 describe "Chatterbot::DB" do
   before(:each) do
@@ -20,7 +18,7 @@ describe "Chatterbot::DB" do
       end
     end      
   end
-
+  
   describe "store_database_config" do
     it "doesn't fail" do
       @bot = Chatterbot::Bot.new    
@@ -29,27 +27,5 @@ describe "Chatterbot::DB" do
       @bot.db      
       @bot.store_database_config.should == true
     end
-  end
-
-  describe "add_to_blacklist" do
-    it "adds to the blacklist table" do
-      @bot = Chatterbot::Bot.new    
-      @bot.config[:db_uri] = @db_uri
-
-      @bot.db      
-      
-      @bot.add_to_blacklist("tester")
-    end
-
-    it "doesn't add a double entry" do
-      @bot = Chatterbot::Bot.new    
-      @bot.config[:db_uri] = @db_uri
-
-      @bot.db      
-      
-      @bot.add_to_blacklist("tester")
-      @bot.add_to_blacklist("tester")      
-    end
-    
   end
 end

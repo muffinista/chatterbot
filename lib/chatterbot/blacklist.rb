@@ -24,36 +24,29 @@ module Chatterbot
 
     # Is this tweet from a user on our blacklist?
     def on_blacklist?(s)
-      search = s.is_a?(Hash) ? s["from_user"] : s     
-      total_blacklist.detect { |b| search.downcase.include?(b.downcase) } != nil
+      search = (s.is_a?(Hash) ? s[:from_user] : s).downcase
+      blacklist.any? { |b| search.include?(b.downcase) } ||
+        on_global_blacklist?(search)
     end
 
-    # the list of users from this bot's blacklist, as well as the global
-    # db blacklist, if available
-    def total_blacklist
-      @_blacklist ||= blacklist + load_global_blacklist
+    def on_global_blacklist?(user)
+      return false if ! has_db?
+      db[:blacklist].where(:user => user).count > 0
     end
 
     #
     # add the specified user to the global blacklist
     def add_to_blacklist(user)    
-      user = user.is_a?(Hash) ? user["from_user"] : user
-      return if ! has_db? || on_blacklist?(user)
+      user = user.is_a?(Hash) ? user[:from_user] : user
+      return if ! has_db? || on_global_blacklist?(user)
 
       # make sure we don't have an @ at the beginning of the username
       user.gsub!(/^@/, "")
 
       debug "adding #{user} to blacklist"
 
-      db[:blacklist].insert({ :user => user, :created_at => Time.now }) # 'NOW()'.lit
+      db[:blacklist].insert({ :user => user, :created_at => Time.now }) # 
     end
-
-    #
-    # load our global blacklist from the database
-    def load_global_blacklist
-      return [] if ! has_db?
-      db[:blacklist].collect{ |x| x[:user] }
-    end
-
+    
   end
 end

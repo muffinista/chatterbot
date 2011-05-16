@@ -24,7 +24,7 @@ protected
 
         if search != nil
           search["results"].each { |s|
-            yield s unless ! block_given? || on_blacklist?(s) || skip_me?(s)
+            yield s.symbolize_keys! unless ! block_given? || on_blacklist?(s) || skip_me?(s)
           }
         end
       }
