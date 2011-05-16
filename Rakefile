@@ -16,7 +16,7 @@ Jeweler::Tasks.new do |gem|
   # gem is a Gem::Specification... see http://docs.rubygems.org/read/chapter/20 for more options
   gem.name = "chatterbot"
   gem.homepage = "http://github.com/muffinista/chatterbot"
-  gem.license = "WTFKBPL"
+  gem.license = "WTFDBAL"
   gem.summary = %Q{A framework for Twitter bots}
   gem.description = %Q{A framework for Twitter bots}
   gem.email = "colin@muffinlabs.com"

@@ -1,4 +1,4 @@
-DO WHAT THE FUCK YOU WANT TO -- BUT KARMA IS A BITCH PUBLIC LICENSE
+DO WHAT THE FUCK YOU WANT TO -- BUT DON'T BE AN ASSHOLE PUBLIC LICENSE
 
    Version 1, May 2011
 
@@ -13,4 +13,5 @@ Derived from WTFPL, Copyright (C) 2004 Sam Hocevar <sam@hocevar.net>
    TERMS AND CONDITIONS FOR COPYING, DISTRIBUTION AND MODIFICATION
 
   0. You just DO WHAT THE FUCK YOU WANT TO.
-  1. But remember, Karma is a bitch sometimes.
+  1. Don't be an asshole.  Really.
+

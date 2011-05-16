@@ -75,20 +75,19 @@ set them up yourselves -- it's not that hard!
 * skeleton bot generator
 
 
-
 == Contributing to chatterbot
- 
-* Check out the latest master to make sure the feature hasn't been implemented or the bug hasn't been fixed yet
-* Check out the issue tracker to make sure someone already hasn't requested it and/or contributed it
-* Fork the project
-* Start a feature/bugfix branch
-* Commit and push until you are happy with your contribution
+
+Since this code is based off of actual Twitter bots, it's mostly
+working the way I want it to, and I might prefer to keep it that way.
+But please, if there are bugs or things you would like to improve,
+fork the project and hack away.  I'll pull anything back that makes
+sense if requested.
 
 
 == Copyright
 
 Copyright (c) 2011 Colin Mitchell. Chatterbot is distributed under the
-'Do what the fuck you want to -- but karma is a bitch' public license:
+'Do what the fuck you want to -- but don't be an asshole' public license:
 Please see LICENSE.txt for further details.
 
 http://muffinlabs.com/
