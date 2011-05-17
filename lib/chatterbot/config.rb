@@ -62,12 +62,6 @@ module Chatterbot
     end   
 
     #
-    # The name of the currently running bot
-    def botname
-      File.basename($0,".rb")
-    end
-
-    #
     # write out our config file
     def update_config
       # don't update flat file if we can store to the DB instead

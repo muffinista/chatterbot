@@ -13,7 +13,7 @@ module Chatterbot
     include DB
 
     include DSL
-
+    
     #
     # Create a new bot. No options for now.
     def initialize
@@ -25,8 +25,17 @@ module Chatterbot
       at_exit do
         raise $! if $!
         update_config
+      end   
+    end
+
+    #
+    # The name of the currently running bot
+    def botname
+      if self.class < Bot
+        self.class.to_s.downcase
+      else
+        File.basename($0,".rb")
       end
-    
     end
     
   end
