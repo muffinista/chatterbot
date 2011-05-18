@@ -46,6 +46,17 @@ describe "Chatterbot::Config" do
 
       @bot.needs_auth_token?.should == true
     end
+
+
+    it "checks for an API key" do
+      @bot.should_receive(:load_config).and_return({})
+      @bot.config = nil
+
+      @bot.needs_api_key?.should == true
+
+      @bot.config = {:consumer_key => "ck", :consumer_secret => "cs" }
+      @bot.needs_api_key?.should == false
+    end
   end
 
   describe "update_config" do

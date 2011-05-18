@@ -11,9 +11,19 @@ describe "Chatterbot::Client" do
     @bot.should_receive(:login).and_return(true)
     @bot.require_login
   end
+
+  describe "api setup" do
+    it "calls get_api_key" do
+      @bot.should_receive(:needs_api_key?).and_return(true)
+      @bot.should_receive(:needs_auth_token?).and_return(false)
+      @bot.should_receive(:get_api_key)
+      @bot.login
+    end
+  end
   
   describe "oauth validation" do
     before(:each) do
+      @bot.should_receive(:needs_api_key?).and_return(false)
       @bot.should_receive(:needs_auth_token?).and_return(true)
       @bot.should_receive(:get_oauth_verifier).and_return("pin")
       @bot.client.should_receive(:request_token).and_return(

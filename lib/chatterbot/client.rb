@@ -43,6 +43,20 @@ module Chatterbot
       STDIN.readline.chomp
     end
 
+    def get_api_key
+      puts "Hey, looks like you need to get an API key from Twitter before you can get started."
+      puts "Please go to this URL: https://twitter.com/apps/new"
+
+      puts "Choose 'Client' as the app type."
+      puts "Choose 'Read & Write' access."
+
+      puts "Paste the 'Consumer Key' here: "
+      config[:consumer_key] = STDIN.readline.chomp
+
+      puts "Paste the 'Consumer Secret' here: "
+      config[:consumer_secret] = STDIN.readline.chomp
+    end
+
     #
     # error message for auth
     def display_oauth_error
@@ -54,6 +68,10 @@ module Chatterbot
     # handle oauth for this request.  if the client isn't authorized, print
     # out the auth URL and get a pin code back from the user
     def login
+      if needs_api_key?
+        get_api_key
+      end
+
       if needs_auth_token?
         pin = get_oauth_verifier
         request_token = client.request_token
