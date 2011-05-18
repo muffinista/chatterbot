@@ -45,6 +45,11 @@ That's it!
 
 === Authorize your bot
 
+If you only want to use Chatterbot to search for tweets, it will work
+out of the box without any authorization.  However, if you want to
+reply to tweets, or check for replies to your bot, you will have to
+jump through a few authorization hoops with Twitter.
+
 The first time you run your bot, it will need to setup authorization
 with Twitter. At the first run, you'll get a message asking you to go
 to a Twitter URL, where you can authorize the bot to post messages for
@@ -56,7 +61,9 @@ NOTE: Twitter requires this validation process to be via an app which
 is registered on Twitter. I have set one up which you are welcome to
 use, HOWEVER, Twitter doesn't allow developers to post the OAuth
 consumer key/secret that you will need to use. So, you should probably
-set them up yourselves -- it's not that hard!
+set them up yourselves -- it's not that hard! Chatterbot will actually
+walk you through this, and store the values in your config.  However,
+if you would rather do it yourself, here are the steps:
 
 1. Setup your own app on Twitter at this URL https://twitter.com/apps/new
 2. Choose 'Client' as the app type
@@ -71,7 +78,6 @@ set them up yourselves -- it's not that hard!
 
 
 == TODO
-* make consumer secret/key generation easier
 * skeleton bot generator
 
 
@@ -90,6 +96,6 @@ Copyright (c) 2011 Colin Mitchell. Chatterbot is distributed under the
 'Do what the fuck you want to -- but don't be an asshole' public license:
 Please see LICENSE.txt for further details.
 
-http://muffinlabs.com/
+http://muffinlabs.com
 
 
