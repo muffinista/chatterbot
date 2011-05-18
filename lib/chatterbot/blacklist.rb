@@ -18,7 +18,7 @@ module Chatterbot
 
     # Based on the text of this tweet, should it be skipped?
     def skip_me?(s)
-      search = s.is_a?(Hash) ? s["text"] : s
+      search = s.is_a?(Hash) ? s[:text] : s
       exclude.detect { |e| search.downcase.include?(e) } != nil
     end
 

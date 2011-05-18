@@ -3,7 +3,6 @@ module Chatterbot
   #
   # reply method for responding to tweets
   module Reply
-    protected
 
     # handle replies for the bot
     def _replies(&block)

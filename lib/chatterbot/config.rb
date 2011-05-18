@@ -33,7 +33,11 @@ module Chatterbot
     #
     # are we in debug mode?
     def debug_mode?
-      true
+      config[:debug_mode] || true # TODO change this to false
+    end
+
+    def update_config?
+      config[:dry_run] || true
     end
 
     #
@@ -64,6 +68,8 @@ module Chatterbot
     #
     # write out our config file
     def update_config
+      return if ! update_config?
+
       # don't update flat file if we can store to the DB instead
       if has_db?
         store_database_config
@@ -181,11 +187,11 @@ module Chatterbot
     
     #
     # load in the config from the assortment of places it can be specified.
-    def load_config
+    def load_config(params={})
       # load the flat-files first
-      @config  = global_config.merge(bot_config)
+      @config  = global_config.merge(bot_config).merge(params)
       @config[:db_uri] ||= ENV["chatterbot_db"] unless ENV["chatterbot_db"].nil?
-      
+
       # if we have a key to load from the DB, do that now
       if @config.has_key?(:db_uri) && @config[:db_uri]
         tmp = db_config

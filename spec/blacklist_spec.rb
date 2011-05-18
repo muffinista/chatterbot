@@ -27,8 +27,8 @@ describe "Chatterbot::Blacklist" do
     end
 
     it "works with result hashes" do
-      @bot.skip_me?({"text" => "did you know that i hate bots?"}).should == true
-      @bot.skip_me?({"text" => "a tweet without any bad content"}).should == false
+      @bot.skip_me?({:text => "did you know that i hate bots?"}).should == true
+      @bot.skip_me?({:text => "a tweet without any bad content"}).should == false
     end
   end
 

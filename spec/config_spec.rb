@@ -49,6 +49,12 @@ describe "Chatterbot::Config" do
   end
 
   describe "update_config" do
+    it "doesn't update the config if update_config? is false" do
+      @bot.should_receive(:update_config?).and_return(false)
+      @bot.should_not_receive(:has_db?)
+      @bot.update_config
+    end
+
     it "doesn't update keys from the global config" do
       @bot.stub!(:global_config).and_return({:foo => :bar, :a => :b})
       @bot.stub!(:bot_config).and_return({:foo => :bar, :custom => :value})      
@@ -120,7 +126,6 @@ describe "Chatterbot::Config" do
       
       @bot.slurp_file(src.path).should == { :since_id => 0 }
     end
-
   
     it "doesn't store local file if we can store to db instead" do
       @bot.should_receive(:has_db?).and_return(true)

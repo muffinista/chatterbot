@@ -10,7 +10,21 @@ module Chatterbot
       @bot ||= if self.kind_of?(Chatterbot::Bot)
                  self
                else
-                 Chatterbot::Bot.new
+
+                 #
+                 # parse any command-line options and use them to initialize the bot
+                 #
+                 params = {}
+
+                 opts = OptionParser.new
+                 opts.on('-d', '--db [ARG]')    { |d| ENV["chatterbot_db"] = d }
+                 opts.on('-c', '--config [ARG]')    { |c| ENV["chatterbot_config"] = c }
+                 opts.on('-t', '--test')    { params[:debug_mode] = true }
+                 opts.on('-t', '--dry-run')    { params[:debug_mode] = true ; params[:no_update] = true }
+                 opts.on('-s', '--since_id [ARG]')    { |s| params[:since_id] = s }
+                 opts.parse!(ARGV)
+
+                 Chatterbot::Bot.new(params)
                end
     end
 
@@ -23,7 +37,16 @@ module Chatterbot
       end
       bot.blacklist = b
     end
-    
+
+    #
+    # specify list of strings we will check when deciding to respond to a tweet or not
+    def exclude(e)
+      if e.is_a?(String)
+        e = e.split(",").collect { |s| s.strip }
+      end
+      bot.exclude = e
+    end
+
     #
     # search twitter for the specified terms
     def search(query, &block)

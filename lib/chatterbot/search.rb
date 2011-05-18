@@ -4,7 +4,6 @@ module Chatterbot
   # handle Twitter searches
   module Search
 
-protected
     # internal search code
     def _search(queries, &block)
       return unless init_client
@@ -24,7 +23,8 @@ protected
 
         if search != nil
           search["results"].each { |s|
-            yield s.symbolize_keys! unless ! block_given? || on_blacklist?(s) || skip_me?(s)
+            s.symbolize_keys!
+            yield s unless ! block_given? || on_blacklist?(s) || skip_me?(s)
           }
         end
       }
