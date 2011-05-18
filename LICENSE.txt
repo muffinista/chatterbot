@@ -9,9 +9,9 @@ Derived from WTFPL, Copyright (C) 2004 Sam Hocevar <sam@hocevar.net>
  copies of this license document, and changing it is allowed as long
  as the name is changed.
 
-            DO WHAT THE FUCK YOU WANT TO PUBLIC LICENSE
-   TERMS AND CONDITIONS FOR COPYING, DISTRIBUTION AND MODIFICATION
+ DO WHAT THE FUCK YOU WANT TO -- BUT DON'T BE AN ASSHOLE PUBLIC LICENSE
+ TERMS AND CONDITIONS FOR COPYING, DISTRIBUTION AND MODIFICATION
 
   0. You just DO WHAT THE FUCK YOU WANT TO.
-  1. Don't be an asshole.  Really.
+  1. Don't be an asshole. Really.
 
