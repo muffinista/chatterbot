@@ -1,36 +1,49 @@
 require File.expand_path(File.dirname(__FILE__) + '/spec_helper')
 
-require 'chatterbot/dsl'
-
 describe "Chatterbot::DSL" do
-  # describe "object setup" do
-  #   it "initializes a new Bot object" do
-  #     Chatterbot::Bot.should_receive(:new).and_return(@bot)
-  #     bot
-  #   end
-  # end
-
   describe "client routines" do
     before(:each) do
       @bot = mock(Chatterbot::Bot)
+      @bot.send :require, 'chatterbot/dsl'
+
       Chatterbot::DSL.stub!(:bot).and_return(@bot)
     end
   
-    it "#blacklist passes along to bot object" do
-      @bot.should_receive(:blacklist=).with(["foo"])
-      blacklist ["foo"]
-    end
+    describe "blacklist" do
+      it "#blacklist passes along to bot object" do
+        @bot.should_receive(:blacklist=).with(["foo"])
+        blacklist ["foo"]
+      end
 
-    it "#blacklist turns single-string arg into an array" do
-      @bot.should_receive(:blacklist=).with(["foo"])
-      blacklist "foo"
-    end
+      it "#blacklist turns single-string arg into an array" do
+        @bot.should_receive(:blacklist=).with(["foo"])
+        blacklist "foo"
+      end
 
-    it "#blacklist turns comma-delimited string arg into an array" do
-      @bot.should_receive(:blacklist=).with(["foo", "bar"])
-      blacklist "foo, bar"
+      it "#blacklist turns comma-delimited string arg into an array" do
+        @bot.should_receive(:blacklist=).with(["foo", "bar"])
+        blacklist "foo, bar"
+      end
     end
+  
+    describe "exclude" do
+      it "#exclude passes along to bot object" do
+        @bot.should_receive(:exclude=).with(["foo"])
+        exclude ["foo"]
+      end
 
+      it "#exclude turns single-string arg into an array" do
+        @bot.should_receive(:exclude=).with(["foo"])
+        exclude "foo"
+      end
+
+      it "#exclude turns comma-delimited string arg into an array" do
+        @bot.should_receive(:exclude=).with(["foo", "bar"])
+        exclude "foo, bar"
+      end
+    end
+    
+    
     it "#search passes along to bot object" do
       @bot.should_receive(:search).with("foo")
       search("foo")
@@ -52,8 +65,8 @@ describe "Chatterbot::DSL" do
     end
 
     it "#reply passes along to bot object" do
-      @bot.should_receive(:tweet).with("hello sailor!", {:foo => "bar" }, { :source => "source "})
-      tweet "hello sailor!", {:foo => "bar"}, { :source => "source "}
+      @bot.should_receive(:reply).with("hello sailor!", { :source => "source "})
+      reply "hello sailor!", { :source => "source "}
     end
     
   end

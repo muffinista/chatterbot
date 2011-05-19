@@ -74,14 +74,14 @@ module Chatterbot
       # capture ctrl-c and exit without a stack trace
       #
     rescue Interrupt => e
-      exit
+#      exit
     end
 
     #
     # error message for auth
     def display_oauth_error
       debug "Oops!  Looks like something went wrong there, please try again!"
-      exit
+#      exit
     end
     
     #
@@ -106,16 +106,13 @@ module Chatterbot
           config[:token] = access_token.token
           config[:secret] = access_token.secret
           update_config
-
-          true
         else
           display_oauth_error
-
-          false
+          return false
         end
-      else
-        true
       end
+
+      true
     end
   end
 end

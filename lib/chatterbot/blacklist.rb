@@ -16,20 +16,24 @@ module Chatterbot
       @blacklist || []
     end
     def blacklist=(b)
-      puts "hi! #{b}"
       @blacklist = b
     end
     
+    #
     # Based on the text of this tweet, should it be skipped?
     def skip_me?(s)
       search = s.is_a?(Hash) ? s[:text] : s
       exclude.detect { |e| search.downcase.include?(e) } != nil
     end
 
+    #
+    # Pull the username from a tweet hash -- this is different depending on
+    # if we're doing a search, or parsing through replies/mentions.
     def tweet_user(s)
       s.has_key?(:from_user) ? s[:from_user] : s[:user][:screen_name]
     end
     
+    #
     # Is this tweet from a user on our blacklist?
     def on_blacklist?(s)
       search = (s.is_a?(Hash) ? tweet_user(s) : s).downcase
@@ -37,6 +41,8 @@ module Chatterbot
         on_global_blacklist?(search)
     end
 
+    #
+    # Is this user on our global blacklist?
     def on_global_blacklist?(user)
       return false if ! has_db?
       db[:blacklist].where(:user => user).count > 0
@@ -46,6 +52,9 @@ module Chatterbot
     # add the specified user to the global blacklist
     def add_to_blacklist(user)    
       user = user.is_a?(Hash) ? user[:from_user] : user
+      
+      # don't try and add if we don't have a DB connection, or if the
+      # user is already on the list
       return if ! has_db? || on_global_blacklist?(user)
 
       # make sure we don't have an @ at the beginning of the username

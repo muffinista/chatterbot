@@ -11,7 +11,8 @@ module Chatterbot
     include Reply
     include Client
     include DB
-    
+    include Helpers
+
     #
     # Create a new bot. No options for now.
     def initialize(params={})

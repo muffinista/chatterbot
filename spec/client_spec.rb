@@ -12,6 +12,11 @@ describe "Chatterbot::Client" do
     @bot.require_login
   end
 
+  it "reset_client resets the client instance" do
+    @bot.should_receive(:init_client).and_return(true)
+    @bot.reset_client
+  end
+  
   describe "api setup" do
     it "calls get_api_key" do
       @bot.should_receive(:needs_api_key?).and_return(true)

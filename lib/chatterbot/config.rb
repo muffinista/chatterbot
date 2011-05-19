@@ -84,14 +84,17 @@ module Chatterbot
     def update_since_id(search)
       unless search.nil?
         tmp_id = case
-                   when search.has_key?(:id) then search[:id]
-                   when search.has_key?("max_id") then search["max_id"]
-                   else 0
-                 end.to_i
-        self.since_id = [self.since_id.to_i, tmp_id].max        
-      end
+                   # incoming tweets
+                 when search.has_key?(:id) then search[:id]
+                   
+                   # incoming searches
+                 when search.has_key?("max_id") then search["max_id"]
 
-    
+                   # other?
+                 else 1
+                 end.to_i
+        config[:tmp_since_id] = [config[:tmp_since_id].to_i, tmp_id].max        
+      end
     end
 
     #
@@ -170,14 +173,8 @@ module Chatterbot
     end
 
     #
-    # config settings that came from the DB
-    def db_config
-      load_config_from_db || { }
-    end
-
-    #
     # load the config settings from the db, if possible
-    def load_config_from_db
+    def db_config
       return {} if db.nil?
       db[:config][:id => botname]
     end

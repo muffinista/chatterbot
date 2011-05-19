@@ -59,6 +59,54 @@ describe "Chatterbot::Config" do
     end
   end
 
+  describe "debug_mode?" do
+    it "works when debug_mode isn't set" do
+      @bot.debug_mode?.should == false
+    end
+
+    it "works when debug_mode is set" do
+      @bot.config[:debug_mode] = false
+      @bot.debug_mode?.should == false
+
+      @bot.config[:debug_mode] = true
+      @bot.debug_mode?.should == true
+    end
+  end
+
+  describe "since_id=" do
+    it "works" do
+      @bot.since_id = 123
+      @bot.config[:tmp_since_id].should == 123
+    end
+  end
+  
+  describe "update_since_id" do
+    it "works with searches" do
+      @bot.config[:tmp_since_id] = 100
+      @bot.update_since_id({ "max_id" => 1000 })
+      @bot.config[:tmp_since_id].should == 1000
+    end
+
+    it "works with tweets" do
+      @bot.config[:tmp_since_id] = 100
+      @bot.update_since_id({ :id => 1000 })
+      @bot.config[:tmp_since_id].should == 1000
+    end
+
+    it "handles weird results" do
+      @bot.config[:tmp_since_id] = 100
+      @bot.update_since_id({ :foo => 1000 })
+      @bot.config[:tmp_since_id].should == 100
+    end
+
+    it "never rolls back" do
+      @bot.config[:tmp_since_id] = 100
+      @bot.update_since_id({ :id => 50 })
+      @bot.config[:tmp_since_id].should == 100     
+    end
+  end
+  
+  
   describe "update_config" do
     it "doesn't update the config if update_config? is false" do
       @bot.should_receive(:update_config?).and_return(false)
@@ -90,6 +138,7 @@ describe "Chatterbot::Config" do
     end
   end
 
+  
   describe "global config files" do
     it "has an array of global_config_files" do
       ENV["chatterbot_config"] = "/tmp/foo.yml"

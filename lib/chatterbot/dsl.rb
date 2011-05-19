@@ -29,31 +29,38 @@ module Chatterbot
 
     #
     # Take a tweet hash, parse out the username, tack an @ on the front
-    def tweet_user(tweet)     
-      "@#{tweet.has_key?(:from_user) ? tweet[:from_user] : tweet[:user][:screen_name]}"
-    end
+#    def tweet_user(tweet)     
+#      bot.tweet_user(tweet)
+#    end
 
     #
     # specify a bot-specific blacklist of users.  accepts an array, or a 
     # comma-delimited string
     def blacklist(b=nil)
-      if b == nil
+      if b.is_a?(String)
+        b = b.split(",").collect { |s| s.strip }
+      end
+
+      if b.nil? || b.empty?
         bot.blacklist = []
-      else
-        if b.is_a?(String)
-          b = b.split(",").collect { |s| s.strip }
-        end
+      else     
         bot.blacklist += b
       end
+    
     end
     
     #
     # specify list of strings we will check when deciding to respond to a tweet or not
-    def exclude(e)
+    def exclude(e=nil)
       if e.is_a?(String)
         e = e.split(",").collect { |s| s.strip }
       end
-      bot.exclude += e
+
+      if e.nil? || e.empty?
+        bot.exclude = []
+      else     
+        bot.exclude += e
+      end
     end
     
     #
@@ -83,3 +90,4 @@ module Chatterbot
 end
 
 include Chatterbot::DSL
+include Chatterbot::Helpers

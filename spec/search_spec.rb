@@ -44,14 +44,13 @@ describe "Chatterbot::Search" do
   
   it "iterates results" do
     bot = test_bot
-#    bot = Chatterbot::Bot.new
     bot.stub!(:client).and_return(fake_search(100, 3))
-
     indexes = []
+
     bot.search("foo") do |x|
       indexes << x[:index]
     end
-
+    
     indexes.should == [1,2,3]
   end
 

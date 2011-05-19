@@ -34,6 +34,7 @@ module Chatterbot
     require "#{dir}/chatterbot/search"
     require "#{dir}/chatterbot/tweet"
     require "#{dir}/chatterbot/reply"
+    require "#{dir}/chatterbot/helpers"    
 
     require "#{dir}/chatterbot/bot"
   end

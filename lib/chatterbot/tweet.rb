@@ -9,7 +9,6 @@ module Chatterbot
       return if require_login == false
 
       if debug_mode?
-        puts "NOT TWEETING: #{txt}"
         debug "I'm in debug mode, otherwise I would tweet: #{txt}"
       else
         debug txt
@@ -20,7 +19,7 @@ module Chatterbot
 
     # reply to a tweet
     def reply(txt, source)
-      tweet txt, {:in_reply_to_status_id => source["id"]}, source
+      self.tweet txt, {:in_reply_to_status_id => source["id"]}, source
     end   
   end
 end
