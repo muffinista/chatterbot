@@ -1,3 +1,5 @@
+require File.join(File.dirname(__FILE__), '..', 'chatterbot')
+
 module Chatterbot
   #
   # very basic DSL to handle the common stuff you would want to do with a bot.

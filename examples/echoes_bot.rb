@@ -1,6 +1,5 @@
 #!/usr/bin/env ruby
 
-require '../lib/chatterbot'
 require '../lib/chatterbot/dsl'
 
 ##
