@@ -1,5 +1,5 @@
 module Chatterbot
-
+  
   #
   # routines for connecting to Twitter and validating the bot
   module Client
@@ -22,7 +22,11 @@ module Chatterbot
     def init_client
       @client ||= TwitterOAuth::Client.new(client_params)
     end
-
+    def reset_client
+      @client = nil
+      init_client
+    end
+    
     #
     # Call this before doing anything that requires an authorized Twitter
     # connection.
@@ -35,7 +39,7 @@ module Chatterbot
     # print out a message about getting a PIN from twitter, then output
     # the URL the user needs to visit to authorize
     #
-    def get_oauth_verifier
+    def get_oauth_verifier(request_token)
       puts "Please go to the following URL and authorize the bot.\n"        
       puts "#{request_token.authorize_url}\n"
 
@@ -44,17 +48,33 @@ module Chatterbot
     end
 
     def get_api_key
+      puts "****************************************"
+      puts "****************************************"
+      puts "****        API SETUP TIME!         ****"
+      puts "****************************************"
+      puts "****************************************"      
+      
       puts "Hey, looks like you need to get an API key from Twitter before you can get started."
       puts "Please go to this URL: https://twitter.com/apps/new"
 
-      puts "Choose 'Client' as the app type."
+      puts "\nChoose 'Client' as the app type."
       puts "Choose 'Read & Write' access."
 
-      puts "Paste the 'Consumer Key' here: "
+      print "\n\n\nPaste the 'Consumer Key' here: "
+      STDOUT.flush
       config[:consumer_key] = STDIN.readline.chomp
 
-      puts "Paste the 'Consumer Secret' here: "
+      print "Paste the 'Consumer Secret' here: "
+      STDOUT.flush
       config[:consumer_secret] = STDIN.readline.chomp
+      
+      reset_client
+      
+      #
+      # capture ctrl-c and exit without a stack trace
+      #
+    rescue Interrupt => e
+      exit
     end
 
     #
@@ -73,8 +93,9 @@ module Chatterbot
       end
 
       if needs_auth_token?
-        pin = get_oauth_verifier
         request_token = client.request_token
+
+        pin = get_oauth_verifier(request_token)
         access_token = client.authorize(
                                          request_token.token,
                                          request_token.secret,
@@ -85,9 +106,15 @@ module Chatterbot
           config[:token] = access_token.token
           config[:secret] = access_token.secret
           update_config
+
+          true
         else
           display_oauth_error
+
+          false
         end
+      else
+        true
       end
     end
   end

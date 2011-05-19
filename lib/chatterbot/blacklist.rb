@@ -10,21 +10,29 @@ module Chatterbot
     def exclude
       @exclude || []
     end
-
+    
     # A list of Twitter users that don't want to hear from the bot.
     def blacklist
       @blacklist || []
     end
-
+    def blacklist=(b)
+      puts "hi! #{b}"
+      @blacklist = b
+    end
+    
     # Based on the text of this tweet, should it be skipped?
     def skip_me?(s)
       search = s.is_a?(Hash) ? s[:text] : s
       exclude.detect { |e| search.downcase.include?(e) } != nil
     end
 
+    def tweet_user(s)
+      s.has_key?(:from_user) ? s[:from_user] : s[:user][:screen_name]
+    end
+    
     # Is this tweet from a user on our blacklist?
     def on_blacklist?(s)
-      search = (s.is_a?(Hash) ? s[:from_user] : s).downcase
+      search = (s.is_a?(Hash) ? tweet_user(s) : s).downcase
       blacklist.any? { |b| search.include?(b.downcase) } ||
         on_global_blacklist?(search)
     end

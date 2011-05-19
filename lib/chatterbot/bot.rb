@@ -11,8 +11,6 @@ module Chatterbot
     include Reply
     include Client
     include DB
-
-    include DSL
     
     #
     # Create a new bot. No options for now.

@@ -27,8 +27,8 @@ describe "Chatterbot::Search" do
     #bot = Chatterbot::Bot.new
 
     bot.stub!(:client).and_return(fake_search(100))
-    bot.client.should_receive(:search).with("foo", {:since_id => 0})
-    bot.client.should_receive(:search).with("bar", {:since_id => 0})    
+    bot.client.should_receive(:search).with("foo", {:since_id => 1})
+    bot.client.should_receive(:search).with("bar", {:since_id => 1})    
 
     bot.search(["foo", "bar"])
   end
@@ -37,7 +37,7 @@ describe "Chatterbot::Search" do
     bot = test_bot
 
     bot.stub!(:client).and_return(fake_search(100))
-    bot.client.should_receive(:search).with("foo", {:since_id => 0})
+    bot.client.should_receive(:search).with("foo", {:since_id => 1})
 
     bot.search("foo")
   end

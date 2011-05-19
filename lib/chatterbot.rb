@@ -35,9 +35,6 @@ module Chatterbot
     require "#{dir}/chatterbot/tweet"
     require "#{dir}/chatterbot/reply"
 
-    # DSL implementation routines
-    require "#{dir}/chatterbot/dsl"
-
     require "#{dir}/chatterbot/bot"
   end
 end

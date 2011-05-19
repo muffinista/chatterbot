@@ -11,9 +11,6 @@ require 'sqlite3'
 # in ./support/ and its subdirectories.
 Dir["#{File.dirname(__FILE__)}/support/**/*.rb"].each {|f| require f}
 
-RSpec.configure do |config|
-  
-end
 
 def test_bot
   bot = Chatterbot::Bot.new

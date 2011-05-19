@@ -33,7 +33,7 @@ module Chatterbot
     #
     # are we in debug mode?
     def debug_mode?
-      config[:debug_mode] || true # TODO change this to false
+      config[:debug_mode] || false
     end
 
     def update_config?
@@ -62,7 +62,7 @@ module Chatterbot
     #
     # return the ID of the most recent tweet pulled up in searches
     def since_id
-      config[:since_id] || 0
+      config[:since_id] || 1
     end   
 
     #
@@ -83,8 +83,15 @@ module Chatterbot
     # tweets, unless it is lower than what we have already
     def update_since_id(search)
       unless search.nil?
-        self.since_id = [self.since_id, search["max_id"].to_i].max
+        tmp_id = case
+                   when search.has_key?(:id) then search[:id]
+                   when search.has_key?("max_id") then search["max_id"]
+                   else 0
+                 end.to_i
+        self.since_id = [self.since_id.to_i, tmp_id].max        
       end
+
+    
     end
 
     #
@@ -120,7 +127,6 @@ module Chatterbot
     # load in a config file
     def slurp_file(f)
       f = File.expand_path(f)
-      debug "load config: #{f}"
 
       tmp = {}
 
@@ -184,6 +190,11 @@ module Chatterbot
       # remove keys that are duped in the global config
       tmp = config.delete_if { |k, v| global_config.has_key?(k) && global_config[k] == config[k] }
 
+      # let's not store these, they're just command-line options
+      tmp.delete(:debug_mode)
+      tmp.delete(:dry_run)
+
+      
       # update the since_id now
       tmp[:since_id] = tmp.delete(:tmp_since_id) unless ! tmp.has_key?(:tmp_since_id)
 

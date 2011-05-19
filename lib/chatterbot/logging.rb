@@ -37,7 +37,6 @@ module Chatterbot
     end
 
 protected
-
     #
     # initialize a Logger object, writing to log_dest
     def logger

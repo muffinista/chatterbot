@@ -5,7 +5,7 @@ module Chatterbot
   module Search
 
     # internal search code
-    def _search(queries, &block)
+    def search(queries, &block)
       return unless init_client
       
       debug "check for tweets since #{since_id}"
