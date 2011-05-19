@@ -1,5 +1,39 @@
 require File.join(File.dirname(__FILE__), '..', 'chatterbot')
 
+#require 'rdoc/usage'
+
+# == Synopsis 
+#   This is a sample description of the application.
+#   Blah blah blah.
+#
+# == Examples
+#   This command does blah blah blah.
+#     ruby_cl_skeleton foo.txt
+#
+#   Other examples:
+#     ruby_cl_skeleton -q bar.doc
+#     ruby_cl_skeleton --verbose foo.html
+#
+# == Usage 
+#   ruby_cl_skeleton [options] source_file
+#
+#   For help use: ruby_cl_skeleton -h
+#
+# == Options
+#   -h, --help          Displays help message
+#   -v, --version       Display the version, then exit
+#   -q, --quiet         Output as little as possible, overrides verbose
+#   -V, --verbose       Verbose output
+#   TO DO - add additional options
+#
+# == Author
+#   YourName
+#
+# == Copyright
+#   Copyright (c) 2007 YourName. Licensed under the MIT License:
+#   http://www.opensource.org/licenses/mit-license.php
+
+
 module Chatterbot
   #
   # very basic DSL to handle the common stuff you would want to do with a bot.
@@ -17,21 +51,27 @@ module Chatterbot
       params = {}
       
       opts = OptionParser.new
-      opts.on('-d', '--db [ARG]')    { |d| ENV["chatterbot_db"] = d }
-      opts.on('-c', '--config [ARG]')    { |c| ENV["chatterbot_config"] = c }
-      opts.on('-t', '--test')    { params[:debug_mode] = true }
-      opts.on('-t', '--dry-run')    { params[:debug_mode] = true ; params[:no_update] = true }
-      opts.on('-s', '--since_id [ARG]')    { |s| params[:since_id] = s }
+
+      opts.banner = "Usage: #{File.basename($0)} [options]"
+
+      opts.separator ""
+      opts.separator "Specific options:" 
+      
+      opts.on('-d', '--db [ARG]', "Specify a DB connection URI")    { |d| ENV["chatterbot_db"] = d }
+      opts.on('-c', '--config [ARG]', "Specify a config file to use")    { |c| ENV["chatterbot_config"] = c }
+      opts.on('-t', '--test', "Run the bot without actually sending any tweets") { params[:debug_mode] = true }
+      opts.on('--dry-run', "Run the bot in test mode, and also don't update the database")    { params[:debug_mode] = true ; params[:no_update] = true }
+      opts.on('-s', '--since_id [ARG]', "Check for tweets since tweet id #[ARG]")    { |s| params[:since_id] = s }
+
+      opts.on_tail("-h", "--help", "Show this message") do
+        puts opts
+        exit
+      end      
+      
       opts.parse!(ARGV)
 
       @bot = Chatterbot::Bot.new(params)
     end
-
-    #
-    # Take a tweet hash, parse out the username, tack an @ on the front
-#    def tweet_user(tweet)     
-#      bot.tweet_user(tweet)
-#    end
 
     #
     # specify a bot-specific blacklist of users.  accepts an array, or a 

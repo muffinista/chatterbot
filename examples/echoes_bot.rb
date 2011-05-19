@@ -1,12 +1,19 @@
 #!/usr/bin/env ruby
 
-require '../lib/chatterbot/dsl'
+$LOAD_PATH.unshift File.join(File.dirname(__FILE__), '..', 'lib')
+
+#
+# require the dsl lib to include all the methods you see below.
+#
+require 'chatterbot/dsl'
 
 ##
 ## If I wanted to exclude some terms from triggering this bot, I would list them here.
 ## For now, we'll block URLs to keep this from being a source of spam
 ##
 exclude "http://"
+
+blacklist "mean_user, private_user"
 
 replies do |tweet|
 
