@@ -1,10 +1,10 @@
 module Chatterbot
-
+  
   #
   # routines for optionally interacting with a database for logging
   # tweets, and storing config data there. Uses Sequel to handle the
   # heavy lifing.
-  module DB
+  module DB   
     #
     # connect to the database, and generate any missing tables
     def db
@@ -16,7 +16,9 @@ module Chatterbot
     #
     # get a DB object from Sequel
     def get_connection
-      Sequel.connect(config[:db_uri])
+      if has_sequel?
+        Sequel.connect(config[:db_uri])
+      end
     end
     
     #

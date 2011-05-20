@@ -2,8 +2,7 @@ module Chatterbot
 
   #
   # routines for storing config information for the bot
-  module Config
-
+  module Config  
     attr_accessor :config
     
     #
@@ -25,9 +24,15 @@ module Chatterbot
     end
 
     #
+    # Check to see if Sequel was loaded successfully.  If not, we won't make any DB calls
+    def has_sequel?
+      ! defined?(Sequel).nil?
+    end
+    
+    #
     # do we have a DB connection string?
     def has_db?
-      config.has_key?(:db_uri)
+      has_sequel? && config.has_key?(:db_uri)
     end
 
     #
@@ -36,6 +41,8 @@ module Chatterbot
       config[:debug_mode] || false
     end
 
+    #
+    # Should we run any config updates?
     def update_config?
       config[:dry_run] || true
     end

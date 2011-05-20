@@ -1,7 +1,7 @@
 source "http://rubygems.org"
 
 gem "twitter_oauth"
-gem "sequel"
+#gem "sequel"
 
 # Add dependencies to develop your gem here.
 # Include everything needed to run rake, tests, features, etc.
@@ -17,6 +17,7 @@ group :development do
 end
 
 group :test do
+  gem "sequel"
   gem "mysql"
   gem "sqlite3"
 end

@@ -1,5 +1,7 @@
 require File.expand_path(File.dirname(__FILE__) + '/spec_helper')
 
+require 'sequel'
+
 describe "Chatterbot::DB" do
   before(:each) do
     @db_tmp = Tempfile.new("config.db")
