@@ -1,6 +1,6 @@
-= chatterbot
+= Chatterbot
 
-chatterbot is a library for making bots on Twitter.  It has pretty
+Chatterbot is a library for making bots on Twitter.  It has pretty
 basic functionality but can be used to make pretty involved bots. It
 handles searches, replies and tweets, and has a simple blacklist
 system to help keep you from spamming people who don't want to hear
@@ -16,7 +16,7 @@ from your bot.
 
 == Using chatterbot
 
-=== Make a twitter account
+=== Make a Twitter account
 
 First thing you'll need to do is create an account for your bot on
 Twitter.  That's the easy part.
@@ -48,40 +48,96 @@ That's it!
 If you only want to use Chatterbot to search for tweets, it will work
 out of the box without any authorization.  However, if you want to
 reply to tweets, or check for replies to your bot, you will have to
-jump through a few authorization hoops with Twitter.
+jump through a few authorization hoops with Twitter. The very
+first time you want to setup a bot, you will need to register an
+application with Twitter.  Twitter all API communication to be via an
+app which is registered on Twitter. I would set one up and make it
+part of Chatterbot, but unfortunately Twitter doesn't allow developers
+to publicly post the OAuth consumer key/secret that you would need to
+use.  If you're planning to run more than one bot, you only need to do
+this step once -- you can use the same app setup for other bots too.
 
-The first time you run your bot, it will need to setup authorization
-with Twitter. At the first run, you'll get a message asking you to go
-to a Twitter URL, where you can authorize the bot to post messages for
-your account or not.  If you accept, you'll get a PIN number back.
-You need to copy this and paste it back into the prompt for the
-bot. Hit return, and you should be all set.
-
-NOTE: Twitter requires this validation process to be via an app which
-is registered on Twitter. I have set one up which you are welcome to
-use, HOWEVER, Twitter doesn't allow developers to post the OAuth
-consumer key/secret that you will need to use. So, you should probably
-set them up yourselves -- it's not that hard! Chatterbot will actually
-walk you through this, and store the values in your config.  However,
-if you would rather do it yourself, here are the steps:
+Chatterbot will walk you through what is needed to get this setup.  If
+you run your bot without having an app setup, it will prompt you with
+the instructions. Here's the instructions if you want to do it yourself:
 
 1. Setup your own app on Twitter at this URL https://twitter.com/apps/new
 2. Choose 'Client' as the app type
 3. Choose 'Read & Write' access unless you don't need to send tweets.
-4. Take the consumer key/consumer secret values, and place them in
-   global.yml or in a YAML file specific to your bot.  It should look
-   like this:
+4. Take the consumer key/consumer secret values, and either run your
+   bot, and enter them in when prompted, or place them in global.yml
+   or in a YAML file specific to your bot.  It should look like this:
 
   --- 
   :consumer_secret: CONSUMER SECRET GOES HERE
   :consumer_key: CONSUMER KEY GOES HERE
 
+Chatterbot will point you at the URL in Step #1, then ask for the
+same values as in Step #4.
+
+Once this is done, you will need to setup authorization with
+Twitter. At the first run, you'll get a message asking you to go
+to a Twitter URL, where you can authorize the bot to post messages for
+your account or not.  If you accept, you'll get a PIN number back.
+You need to copy this and paste it back into the prompt for the
+bot. Hit return, and you should be all set.
+
+This is obviously a bunch of effort, but once you're done, you're
+ready to go!
+
+=== Configuration
+
+Chatterbot offers a couple different methods of storing the config for
+your bot:
+
+1. In a YAML file with the same name as the bot, so if you have
+   botname.rb or a Botname class, store your config in botname.yaml
+2. In a global config file at /etc/chatterbot.yml -- values stored here
+   will apply to any bots you run.
+3. In another global config file specified in the environment variable
+   'chatterbot_config'.
+4. In a 'global.yml' file in the same directory as your bot.  This
+   gives you the ability to have a global configuration file, but keep
+   it with your bots if desired.
+5. In a database.  You can store your configuration in a DB, and then
+   specify the connection string either in one of the global config
+   files, or on the command-line by using the --db="db_uri"
+   configuration option.  Any calls to the database are handled by the
+   Sequel gem, and MySQL and Sqlite should work.
+
+=== Database logging
+
+Chatterbot can log tweet activity to the database if desired.  This
+can be handy for tracking what's going on with your bot.  See
+Chatterbot::Logging for details on this.
+
+=== Blacklists
+
+Not everyone wants to hear from your bot.  To keep annoyances to a
+minimum, Chatterbot has a global blacklist option, as well as
+bot-specific blacklists if desired.  The global blacklist is stored in
+the database, and you can add entries to it by using the
+chatterbot-blacklist script included with the gem.
+
+You can also specify users to skip as part of the DSL:
+
+  require 'chatterbot'
+  blacklist "mean_user, private_user"
+
+There's also an 'exclude' method which can be used to add
+words/phrases you might want to ignore -- for example, if you wanted
+to ignore tweets with links, you could do something like this:
+
+  exclude "http://"
+
 
 == TODO
+
 * skeleton bot generator
+* some sort of web-based frontend for tracking bot activity
 
 
-== Contributing to chatterbot
+== Contributing to Chatterbot
 
 Since this code is based off of actual Twitter bots, it's mostly
 working the way I want it to, and I might prefer to keep it that way.
