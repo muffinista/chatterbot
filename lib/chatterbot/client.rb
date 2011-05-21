@@ -22,6 +22,9 @@ module Chatterbot
     def init_client
       @client ||= TwitterOAuth::Client.new(client_params)
     end
+    
+    #
+    # Re-initialize with Twitter, handy during the auth process
     def reset_client
       @client = nil
       init_client
@@ -47,6 +50,8 @@ module Chatterbot
       STDIN.readline.chomp
     end
 
+    #
+    # Ask the user to get an API key from Twitter.
     def get_api_key
       puts "****************************************"
       puts "****************************************"
