@@ -92,23 +92,28 @@ your bot:
 
 1. In a YAML file with the same name as the bot, so if you have
    botname.rb or a Botname class, store your config in botname.yaml
-2. In a global config file at +/etc/chatterbot.yml+ -- values stored here
+2. In a global config file at <tt>/etc/chatterbot.yml</tt> -- values stored here
    will apply to any bots you run.
 3. In another global config file specified in the environment variable
-   '+chatterbot_config+'.
-4. In a +global.yml+ file in the same directory as your bot.  This
+   <tt>'chatterbot_config'</tt>.
+4. In a <tt>global.yml</tt> file in the same directory as your bot.  This
    gives you the ability to have a global configuration file, but keep
    it with your bots if desired.
 5. In a database.  You can store your configuration in a DB, and then
    specify the connection string either in one of the global config
-   files, or on the command-line by using the +db+
+   files, or on the command-line by using the <tt>--db="db_uri"</tt>
    configuration option.  Any calls to the database are handled by the
-   Sequel gem, and MySQL and Sqlite should work.
+   Sequel gem, and MySQL and Sqlite should work.  The DB URI should
+   look like <tt>mysql://username:password@host/database</tt> -- see
+   http://sequel.rubyforge.org/rdoc/files/doc/opening_databases_rdoc.html
+   for details.
 
 === Database logging
 
 Chatterbot can log tweet activity to the database if desired.  This
-can be handy for tracking what's going on with your bot.  See +Chatterbot+::+Logging+ for details on this.
+can be handy for tracking what's going on with your bot.  See
+<tt>Chatterbot::Logging</tt> for details on this.
+
 
 === Blacklists
 
@@ -116,7 +121,7 @@ Not everyone wants to hear from your bot.  To keep annoyances to a
 minimum, Chatterbot has a global blacklist option, as well as
 bot-specific blacklists if desired.  The global blacklist is stored in
 the database, and you can add entries to it by using the
-+chatterbot-blacklist+ script included with the gem.
+<tt>chatterbot-blacklist</tt> script included with the gem.
 
 You can also specify users to skip as part of the DSL:
 
