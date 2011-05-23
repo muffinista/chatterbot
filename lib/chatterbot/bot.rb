@@ -24,16 +24,6 @@ module Chatterbot
         update_config
       end   
     end
-
-    #
-    # The name of the currently running bot
-    def botname
-      if self.class < Bot
-        self.class.to_s.downcase
-      else
-        File.basename($0,".rb")
-      end
-    end
     
   end
 end

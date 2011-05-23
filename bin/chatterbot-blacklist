@@ -3,27 +3,60 @@ $LOAD_PATH.unshift File.join(File.dirname(__FILE__), '..', 'lib')
 
 require 'chatterbot'
 
+include Chatterbot::Helpers
 include Chatterbot::Blacklist
 include Chatterbot::Config
 include Chatterbot::DB
 include Chatterbot::Logging
 
+@display_blacklist = false
+
 #
 # pull in any arguments and set them as env variables
 #
 opts = OptionParser.new
-opts.on('-d', '--db [ARG]')    { |d| ENV["chatterbot_db"] = d }
-opts.on('-c', '--config [ARG]')    { |c| ENV["chatterbot_config"] = c }
-opts.parse!(ARGV)
+opts.banner = "Usage: #{File.basename($0)} [options]"
+
+opts.separator ""
+opts.separator "Specific options:" 
+
+opts.on('-d', '--db [ARG]', "Specify a DB connection URI")    { |d| ENV["chatterbot_db"] = d }
+opts.on('-c', '--config [ARG]', "Specify a config file to use")    { |c| ENV["chatterbot_config"] = c }
+opts.on('-p', '--print', "Print out the current blacklist")    { @display_blacklist = true }
+opts.on_tail("-h", "--help", "Show this message") do
+  puts opts
+  exit
+end      
+
+extra = opts.parse!(ARGV)
 
 if ! has_db?
   puts "You need to specify a db connection!"
   exit
 end
 
-#
-# iterate through and add anything to the blacklist.  nothing too shiny here.
-#
-$stdin.each_line do |l|
-  add_to_blacklist(l.chomp)
+
+if @display_blacklist
+  db[:blacklist].each do |u|
+    puts u.inspect
+  end
+  
+elsif extra.empty?
+  #
+  # iterate through STDIN and add anything to the blacklist.  nothing too shiny here.
+  #
+  $stdin.each_line do |l|
+    add_to_blacklist(l.chomp)
+  end 
+else
+  #
+  # add any users specified on the command-line
+  #
+  extra.each do |l|
+    add_to_blacklist(l.chomp)
+  end  
+  
 end
+
+
+

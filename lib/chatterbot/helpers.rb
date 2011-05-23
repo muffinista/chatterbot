@@ -5,6 +5,16 @@ module Chatterbot
   module Helpers
 
     #
+    # The name of the currently running bot
+    def botname
+      if self.class < Bot
+        self.class.to_s.downcase
+      else
+        File.basename($0,".rb")
+      end
+    end
+
+    #
     # Take the incoming tweet/user name, and turn it into something suitable for replying 
     # to a user. Basically, get their handle and add a '@' to it.
     def tweet_user(tweet)     
