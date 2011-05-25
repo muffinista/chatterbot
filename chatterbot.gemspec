@@ -9,8 +9,8 @@ Gem::Specification.new do |s|
   s.authors = ["Colin Mitchell"]
   s.email = %q{colin@muffinlabs.com}
   s.homepage = %q{http://github.com/muffinista/chatterbot}
-  s.summary = %q{A framework for Twitter bots}
-  s.description = %q{A framework for Twitter bots}
+  s.summary = %q{A framework for writing Twitter bots}
+  s.description = %q{A framework for writing bots that run on Twitter. Comes with a simple DSL for easy coding.}
 
   s.rubyforge_project = "chatterbot"
 
