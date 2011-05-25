@@ -2,6 +2,7 @@
 $LOAD_PATH.unshift File.join(File.dirname(__FILE__), '..', 'lib')
 
 require 'chatterbot'
+require 'optparse'
 
 include Chatterbot::Helpers
 include Chatterbot::Blacklist

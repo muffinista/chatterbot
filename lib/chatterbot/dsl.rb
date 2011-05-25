@@ -1,4 +1,5 @@
 require File.join(File.dirname(__FILE__), '..', 'chatterbot')
+require 'optparse'
 
 module Chatterbot
   #
