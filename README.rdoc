@@ -1,18 +1,18 @@
 = Chatterbot
 
-Chatterbot is a library for making bots on Twitter.  It has pretty
-basic functionality but can be used to make pretty involved bots. It
-handles searches, replies and tweets, and has a simple blacklist
-system to help keep you from spamming people who don't want to hear
-from your bot.
+Chatterbot is a library for making bots on Twitter.  It is basic
+enough that you can put it into use quickly, but can be used to make
+pretty involved bots. It handles searches, replies and tweets, and has
+a simple blacklist system to help keep you from spamming people who
+don't want to hear from your bot.
 
 == A quick list of features:
 
-* works via Twitter's OAuth system.
-* handles search queries and replies to your bot
-* use a simple DSL, or extend a Bot class if you need it.
-* simple blacklistling system to limit annoying users.
-* optionally log tweets to the database for metrics and tracking purposes.
+* Works via Twitter's OAuth system.
+* Handles search queries and replies to your bot
+* Use a simple DSL, or extend a Bot class if you need it
+* Simple blacklistling system to limit your annoyance of users
+* Optionally log tweets to the database for metrics and tracking purposes
 
 == Using Chatterbot
 
@@ -21,17 +21,16 @@ from your bot.
 First thing you'll need to do is create an account for your bot on
 Twitter.  That's the easy part.
 
-
 === Write your bot
 
 Chatterbot has a very simple DSL inspired by Sinatra and Twibot, an
-earlier Twitter bot framework.  Here's an example:
+earlier Twitter bot framework.  Here's an example, based on @dr_rumack
+on Twitter (http://twitter.com/#!/Dr_Rumack):
 
   require 'chatterbot'
   search("'surely you must be joking'") do |tweet|
     reply "@#{tweet_user(tweet)} I am serious, and don't call me Shirley!", tweet
   end
-
 
 Or, you can create a bot object yourself, extend it if needed, and use
 it like so:
