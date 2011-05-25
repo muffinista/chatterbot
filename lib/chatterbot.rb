@@ -1,7 +1,5 @@
-#require 'rubygems'
-
-require 'bundler/setup'
-Bundler.require
+require 'yaml'
+require 'twitter_oauth'
 
 #
 # Try and load Sequel, but don't freak out if it's not there
