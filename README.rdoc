@@ -1,6 +1,6 @@
 = Chatterbot
 
-Chatterbot is a library for making bots on Twitter.  It is basic
+Chatterbot is a Ruby library for making bots on Twitter.  It is basic
 enough that you can put it into use quickly, but can be used to make
 pretty involved bots. It handles searches, replies and tweets, and has
 a simple blacklist system to help keep you from spamming people who
