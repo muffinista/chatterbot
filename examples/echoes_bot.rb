@@ -15,11 +15,15 @@ exclude "http://"
 
 blacklist "mean_user, private_user"
 
-replies do |tweet|
+loop do
+  replies do |tweet|
 
-  # replace the incoming username with the handle of the user who tweeted us
-  src = tweet[:text].gsub(/@echoes_bot/, tweet_user(tweet))
+    # replace the incoming username with the handle of the user who tweeted us
+    src = tweet[:text].gsub(/@echoes_bot/, tweet_user(tweet))
 
-  # send it back!
-  reply src, tweet
+    # send it back!
+    reply src, tweet
+  end
+
+  sleep 10
 end
