@@ -1,6 +1,6 @@
 #!/usr/bin/env ruby
 
-require '../lib/chatterbot'
+require 'chatterbot/dsl'
 
 exclude ["foo", "bar"]
 search("foo") do |tweet|

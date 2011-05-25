@@ -1,6 +1,6 @@
 #!/usr/bin/env ruby
 
-require '../lib/chatterbot'
+require 'chatterbot'
 
 
 x = Chatterbot::Bot.new

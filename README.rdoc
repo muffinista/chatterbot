@@ -27,7 +27,7 @@ Chatterbot has a very simple DSL inspired by Sinatra and Twibot, an
 earlier Twitter bot framework.  Here's an example, based on @dr_rumack
 on Twitter (http://twitter.com/#!/Dr_Rumack):
 
-  require 'chatterbot'
+  require 'chatterbot/dsl'
   search("'surely you must be joking'") do |tweet|
     reply "@#{tweet_user(tweet)} I am serious, and don't call me Shirley!", tweet
   end
