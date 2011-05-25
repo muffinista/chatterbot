@@ -113,10 +113,10 @@ your bot:
 
 There's a couple ways of running your bot:
 
-1. Run it on the command-line whenever you like. Whee!
-2. Run it via cron.  Here's an example of running a bot every two minutes:
+* Run it on the command-line whenever you like. Whee!
+* Run it via cron.  Here's an example of running a bot every two minutes:
   */2 * * * * . ~/.bash_profile; cd /path/to/bot/;  ./bot.rb
-3. Run it as a background process.  Just put the guts of your bot in a
+* Run it as a background process.  Just put the guts of your bot in a
 loop like this:
 
   loop do
