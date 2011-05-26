@@ -4,6 +4,7 @@
 #
 # require the dsl lib to include all the methods you see below.
 #
+require 'rubygems'
 require 'chatterbot/dsl'
 
 puts "Loading echoes_bot.rb"
