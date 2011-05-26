@@ -53,6 +53,10 @@ module Chatterbot
       has_config? && config.has_key?(:log_dest)
     end
 
+    def verbose?
+      config[:verbose] || false
+    end
+    
     #
     # destination for log entries
     def log_dest
@@ -197,6 +201,7 @@ module Chatterbot
       # let's not store these, they're just command-line options
       tmp.delete(:debug_mode)
       tmp.delete(:dry_run)
+      tmp.delete(:verbose)      
 
       
       # update the since_id now

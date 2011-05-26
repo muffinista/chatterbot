@@ -18,7 +18,6 @@ describe "Chatterbot::Reply" do
   # end
 
   it "iterates results" do
-    #bot = Chatterbot::Bot.new
     bot = test_bot
     bot.should_receive(:require_login).and_return(true)
     bot.stub!(:client).and_return(fake_replies(100, 3))
@@ -35,7 +34,6 @@ describe "Chatterbot::Reply" do
 
   it "checks blacklist" do
     bot = test_bot
-#    bot = Chatterbot::Bot.new
     bot.should_receive(:require_login).and_return(true)
     bot.stub!(:client).and_return(fake_replies(100, 3))
     
@@ -51,4 +49,29 @@ describe "Chatterbot::Reply" do
     indexes.should == [2,3]
   end
 
+
+  it "passes along since_id" do
+    bot = test_bot
+    bot.should_receive(:require_login).and_return(true)
+    bot.stub!(:client).and_return(fake_replies(100, 3))    
+    bot.stub!(:since_id).and_return(123)
+    
+    bot.client.should_receive(:replies).with({:since_id => 123})
+
+    bot.replies
+  end
+  
+
+  it "doesn't pass along invalid since_id" do
+    bot = test_bot
+    bot.should_receive(:require_login).and_return(true)
+    bot.stub!(:client).and_return(fake_replies(100, 3))    
+    bot.stub!(:since_id).and_return(0)
+    
+    bot.client.should_receive(:replies).with({ })
+
+    bot.replies
+  end
+    
+  
 end

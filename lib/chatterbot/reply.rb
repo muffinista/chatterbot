@@ -9,7 +9,8 @@ module Chatterbot
       return unless require_login
       debug "check for replies since #{since_id}"
       
-      results = client.replies(:since_id => since_id)
+      opts = since_id > 0 ? {:since_id => since_id} : {}
+      results = client.replies(opts)
 
       if results.is_a?(Hash) && results.has_key?("error")
         critical results["error"]

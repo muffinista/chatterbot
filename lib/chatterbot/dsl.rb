@@ -27,8 +27,9 @@ module Chatterbot
       opts.on('-d', '--db [ARG]', "Specify a DB connection URI")    { |d| ENV["chatterbot_db"] = d }
       opts.on('-c', '--config [ARG]', "Specify a config file to use")    { |c| ENV["chatterbot_config"] = c }
       opts.on('-t', '--test', "Run the bot without actually sending any tweets") { params[:debug_mode] = true }
+      opts.on('-v', '--verbose', "verbose output to stdout")    { params[:verbose] = true }
       opts.on('--dry-run', "Run the bot in test mode, and also don't update the database")    { params[:debug_mode] = true ; params[:no_update] = true }
-      opts.on('-s', '--since_id [ARG]', "Check for tweets since tweet id #[ARG]")    { |s| params[:since_id] = s }
+      opts.on('-s', '--since_id [ARG]', "Check for tweets since tweet id #[ARG]")    { |s| params[:since_id] = s.to_i }
 
       opts.on_tail("-h", "--help", "Show this message") do
         puts opts
