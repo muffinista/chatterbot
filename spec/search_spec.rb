@@ -27,17 +27,36 @@ describe "Chatterbot::Search" do
     #bot = Chatterbot::Bot.new
 
     bot.stub!(:client).and_return(fake_search(100))
-    bot.client.should_receive(:search).with("foo", {:since_id => 1})
-    bot.client.should_receive(:search).with("bar", {:since_id => 1})    
+    bot.client.should_receive(:search).with("foo", {})
+    bot.client.should_receive(:search).with("bar", {})    
 
     bot.search(["foo", "bar"])
+  end
+
+  it "accepts extra params" do
+    bot = test_bot
+
+    bot.stub!(:client).and_return(fake_search(100))
+    bot.client.should_receive(:search).with("foo", {:lang => "en"})
+
+    bot.search("foo", :lang => "en")
   end
 
   it "accepts a single search query" do
     bot = test_bot
 
     bot.stub!(:client).and_return(fake_search(100))
-    bot.client.should_receive(:search).with("foo", {:since_id => 1})
+    bot.client.should_receive(:search).with("foo", {})
+
+    bot.search("foo")
+  end
+
+  it "passes along since_id" do
+    bot = test_bot
+    bot.stub!(:since_id).and_return(123)
+    
+    bot.stub!(:client).and_return(fake_search(100))
+    bot.client.should_receive(:search).with("foo", {:since_id => 123})
 
     bot.search("foo")
   end

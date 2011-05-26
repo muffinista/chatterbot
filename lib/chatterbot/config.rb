@@ -44,7 +44,7 @@ module Chatterbot
     #
     # Should we run any config updates?
     def update_config?
-      config[:dry_run] || true
+      config.has_key?(:dry_run) ? ! config[:dry_run] : true
     end
 
     #
@@ -69,7 +69,7 @@ module Chatterbot
     #
     # return the ID of the most recent tweet pulled up in searches
     def since_id
-      config[:since_id] || 1
+      config[:since_id] || 0
     end   
 
     #

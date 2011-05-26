@@ -72,8 +72,8 @@ module Chatterbot
     
     #
     # search twitter for the specified terms
-    def search(query, &block)
-      @bot.search(query, &block)
+    def search(query, opts = {}, &block)
+      @bot.search(query, opts, &block)
     end
     
     #

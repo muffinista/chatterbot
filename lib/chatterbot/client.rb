@@ -11,6 +11,7 @@ module Chatterbot
     # default options when querying twitter -- this could be extended
     # with a language, etc.
     def default_opts
+      return {} if since_id <= 0
       {
         :since_id => since_id
       }

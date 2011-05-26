@@ -26,6 +26,16 @@ describe "Chatterbot::Config" do
       @bot.config[:custom].should == :value
     end
 
+    it "update_config? is true by default" do
+      @bot.update_config?.should == true
+    end
+
+    it "update_config? is false if this is a dry run" do
+      @bot.config[:dry_run] = true
+      @bot.update_config?.should == false
+    end
+
+    
     it "returns a log dest" do
       @bot.should_receive(:load_config).and_return({:log_dest => :bar})    
       @bot.config = nil

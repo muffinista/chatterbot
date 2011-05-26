@@ -45,12 +45,12 @@ describe "Chatterbot::DSL" do
     
     
     it "#search passes along to bot object" do
-      @bot.should_receive(:search).with("foo")
+      @bot.should_receive(:search).with("foo", { })
       search("foo")
     end
 
     it "#search passes along to bot object" do
-      @bot.should_receive(:search).with(["foo","bar"])
+      @bot.should_receive(:search).with(["foo","bar"], { })
       search(["foo","bar"])
     end
     

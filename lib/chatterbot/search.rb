@@ -5,7 +5,7 @@ module Chatterbot
   module Search
 
     # internal search code
-    def search(queries, &block)
+    def search(queries, opts = {}, &block)
       return unless init_client
       
       debug "check for tweets since #{since_id}"
@@ -18,7 +18,7 @@ module Chatterbot
       # search twitter
       #
       queries.each { |query|
-        search = client.search(query, default_opts)
+        search = client.search(query, opts.merge(default_opts))
         update_since_id(search)
 
         if search != nil
