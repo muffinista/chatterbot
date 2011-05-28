@@ -56,6 +56,11 @@ to publicly post the OAuth consumer key/secret that you would need to
 use.  If you're planning to run more than one bot, you only need to do
 this step once -- you can use the same app setup for other bots too.
 
+I've put together a {walkthrough of the process}[http://muffinlabs.com/content/walkthrough-setting-twitter-app-use-chatterbot] of setting up an app, and then authorizing your bot. It might be useful for first-time users
+
+
+
+
 Chatterbot will walk you through what is needed to get this setup.  If
 you run your bot without having an app setup, it will prompt you with
 the instructions. Here's the instructions if you want to do it yourself:
