@@ -54,7 +54,7 @@ describe "Chatterbot::Tweet" do
       test_str = "test!"
 
       s = {
-        'id' => 100
+        :id => 100
       }
       bot.client.should_receive(:update).with(test_str, {:in_reply_to_status_id => 100})
       bot.reply test_str, s
@@ -69,7 +69,7 @@ describe "Chatterbot::Tweet" do
       bot.stub!(:debug_mode?).and_return(true)
 
       bot.client.should_not_receive(:update)
-      bot.reply "no reply test!", {"id" => 100}
+      bot.reply "no reply test!", {:id => 100}
     end
   end
 
