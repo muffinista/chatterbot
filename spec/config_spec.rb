@@ -31,7 +31,7 @@ describe "Chatterbot::Config" do
     end
 
     it "update_config? is false if this is a dry run" do
-      @bot.config[:dry_run] = true
+      @bot.config[:no_update] = true
       @bot.update_config?.should == false
     end
 

@@ -22,7 +22,7 @@ module Chatterbot
       at_exit do
         raise $! if $!
         update_config
-      end   
+      end  
     end
     
   end

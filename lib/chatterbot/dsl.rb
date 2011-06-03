@@ -74,25 +74,25 @@ module Chatterbot
     #
     # search twitter for the specified terms
     def search(query, opts = {}, &block)
-      @bot.search(query, opts, &block)
+      bot.search(query, opts, &block)
     end
     
     #
     # handle replies to the bot
     def replies(&block)
-      @bot.replies(&block)
+      bot.replies(&block)
     end
 
     #
     # send a tweet
     def tweet(txt, params = {}, original = nil)
-      @bot.tweet(txt, params, original)
+      bot.tweet(txt, params, original)
     end   
 
     #
     # reply to a tweet
     def reply(txt, source)
-      @bot.reply(txt, source)
+      bot.reply(txt, source)
     end
   end
 end

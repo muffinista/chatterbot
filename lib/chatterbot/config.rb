@@ -44,7 +44,7 @@ module Chatterbot
     #
     # Should we run any config updates?
     def update_config?
-      config.has_key?(:dry_run) ? ! config[:dry_run] : true
+      config.has_key?(:no_update) ? ! config[:no_update] : true
     end
 
     #
@@ -200,7 +200,7 @@ module Chatterbot
 
       # let's not store these, they're just command-line options
       tmp.delete(:debug_mode)
-      tmp.delete(:dry_run)
+      tmp.delete(:no_update)
       tmp.delete(:verbose)      
 
       
