@@ -11,7 +11,7 @@ module Chatterbot
     # log a message
     def debug(s)
       puts s if verbose?
-      logger.debug s unless ! logging?
+      logger.debug "#{botname} #{s}" unless ! logging?
     end
 
     #

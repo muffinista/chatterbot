@@ -83,6 +83,7 @@ module Chatterbot
 
       # don't update flat file if we can store to the DB instead
       if has_db?
+        debug "storing config to database -- you don't need local file anymore"
         store_database_config
       else
         store_local_config
@@ -239,7 +240,7 @@ module Chatterbot
 
       configs = db[:config]
       data = {
-        :since_id => config[:since_id],
+        :since_id => config.has_key?(:tmp_since_id) ? config[:tmp_since_id] : config[:since_id],
         :token => config[:token],
         :secret => config[:secret],
         :consumer_secret => config[:consumer_secret],
