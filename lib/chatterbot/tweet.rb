@@ -19,7 +19,7 @@ module Chatterbot
 
     # reply to a tweet
     def reply(txt, source)
-      self.tweet txt, {:in_reply_to_status_id => source["id"]}, source
+      self.tweet txt, {:in_reply_to_status_id => source[:id]}, source
     end   
   end
 end
