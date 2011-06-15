@@ -10,7 +10,7 @@ describe "Chatterbot::Logging" do
 
     it "should call logger on debug" do
       @bot.should_receive(:logging?).and_return(true)
-      @logger.should_receive(:debug).with("hi!")
+      @logger.should_receive(:debug).with("rspec hi!")
       @bot.debug "hi!"
     end
 
@@ -22,7 +22,7 @@ describe "Chatterbot::Logging" do
 
     it "should call logger and also print output when critical" do
       @bot.should_receive(:logging?).and_return(true)
-      @logger.should_receive(:debug).with("hi!")      
+      @logger.should_receive(:debug).with("rspec hi!")      
       @bot.should_receive(:puts).with("hi!")
       @bot.critical "hi!"
     end

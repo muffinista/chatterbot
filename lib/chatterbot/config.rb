@@ -216,7 +216,7 @@ module Chatterbot
     # load in the config from the assortment of places it can be specified.
     def load_config(params={})
       # load the flat-files first
-      @config  = global_config.merge(bot_config).merge(params)
+      @config  = global_config.merge(bot_config)
       @config[:db_uri] ||= ENV["chatterbot_db"] unless ENV["chatterbot_db"].nil?
 
       # if we have a key to load from the DB, do that now
@@ -224,7 +224,7 @@ module Chatterbot
         tmp = db_config
         @config = @config.merge(tmp) unless tmp.nil?
       end
-      @config
+      @config.merge(params)
     end
 
     #

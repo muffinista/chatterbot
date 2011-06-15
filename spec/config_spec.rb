@@ -7,6 +7,12 @@ describe "Chatterbot::Config" do
   end
   
   describe "loading" do
+    it "overrides with incoming params" do
+      @bot.should_receive(:global_config).and_return({:foo => :bar})      
+      tmp = @bot.load_config({:foo => :baz})
+      tmp[:foo].should == :baz
+    end
+    
     it "loads config when we need a variable" do
       @bot.should_receive(:load_config).and_return({:foo => :bar})
       @bot.config = nil
