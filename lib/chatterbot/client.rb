@@ -13,7 +13,8 @@ module Chatterbot
     def default_opts
       return {} if since_id <= 0
       {
-        :since_id => since_id
+        :since_id => since_id,
+        :result_type => "recent"
       }
     end
     

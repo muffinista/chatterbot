@@ -47,4 +47,3 @@ end
 
 # mount up
 Chatterbot.load
-

@@ -1,12 +1,30 @@
 require File.expand_path(File.dirname(__FILE__) + '/spec_helper')
 
 describe "Chatterbot::Search" do
+  describe "exclude_retweets" do
+    before(:each) do
+      @bot = Chatterbot::Bot.new
+    end
+
+    it "should tack onto query" do
+      @bot.exclude_retweets("foo").should == ("foo -include:retweets")
+    end
+
+    it "shouldn't tack onto query" do
+      @bot.exclude_retweets("foo -include:retweets").should == ("foo -include:retweets")
+    end
+
+    it "shouldn't tack onto query" do
+      @bot.exclude_retweets("foo include:retweets").should == ("foo include:retweets")
+    end
+  end
+
   it "calls search" do
     bot = Chatterbot::Bot.new
     bot.should_receive(:search)
     bot.search("foo")
   end
-
+  
   it "calls init_client" do
     bot = test_bot
     bot.should_receive(:init_client).and_return(false)
@@ -27,8 +45,8 @@ describe "Chatterbot::Search" do
     #bot = Chatterbot::Bot.new
 
     bot.stub!(:client).and_return(fake_search(100))
-    bot.client.should_receive(:search).with("foo", {})
-    bot.client.should_receive(:search).with("bar", {})    
+    bot.client.should_receive(:search).with("foo -include:retweets", {})
+    bot.client.should_receive(:search).with("bar -include:retweets", {})    
 
     bot.search(["foo", "bar"])
   end
@@ -37,7 +55,7 @@ describe "Chatterbot::Search" do
     bot = test_bot
 
     bot.stub!(:client).and_return(fake_search(100))
-    bot.client.should_receive(:search).with("foo", {:lang => "en"})
+    bot.client.should_receive(:search).with("foo -include:retweets", {:lang => "en"})
 
     bot.search("foo", :lang => "en")
   end
@@ -46,7 +64,7 @@ describe "Chatterbot::Search" do
     bot = test_bot
 
     bot.stub!(:client).and_return(fake_search(100))
-    bot.client.should_receive(:search).with("foo", {})
+    bot.client.should_receive(:search).with("foo -include:retweets", {})
 
     bot.search("foo")
   end
@@ -56,7 +74,7 @@ describe "Chatterbot::Search" do
     bot.stub!(:since_id).and_return(123)
     
     bot.stub!(:client).and_return(fake_search(100))
-    bot.client.should_receive(:search).with("foo", {:since_id => 123})
+    bot.client.should_receive(:search).with("foo -include:retweets", {:since_id => 123, :result_type => "recent"})
 
     bot.search("foo")
   end
