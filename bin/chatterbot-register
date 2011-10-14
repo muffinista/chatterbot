@@ -1,0 +1,107 @@
+#!/usr/bin/env ruby
+$LOAD_PATH.unshift File.join(File.dirname(__FILE__), '..', 'lib')
+
+require 'chatterbot'
+require 'optparse'
+
+include Chatterbot::Helpers
+include Chatterbot::Config
+include Chatterbot::DB
+include Chatterbot::Logging
+
+@force = false
+
+
+#
+# pull in any arguments and set them as env variables
+#
+opts = OptionParser.new
+opts.banner = "Usage: #{File.basename($0)} [options]"
+
+opts.separator ""
+opts.separator "Specific options:" 
+
+opts.on('-d', '--db [ARG]', "Specify a DB connection URI")    { |d| ENV["chatterbot_db"] = d }
+opts.on('-c', '--config [ARG]', "Specify a config file to use")    { |c| ENV["chatterbot_config"] = c }
+opts.on('-b', '--bot [ARG]', "Name of the bot you want to register. If you don't specify this, it will be grabbed from twitter when you authenticate")    { |b| @botname = b }
+opts.on('-f', '--force', "Overwrite existing config values") { @force = true }
+
+opts.on_tail("-h", "--help", "Show this message") do
+  puts opts
+  exit
+end      
+
+skeleton = <<'EOF'
+#!/usr/bin/env ruby
+
+require 'rubygems'
+require 'chatterbot/dsl'
+
+# remove this to send out tweets
+debug_mode
+
+# remove this to update the db
+no_update
+
+# remove this to get less output when running
+verbose
+
+# here's a list of users to ignore
+blacklist "abc", "def"
+
+# here's a list of things to exclude from searches
+exclude "hi", "spammer", "junk"
+
+search "keyword" do |tweet|
+ reply "Hey #USER# nice to meet you!", tweet
+end
+
+replies do |tweet|
+  reply "Yes #USER#, you are very kind to say that!", tweet
+end
+
+EOF
+
+extra = opts.parse!(ARGV)
+
+
+if @botname.nil?
+  @botname = "tmp_bot_name"
+end
+
+@bot = Chatterbot::Bot.new(:name => @botname)
+
+if ! @bot.needs_auth_token? && @force == false
+  # check if this auth atually works
+
+  # if it does, print a message and exit
+end
+
+
+@bot.config.delete(:token)
+@bot.require_login(false)
+
+if @bot.client.authorized?
+  if @botname == "tmp_bot_name"
+    puts "change botname to #{@bot.access_token.params[:screen_name]}"
+    @bot.botname = @bot.access_token.params[:screen_name]
+  end
+
+  puts "Storing config info"
+  @bot.update_config
+
+  skel_dest = File.join(Dir.getwd, "#{@bot.botname}.rb")
+  if File.exist?(skel_dest)
+    puts "#{skel_dest} exists already, no doing anything"
+  else
+    puts "writing skeleton to #{skel_dest}"
+
+    f = File.new(skel_dest, "w")
+    f.write(skeleton)
+    f.close
+
+    File.chmod(0740, skel_dest)
+  end
+else
+  puts "Looks like something went wrong, better luck next time!"
+end
