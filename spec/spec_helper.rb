@@ -1,14 +1,16 @@
-$LOAD_PATH.unshift(File.join(File.dirname(__FILE__), '..', 'lib'))
-$LOAD_PATH.unshift(File.dirname(__FILE__))
+require 'simplecov'
+SimpleCov.start
+#$LOAD_PATH.unshift(File.join(File.dirname(__FILE__), '..', 'lib'))
+#$LOAD_PATH.unshift(File.dirname(__FILE__))
 
 require 'bundler/setup'
 Bundler.require
 
-require 'rspec'
-require 'chatterbot'
+
+#require 'rspec'
+#require 'chatterbot'
 
 require "twitter_oauth"
-
 
 require 'tempfile'
 require 'sqlite3'

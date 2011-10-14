@@ -35,6 +35,13 @@ module Chatterbot
       has_sequel? && config.has_key?(:db_uri)
     end
 
+    def debug_mode=(d)
+      config[:debug_mode] = d
+    end
+    def no_update=(d)
+      config[:no_update] = d
+    end
+    
     #
     # are we in debug mode?
     def debug_mode?
@@ -53,6 +60,10 @@ module Chatterbot
       has_config? && config.has_key?(:log_dest)
     end
 
+    def verbose=(v)
+      config[:verbose] = v
+    end
+   
     def verbose?
       config[:verbose] || false
     end
@@ -133,9 +144,31 @@ module Chatterbot
     end
 
     #
+    # determine if we're being called by one of our internal scripts
+    #
+    def chatterbot_helper?
+      File.basename($0).include?("chatterbot-")
+    end
+    
+    #
+    # if we are called by a bot, we want to use the directory of that
+    # script.  If we are called by chatterbot-register or another
+    # helper script, we want to use the current working directory   
+    #
+    def working_dir
+      if chatterbot_helper?
+        Dir.getwd
+      else
+        File.dirname($0)
+      end
+    end
+    
+    #
     # figure out what config file to load based on the name of the bot
     def config_file
-      File.join(File.expand_path(File.dirname($0)), "#{botname}.yml")
+      dest = working_dir
+
+      x = File.join(File.expand_path(dest), "#{botname}.yml")
     end
 
     #
@@ -164,7 +197,7 @@ module Chatterbot
        ENV["chatterbot_config"],
        
        # 'global' config file local to the path of the ruby script
-       File.join(File.dirname(File.expand_path($0)), "global.yml")
+       File.join(working_dir, "global.yml")
       ].compact
     end
 
@@ -172,6 +205,7 @@ module Chatterbot
     # get any config from our global config files
     def global_config
       tmp = {}
+
       global_config_files.each { |f|
         tmp.merge!(slurp_file(f) || {})      
       }

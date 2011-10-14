@@ -25,16 +25,18 @@ module Chatterbot
       # search twitter
       #
       queries.each { |query|
-
-        query = exclude_retweets(query)
-
-        search = client.search(query, opts.merge(default_opts))
+        debug "search: #{query} #{opts.merge(default_opts)}"
+        
+        search = client.search(exclude_retweets(query), opts.merge(default_opts))
         update_since_id(search)
 
         if search != nil
           search["results"].each { |s|
             s.symbolize_keys!
+            debug s[:text]
+            #if s[:text].downcase.include?(query.downcase)
             yield s unless ! block_given? || on_blacklist?(s) || skip_me?(s)
+            #end
           }
         end
       }

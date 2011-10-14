@@ -25,7 +25,26 @@ describe "Chatterbot::DSL" do
         blacklist "foo, bar"
       end
     end
-  
+
+    [:no_update, :debug_mode, :verbose].each do |method|
+      describe method.to_s do
+        it "#{method.to_s} with nil passes along true to bot object" do
+          @bot.should_receive("#{method.to_s}=").with(true)
+          send method
+        end
+
+        it "#debug_mode with false is passed" do
+          @bot.should_receive("#{method.to_s}=").with(false)
+          send method, false
+        end
+
+        it "#debug_mode with true is passed" do
+          @bot.should_receive("#{method.to_s}=").with(true)          
+          send method, true
+        end
+      end
+    end
+    
     describe "exclude" do
       it "#exclude passes along to bot object" do
         @bot.should_receive(:exclude=).with(["foo"])

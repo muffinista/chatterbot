@@ -75,6 +75,28 @@ describe "Chatterbot::Config" do
     end
   end
 
+  describe "debug_mode=" do
+    it "works" do
+      @bot.debug_mode = true
+      @bot.config[:debug_mode].should == true
+    end
+  end
+
+  describe "no_update=" do
+    it "works" do
+      @bot.no_update = true
+      @bot.config[:no_update].should == true
+    end
+  end
+
+  describe "verbose=" do
+    it "works" do
+      @bot.verbose = true
+      @bot.config[:verbose].should == true
+    end
+  end
+  
+  
   describe "debug_mode?" do
     it "works when debug_mode isn't set" do
       @bot.debug_mode?.should == false
@@ -181,7 +203,19 @@ describe "Chatterbot::Config" do
     end
   end
 
+  
+  describe "working_dir" do
+    it "returns getwd for chatterbot scripts" do
+      @bot.should_receive(:chatterbot_helper?).and_return(true)
+      @bot.working_dir.should == Dir.getwd
+    end
 
+    it "returns calling dir for non-chatterbot scripts" do
+      @bot.should_receive(:chatterbot_helper?).and_return(false)
+      @bot.working_dir.should == File.dirname($0)
+    end
+  end
+  
   describe "file I/O" do
     it "loads in some YAML" do
       tmp = {:since_id => 0}
@@ -214,6 +248,22 @@ describe "Chatterbot::Config" do
       @bot.should_not_receive(:store_database_config)
       @bot.should_receive(:store_local_config)      
       @bot.update_config     
+    end
+  end
+
+  describe "store_local_config" do
+    before(:each) do
+      tmp = {:x => 123, :foo => :bar}
+      
+      @src = Tempfile.new("config")
+
+      @bot.stub!(:config_file).and_return(@src.path)
+      @bot.stub!(:config_to_save).and_return(tmp)
+    end
+
+    it "should work" do
+      @bot.store_local_config
+      @bot.slurp_file(@src.path).should == { :x => 123, :foo => :bar }
     end
   end
   

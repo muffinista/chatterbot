@@ -25,18 +25,11 @@ module Chatterbot
       search = s.is_a?(Hash) ? s[:text] : s
       exclude.detect { |e| search.downcase.include?(e) } != nil
     end
-
-    #
-    # Pull the username from a tweet hash -- this is different depending on
-    # if we're doing a search, or parsing through replies/mentions.
-    def tweet_user(s)
-      s.has_key?(:from_user) ? s[:from_user] : s[:user][:screen_name]
-    end
     
     #
     # Is this tweet from a user on our blacklist?
     def on_blacklist?(s)
-      search = (s.is_a?(Hash) ? tweet_user(s) : s).downcase
+      search = (s.is_a?(Hash) ? from_user(s) : s).downcase
       blacklist.any? { |b| search.include?(b.downcase) } ||
         on_global_blacklist?(search)
     end

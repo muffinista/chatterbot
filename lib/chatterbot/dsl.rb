@@ -42,28 +42,62 @@ module Chatterbot
     end
 
     #
+    # should we send tweets?
+    #
+    def debug_mode(d=nil)
+      d = true if d.nil?
+      bot.debug_mode = d
+    end
+
+    #
+    # should we update the db with a new since_id?
+    #
+    def no_update(d=nil)
+      d = true if d.nil?
+      bot.no_update = d
+    end
+
+    #
+    # turn on/off verbose output
+    #
+    def verbose(d=nil)
+      d = true if d.nil?
+      bot.verbose = d
+    end
+
+    #
+    # take a variable list of strings and possibly arrays and turn
+    # them into a single flat array of strings
+    #
+    def flatten_list_of_strings(args)
+      args.collect do |b|
+        if b.is_a?(String)
+          # string, split on commas and turn into array
+          b.split(",").collect { |s| s.strip }
+        else
+          # presumably an array
+          b
+        end
+      end.flatten
+    end
+    
+    #
     # specify a bot-specific blacklist of users.  accepts an array, or a 
     # comma-delimited string
-    def blacklist(b=nil)
-      if b.is_a?(String)
-        b = b.split(",").collect { |s| s.strip }
-      end
-
-      if b.nil? || b.empty?
+    def blacklist(*args)
+      list = flatten_list_of_strings(args)
+      
+      if list.nil? || list.empty?
         bot.blacklist = []
       else     
-        bot.blacklist += b
+        bot.blacklist += list
       end
-    
     end
     
     #
     # specify list of strings we will check when deciding to respond to a tweet or not
-    def exclude(e=nil)
-      if e.is_a?(String)
-        e = e.split(",").collect { |s| s.strip }
-      end
-
+    def exclude(*args)
+      e = flatten_list_of_strings(args)
       if e.nil? || e.empty?
         bot.exclude = []
       else     

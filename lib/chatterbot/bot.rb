@@ -16,6 +16,10 @@ module Chatterbot
     #
     # Create a new bot. No options for now.
     def initialize(params={})
+      if params.has_key?(:name)
+        @botname = params.delete(:name)
+      end
+
       @config = load_config(params)
       
       # update config when we exit

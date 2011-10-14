@@ -7,6 +7,10 @@ module Chatterbot
     # the Twitter client
     attr_accessor :client
 
+    # track the access token so we can get screen name when
+    # registering new bots
+    attr_accessor :access_token
+
     #
     # default options when querying twitter -- this could be extended
     # with a language, etc.
@@ -35,9 +39,9 @@ module Chatterbot
     #
     # Call this before doing anything that requires an authorized Twitter
     # connection.
-    def require_login
+    def require_login(do_update_config=true)
       init_client
-      login
+      login(do_update_config)
     end
 
     #
@@ -50,6 +54,8 @@ module Chatterbot
 
       puts "Paste your PIN and hit enter when you have completed authorization."
       STDIN.readline.chomp
+    rescue Interrupt => e
+
     end
 
     #
@@ -88,13 +94,16 @@ module Chatterbot
     # error message for auth
     def display_oauth_error
       debug "Oops!  Looks like something went wrong there, please try again!"
-#      exit
     end
     
     #
     # handle oauth for this request.  if the client isn't authorized, print
     # out the auth URL and get a pin code back from the user
-    def login
+    # If +do_update_config+ is false, don't udpate the bots config
+    # file after authorization. This defaults to true but
+    # chatterbot-register will pass in false because it does some
+    # other work before saving.
+    def login(do_update_config=true)
       if needs_api_key?
         get_api_key
       end
@@ -103,16 +112,20 @@ module Chatterbot
         request_token = client.request_token
 
         pin = get_oauth_verifier(request_token)
-        access_token = client.authorize(
+        return false if pin.nil?
+
+        @access_token = client.authorize(
                                          request_token.token,
                                          request_token.secret,
                                          :oauth_verifier => pin
                                          )
 
+
         if client.authorized?
-          config[:token] = access_token.token
-          config[:secret] = access_token.secret
-          update_config
+          config[:token] = @access_token.token
+          config[:secret] = @access_token.secret
+
+          update_config unless do_update_config == false
         else
           display_oauth_error
           return false
