@@ -11,12 +11,18 @@ module Chatterbot
       @_db ||= connect_and_validate
     end
 
+    def display_db_config_notice
+      puts "ERROR: You have specified a DB connection, but you need to install the sequel gem to use it"
+    end
+    
     protected  
 
     #
     # get a DB object from Sequel
     def get_connection
-      if has_sequel?
+      if ! has_sequel? && config.has_key?(:db_uri)
+        display_db_config_notice
+      elsif has_sequel?
         Sequel.connect(config[:db_uri])
       end
     end
