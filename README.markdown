@@ -183,6 +183,8 @@ to ignore tweets with links, you could do something like this:
 TODO
 ====
 
+* document DSL methods
+* consider switching to Twitter gem for API
 * web-based frontend for tracking bot activity
 * opt-out system that adds people to blacklist if they reply to a bot
   in the right way
