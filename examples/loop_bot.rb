@@ -1,7 +1,10 @@
 #!/usr/bin/env ruby
 
 #
-# simple example of how to run a bot in a loop if you want
+# simple example of how to run a bot in a loop. if you want to do
+# that, you need to call update_config to update the database at the
+# end of each iteration -- this will keep you from processing the same
+# tweets multiple times
 #
 
 
