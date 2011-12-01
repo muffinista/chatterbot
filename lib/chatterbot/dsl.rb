@@ -128,6 +128,14 @@ module Chatterbot
     def reply(txt, source)
       bot.reply(txt, source)
     end
+
+    def since_id
+      bot.config[:since_id]
+    end
+    
+    def update_config
+      bot.update_config
+    end
   end
 end
 

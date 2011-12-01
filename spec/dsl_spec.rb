@@ -8,7 +8,7 @@ describe "Chatterbot::DSL" do
 
       Chatterbot::DSL.stub!(:bot).and_return(@bot)
     end
-  
+    
     describe "blacklist" do
       it "#blacklist passes along to bot object" do
         @bot.should_receive(:blacklist=).with(["foo"])
@@ -86,7 +86,21 @@ describe "Chatterbot::DSL" do
     it "#reply passes along to bot object" do
       @bot.should_receive(:reply).with("hello sailor!", { :source => "source "})
       reply "hello sailor!", { :source => "source "}
+    end    
+
+    describe "update_config" do
+      it "should pass to bot object" do
+        @bot.should_receive(:update_config)
+        update_config
+      end
     end
-    
+
+    describe "since_id" do
+      it "should pass to bot object" do
+        @bot.should_receive(:config).and_return({:since_id => 1234})
+        since_id.should == 1234
+      end
+    end
+
   end
 end

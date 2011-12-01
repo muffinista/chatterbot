@@ -78,6 +78,15 @@ describe "Chatterbot::Search" do
 
     bot.search("foo")
   end
+
+  it "updates since_id when complete" do
+    bot = test_bot
+    results = fake_search(100, 1, 1000)
+
+    bot.stub!(:client).and_return(results)
+    
+    bot.search("foo")
+  end
   
   it "iterates results" do
     bot = test_bot
@@ -93,7 +102,6 @@ describe "Chatterbot::Search" do
 
   it "checks blacklist" do
     bot = test_bot
-#    bot = Chatterbot::Bot.new
     bot.stub!(:client).and_return(fake_search(100, 3))
     
     bot.stub!(:on_blacklist?).and_return(true, false)
