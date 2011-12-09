@@ -156,6 +156,11 @@ Run it as a background process.  Just put the guts of your bot in a loop like th
       sleep 60
     end
 
+You need to call `update_config` to update the last tweet your script
+has processed -- if you don't have this call, you will get duplicate
+tweets.
+
+
 Database logging
 ----------------
 
