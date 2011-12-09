@@ -36,7 +36,7 @@ Write your bot
 --------------
 
 Chatterbot has a very simple DSL inspired by Sinatra and Twibot, an
-earlier Twitter bot framework.  Here's an example, based on 
+earlier Twitter bot framework.  Here's an example, based on
 [@dr_rumack](http://twitter.com/#!/Dr_Rumack), an actual bot running
 on Twitter:
 
@@ -60,7 +60,7 @@ Authorization
 If you only want to use Chatterbot to search for tweets, it will work
 out of the box without any authorization.  However, if you want to
 reply to tweets, or check for replies to your bot, you will have to
-jump through a few authorization hoops with Twitter. 
+jump through a few authorization hoops with Twitter.
 
 Before you setup a bot for the first time, you will need to register an
 application with Twitter.  Twitter requires all API communication to be via an
@@ -82,7 +82,7 @@ the instructions if you want to do it yourself:
 
 3. Choose 'Read & Write' access unless you don't need to send tweets.
 
-4. Take the consumer key/consumer secret values, and either run your bot, and enter them 
+4. Take the consumer key/consumer secret values, and either run your bot, and enter them
 in when prompted, or store them in a config file for your bot. (See
 below for details on this).  It should look like this:
 
@@ -142,9 +142,16 @@ Run it via cron.  Here's an example of running a bot every two minutes
 Run it as a background process.  Just put the guts of your bot in a loop like this:
 
     loop do
+      search "twitter" do |tweet|
+        # here you could do something with a tweet
+      end
+
       replies do |tweet|
         # do stuff
       end
+
+	  # explicitly update our config
+      update_config
 
       sleep 60
     end
