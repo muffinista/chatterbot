@@ -8,6 +8,7 @@ module Chatterbot
     include Logging
     include Search
     include Tweet
+    include Retweet
     include Reply
     include Client
     include DB

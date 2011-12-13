@@ -12,7 +12,6 @@ group :development do
   gem "shoulda", ">= 0"
   gem "rspec"
 
-  gem "bundler", "~> 1.0.0"
   gem "watchr"
 end
 
