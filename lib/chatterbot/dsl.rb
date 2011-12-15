@@ -124,6 +124,12 @@ module Chatterbot
     end   
 
     #
+    # retweet
+    def retweet(id)
+      bot.retweet(id)
+    end   
+
+    #
     # reply to a tweet
     def reply(txt, source)
       bot.reply(txt, source)

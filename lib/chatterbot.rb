@@ -37,6 +37,7 @@ module Chatterbot
     require "chatterbot/client"
     require "chatterbot/search"
     require "chatterbot/tweet"
+    require "chatterbot/retweet"
     require "chatterbot/reply"
     require "chatterbot/helpers"    
 

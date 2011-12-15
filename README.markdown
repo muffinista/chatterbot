@@ -141,25 +141,33 @@ Run it via cron.  Here's an example of running a bot every two minutes
 
 Run it as a background process.  Just put the guts of your bot in a loop like this:
 
-    loop do
-      search "twitter" do |tweet|
-        # here you could do something with a tweet
-      end
+```rb
+loop do
+  search "twitter" do |tweet|
+    # here you could do something with a tweet
+    # if you want to retweet
+    retweet(tweet[:id])
+  end
 
-      replies do |tweet|
-        # do stuff
-      end
+  replies do |tweet|
+    # do stuff
+  end
 
-	  # explicitly update our config
-      update_config
+# explicitly update our config
+  update_config
 
-      sleep 60
-    end
+  sleep 60
+end
+```
 
 You need to call `update_config` to update the last tweet your script
 has processed -- if you don't have this call, you will get duplicate
 tweets.
 
+Retweet
+-------
+
+Chatterbot can retweet the tweets found based upon the search.
 
 Database logging
 ----------------
