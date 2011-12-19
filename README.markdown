@@ -78,11 +78,9 @@ the instructions if you want to do it yourself:
 
 1. [Setup your own app](https://twitter.com/apps/new) on Twitter.
 
-2. Choose 'Client' as the app type.
+2. Put in whatever name, description, and website you want.
 
-3. Choose 'Read & Write' access unless you don't need to send tweets.
-
-4. Take the consumer key/consumer secret values, and either run your bot, and enter them
+3. Take the consumer key/consumer secret values, and either run your bot, and enter them
 in when prompted, or store them in a config file for your bot. (See
 below for details on this).  It should look like this:
 
@@ -153,21 +151,28 @@ loop do
     # do stuff
   end
 
-# explicitly update our config
+  # explicitly update our config
   update_config
 
   sleep 60
 end
 ```
 
-You need to call `update_config` to update the last tweet your script
+**NOTE:** You need to call `update_config` to update the last tweet your script
 has processed -- if you don't have this call, you will get duplicate
 tweets.
 
 Retweet
 -------
 
-Chatterbot can retweet the tweets found based upon the search.
+Chatterbot can retweet the tweets found based upon the search:
+
+```rb
+  search "xyzzy" do |tweet|
+    retweet(tweet[:id])
+  end
+```
+
 
 Database logging
 ----------------
