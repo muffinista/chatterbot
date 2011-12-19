@@ -8,7 +8,7 @@ describe "Chatterbot::DSL" do
 
       Chatterbot::DSL.stub!(:bot).and_return(@bot)
     end
-    
+
     describe "blacklist" do
       it "#blacklist passes along to bot object" do
         @bot.should_receive(:blacklist=).with(["foo"])
@@ -39,12 +39,12 @@ describe "Chatterbot::DSL" do
         end
 
         it "#debug_mode with true is passed" do
-          @bot.should_receive("#{method.to_s}=").with(true)          
+          @bot.should_receive("#{method.to_s}=").with(true)
           send method, true
         end
       end
     end
-    
+
     describe "exclude" do
       it "#exclude passes along to bot object" do
         @bot.should_receive(:exclude=).with(["foo"])
@@ -61,8 +61,8 @@ describe "Chatterbot::DSL" do
         exclude "foo, bar"
       end
     end
-    
-    
+
+
     it "#search passes along to bot object" do
       @bot.should_receive(:search).with("foo", { })
       search("foo")
@@ -72,7 +72,7 @@ describe "Chatterbot::DSL" do
       @bot.should_receive(:search).with(["foo","bar"], { })
       search(["foo","bar"])
     end
-    
+
     it "#replies passes along to bot object" do
       @bot.should_receive(:replies)
       replies
@@ -86,7 +86,7 @@ describe "Chatterbot::DSL" do
     it "#reply passes along to bot object" do
       @bot.should_receive(:reply).with("hello sailor!", { :source => "source "})
       reply "hello sailor!", { :source => "source "}
-    end    
+    end
 
     describe "update_config" do
       it "should pass to bot object" do
@@ -99,6 +99,15 @@ describe "Chatterbot::DSL" do
       it "should pass to bot object" do
         @bot.should_receive(:config).and_return({:since_id => 1234})
         since_id.should == 1234
+      end
+    end
+
+    describe "db" do
+      it "should pass to bot object" do
+        bot_db = mock(Object)
+        @bot.should_receive(:db).and_return(bot_db)
+
+        db.should eql(bot_db)
       end
     end
 

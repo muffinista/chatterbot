@@ -11,19 +11,19 @@ module Chatterbot
     # otherwise create a bot and return that
     def bot
       return @bot unless @bot.nil?
-      
+
       #
       # parse any command-line options and use them to initialize the bot
       #
       params = {}
-      
+
       opts = OptionParser.new
 
       opts.banner = "Usage: #{File.basename($0)} [options]"
 
       opts.separator ""
-      opts.separator "Specific options:" 
-      
+      opts.separator "Specific options:"
+
       opts.on('-d', '--db [ARG]', "Specify a DB connection URI")    { |d| ENV["chatterbot_db"] = d }
       opts.on('-c', '--config [ARG]', "Specify a config file to use")    { |c| ENV["chatterbot_config"] = c }
       opts.on('-t', '--test', "Run the bot without actually sending any tweets") { params[:debug_mode] = true }
@@ -34,8 +34,8 @@ module Chatterbot
       opts.on_tail("-h", "--help", "Show this message") do
         puts opts
         exit
-      end      
-      
+      end
+
       opts.parse!(ARGV)
 
       @bot = Chatterbot::Bot.new(params)
@@ -80,37 +80,37 @@ module Chatterbot
         end
       end.flatten
     end
-    
+
     #
-    # specify a bot-specific blacklist of users.  accepts an array, or a 
+    # specify a bot-specific blacklist of users.  accepts an array, or a
     # comma-delimited string
     def blacklist(*args)
       list = flatten_list_of_strings(args)
-      
+
       if list.nil? || list.empty?
         bot.blacklist = []
-      else     
+      else
         bot.blacklist += list
       end
     end
-    
+
     #
     # specify list of strings we will check when deciding to respond to a tweet or not
     def exclude(*args)
       e = flatten_list_of_strings(args)
       if e.nil? || e.empty?
         bot.exclude = []
-      else     
+      else
         bot.exclude += e
       end
     end
-    
+
     #
     # search twitter for the specified terms
     def search(query, opts = {}, &block)
       bot.search(query, opts, &block)
     end
-    
+
     #
     # handle replies to the bot
     def replies(&block)
@@ -121,13 +121,13 @@ module Chatterbot
     # send a tweet
     def tweet(txt, params = {}, original = nil)
       bot.tweet(txt, params, original)
-    end   
+    end
 
     #
     # retweet
     def retweet(id)
       bot.retweet(id)
-    end   
+    end
 
     #
     # reply to a tweet
@@ -138,9 +138,13 @@ module Chatterbot
     def since_id
       bot.config[:since_id]
     end
-    
+
     def update_config
       bot.update_config
+    end
+
+    def db
+      bot.db
     end
   end
 end
