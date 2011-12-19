@@ -70,10 +70,7 @@ module Chatterbot
       puts "Hey, looks like you need to get an API key from Twitter before you can get started."
       puts "Please go to this URL: https://twitter.com/apps/new"
 
-      puts "\nChoose 'Client' as the app type."
-      puts "Choose 'Read & Write' access."
-
-      print "\n\n\nPaste the 'Consumer Key' here: "
+      print "\n\nPaste the 'Consumer Key' here: "
       STDOUT.flush
       config[:consumer_key] = STDIN.readline.chomp
 
