@@ -10,6 +10,7 @@ include Chatterbot::DB
 include Chatterbot::Logging
 
 @force = false
+@skeleton = true
 
 
 #
@@ -25,17 +26,18 @@ Usage: #{File.basename($0)} [options]
 EOS
 
 opts.separator ""
-opts.separator "Options:" 
+opts.separator "Options:"
 
 opts.on('-d', '--db [ARG]', "Specify a DB connection URI")    { |d| ENV["chatterbot_db"] = d }
 opts.on('-c', '--config [ARG]', "Specify a config file to load")    { |c| ENV["chatterbot_config"] = c }
 opts.on('-b', '--bot [ARG]', "Name of the bot you want to register. If you don't specify this, it will be grabbed from twitter when you authenticate")    { |b| @botname = b }
 opts.on('-f', '--force', "Overwrite existing config values") { @force = true }
+opts.on('-s', '--skip-skeleton', "Don't write out a skeleton bot script") { @skeleton = false }
 
 opts.on_tail("-h", "--help", "Show this message") do
   puts opts
   exit
-end      
+end
 
 #
 # skeleton code for a bot -- pretty basic but covers the bases
@@ -96,17 +98,19 @@ if @bot.client.authorized?
   puts "Storing config info"
   @bot.update_config
 
-  skel_dest = File.join(Dir.getwd, "#{@bot.botname}.rb")
-  if File.exist?(skel_dest)
-    puts "#{skel_dest} exists already, not doing anything"
-  else
-    puts "writing skeleton to #{skel_dest}"
+  if @skeleton
+    skel_dest = File.join(Dir.getwd, "#{@bot.botname}.rb")
+    if File.exist?(skel_dest)
+      puts "#{skel_dest} exists already, not doing anything"
+    else
+      puts "writing skeleton to #{skel_dest}"
 
-    f = File.new(skel_dest, "w")
-    f.write(skeleton)
-    f.close
+      f = File.new(skel_dest, "w")
+      f.write(skeleton)
+      f.close
 
-    File.chmod(0740, skel_dest)
+      File.chmod(0740, skel_dest)
+    end
   end
 else
   puts "Looks like something went wrong, better luck next time!"

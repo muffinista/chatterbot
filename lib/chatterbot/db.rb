@@ -1,10 +1,10 @@
 module Chatterbot
-  
+
   #
   # routines for optionally interacting with a database for logging
   # tweets, and storing config data there. Uses Sequel to handle the
   # heavy lifing.
-  module DB   
+  module DB
     #
     # connect to the database, and generate any missing tables
     def db
@@ -14,8 +14,8 @@ module Chatterbot
     def display_db_config_notice
       puts "ERROR: You have specified a DB connection, but you need to install the sequel gem to use it"
     end
-    
-    protected  
+
+    protected
 
     #
     # get a DB object from Sequel
@@ -26,7 +26,7 @@ module Chatterbot
         Sequel.connect(config[:db_uri])
       end
     end
-    
+
     #
     # try and connect to the DB, and create tables that are missing.
     def connect_and_validate
@@ -39,7 +39,7 @@ module Chatterbot
           DateTime :created_at
         end
       end
-      
+
       if ! conn.tables.include?(:tweets)
         conn.create_table :tweets do
           primary_key :id
@@ -48,7 +48,7 @@ module Chatterbot
           String :user
           String :source_id
           String :source_tweet
-          
+
           DateTime :created_at
         end
       end
@@ -63,12 +63,12 @@ module Chatterbot
           String :token
           String :consumer_secret
           String :consumer_key
-          
+
           DateTime :created_at
           DateTime :updated_at
         end
       end
-      
+
       conn
     end
 
