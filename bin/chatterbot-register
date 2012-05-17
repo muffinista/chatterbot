@@ -89,10 +89,10 @@ end
 @bot.config.delete(:token)
 @bot.require_login(false)
 
-if @bot.client.authorized?
+unless @bot.screen_name.nil?
   if @botname == "tmp_bot_name"
-    puts "change botname to #{@bot.access_token.params[:screen_name]}"
-    @bot.botname = @bot.access_token.params[:screen_name]
+    puts "change botname to #{@bot.screen_name}"
+    @bot.botname = @bot.screen_name
   end
 
   puts "Storing config info"

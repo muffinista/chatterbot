@@ -108,10 +108,10 @@ module Chatterbot
       unless search.nil?
         tmp_id = case
                    # incoming tweets
-                 when search.has_key?(:id) then search[:id]
-                   
+                 when search.respond_to?(:id) then search.id
+                 when search.respond_to?(:max) then search.max { |a, b| a.id <=> b.id }.id
                    # incoming searches
-                 when search.has_key?("max_id") then search["max_id"]
+#                 when search.has_key?("max_id") then search["max_id"]
 
                    # other?
                  else 1

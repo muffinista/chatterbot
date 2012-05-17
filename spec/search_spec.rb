@@ -27,16 +27,17 @@ describe "Chatterbot::Search" do
   
   it "calls init_client" do
     bot = test_bot
-    bot.should_receive(:init_client).and_return(false)
+#    bot.should_receive(:init_client).and_return(false)
     bot.search("foo")
   end
 
   it "calls update_since_id" do
     bot = test_bot
 
-    bot.stub!(:client).and_return(fake_search(100))
-    bot.should_receive(:update_since_id).with({'max_id' => 100, 'results' => []})
-
+    data = fake_search(100, 1)
+    bot.stub!(:search_client).and_return(data)
+    bot.should_receive(:update_since_id).with(data.search)
+    
     bot.search("foo")
   end
 
@@ -44,9 +45,9 @@ describe "Chatterbot::Search" do
     bot = test_bot
     #bot = Chatterbot::Bot.new
 
-    bot.stub!(:client).and_return(fake_search(100))
-    bot.client.should_receive(:search).with("foo -include:retweets", {})
-    bot.client.should_receive(:search).with("bar -include:retweets", {})    
+    bot.stub!(:search_client).and_return(fake_search(100, 1))
+    bot.search_client.should_receive(:search).with("foo -include:retweets", {})
+    bot.search_client.should_receive(:search).with("bar -include:retweets", {})    
 
     bot.search(["foo", "bar"])
   end
@@ -54,8 +55,8 @@ describe "Chatterbot::Search" do
   it "accepts extra params" do
     bot = test_bot
 
-    bot.stub!(:client).and_return(fake_search(100))
-    bot.client.should_receive(:search).with("foo -include:retweets", {:lang => "en"})
+    bot.stub!(:search_client).and_return(fake_search(100, 1))
+    bot.search_client.should_receive(:search).with("foo -include:retweets", {:lang => "en"})
 
     bot.search("foo", :lang => "en")
   end
@@ -63,8 +64,8 @@ describe "Chatterbot::Search" do
   it "accepts a single search query" do
     bot = test_bot
 
-    bot.stub!(:client).and_return(fake_search(100))
-    bot.client.should_receive(:search).with("foo -include:retweets", {})
+    bot.stub!(:search_client).and_return(fake_search(100, 1))
+    bot.search_client.should_receive(:search).with("foo -include:retweets", {})
 
     bot.search("foo")
   end
@@ -73,8 +74,8 @@ describe "Chatterbot::Search" do
     bot = test_bot
     bot.stub!(:since_id).and_return(123)
     
-    bot.stub!(:client).and_return(fake_search(100))
-    bot.client.should_receive(:search).with("foo -include:retweets", {:since_id => 123, :result_type => "recent"})
+    bot.stub!(:search_client).and_return(fake_search(100, 1))
+    bot.search_client.should_receive(:search).with("foo -include:retweets", {:since_id => 123, :result_type => "recent"})
 
     bot.search("foo")
   end
@@ -83,18 +84,20 @@ describe "Chatterbot::Search" do
     bot = test_bot
     results = fake_search(100, 1, 1000)
 
-    bot.stub!(:client).and_return(results)
+    bot.stub!(:search_client).and_return(results)
     
     bot.search("foo")
+
+    bot.config[:tmp_since_id].should == 1000
   end
   
   it "iterates results" do
     bot = test_bot
-    bot.stub!(:client).and_return(fake_search(100, 3))
+    bot.stub!(:search_client).and_return(fake_search(100, 3))
     indexes = []
 
     bot.search("foo") do |x|
-      indexes << x[:index]
+      indexes << x.attrs['index']
     end
     
     indexes.should == [1,2,3]
@@ -102,13 +105,13 @@ describe "Chatterbot::Search" do
 
   it "checks blacklist" do
     bot = test_bot
-    bot.stub!(:client).and_return(fake_search(100, 3))
+    bot.stub!(:search_client).and_return(fake_search(100, 3))
     
     bot.stub!(:on_blacklist?).and_return(true, false)
     
     indexes = []
     bot.search("foo") do |x|
-      indexes << x[:index]
+      indexes << x.attrs['index']
     end
 
     indexes.should == [2,3]

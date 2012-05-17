@@ -5,11 +5,39 @@ module Chatterbot
   module Client
 
     # the Twitter client
-    attr_accessor :client
+    #attr_accessor :client
 
-    # track the access token so we can get screen name when
-    # registering new bots
-    attr_accessor :access_token
+    attr_accessor :screen_name
+    attr_accessor :client
+    attr_accessor :search_client
+
+    def search_client
+      if @search_client
+        return @search_client
+      end
+
+      @search_client = Twitter::Client.new(
+                                    :consumer_key => client_params[:consumer_key],
+                                    :consumer_secret => client_params[:consumer_secret],
+                                    :oauth_token => client_params[:token],
+                                    :oauth_token_secret => client_params[:secret]
+                                    )
+    end
+
+    def client
+      if @client
+        return @client
+      end
+
+      @client = Twitter::Client.new(
+                                    :endpoint => "https://api.twitter.com",
+                                    :consumer_key => client_params[:consumer_key],
+                                    :consumer_secret => client_params[:consumer_secret],
+                                    :oauth_token => client_params[:token],
+                                    :oauth_token_secret => client_params[:secret]
+                                    )
+    end
+
 
     #
     # default options when querying twitter -- this could be extended
@@ -26,13 +54,12 @@ module Chatterbot
     #
     # Initialize the Twitter client
     def init_client
-      @client ||= TwitterOAuth::Client.new(client_params)
+      client.credentials?
     end
     
     #
     # Re-initialize with Twitter, handy during the auth process
     def reset_client
-      @client = nil
       init_client
     end
     
@@ -92,6 +119,32 @@ module Chatterbot
     def display_oauth_error
       debug "Oops!  Looks like something went wrong there, please try again!"
     end
+
+    def base_url
+      "https://api.twitter.com"
+    end
+
+    def consumer
+      OAuth::Consumer.new(
+                          config[:consumer_key],
+                          config[:consumer_secret],
+                          :site => base_url
+                          )
+    end
+
+    def generate_authorize_url(request_token)
+      request = consumer.create_signed_request(:get, consumer.authorize_path, request_token, pin_auth_parameters)
+      params = request['Authorization'].sub(/^OAuth\s+/, '').split(/,\s+/).map do |param|
+        key, value = param.split('=')
+        value =~ /"(.*?)"/
+        "#{key}=#{CGI::escape($1)}"
+      end.join('&')
+      "#{base_url}#{request.path}?#{params}"
+    end
+
+    def pin_auth_parameters
+      {:oauth_callback => 'oob'}
+    end
     
     #
     # handle oauth for this request.  if the client isn't authorized, print
@@ -106,27 +159,29 @@ module Chatterbot
       end
 
       if needs_auth_token?
-        request_token = client.request_token
+        request_token = consumer.get_request_token
+        url = generate_authorize_url(request_token)
+
+#        require 'launchy'
+#        Launchy.open(url)
 
         pin = get_oauth_verifier(request_token)
+
+#        pin = ask "Paste in the supplied PIN:"
+#        access_token = request_token.get_access_token(:oauth_verifier => pin.chomp)
+#        oauth_response = access_token.get('/1/account/verify_credentials.json')
+#        screen_name = oauth_response.body.match(/"screen_name"\s*:\s*"(.*?)"/).captures.first
+
+
         return false if pin.nil?
+        @access_token = request_token.get_access_token(:oauth_verifier => pin.chomp)
+        oauth_response = @access_token.get('/1/account/verify_credentials.json')
 
-        @access_token = client.authorize(
-                                         request_token.token,
-                                         request_token.secret,
-                                         :oauth_verifier => pin
-                                         )
+        @screen_name = oauth_response.body.match(/"screen_name"\s*:\s*"(.*?)"/).captures.first
 
-
-        if client.authorized?
-          config[:token] = @access_token.token
-          config[:secret] = @access_token.secret
-
-          update_config unless do_update_config == false
-        else
-          display_oauth_error
-          return false
-        end
+        config[:token] = @access_token.token
+        config[:secret] = @access_token.secret
+        update_config unless do_update_config == false
       end
 
       true

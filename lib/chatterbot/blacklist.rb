@@ -22,14 +22,14 @@ module Chatterbot
     #
     # Based on the text of this tweet, should it be skipped?
     def skip_me?(s)
-      search = s.is_a?(Hash) ? s[:text] : s
+      search = s.respond_to?(:text) ? s.text : s
       exclude.detect { |e| search.downcase.include?(e) } != nil
     end
     
     #
     # Is this tweet from a user on our blacklist?
     def on_blacklist?(s)
-      search = (s.is_a?(Hash) ? from_user(s) : s).downcase
+      search = (s.respond_to?(:user) ? from_user(s) : s).downcase
       blacklist.any? { |b| search.include?(b.downcase) } ||
         on_global_blacklist?(search)
     end

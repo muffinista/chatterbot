@@ -13,8 +13,6 @@ module Chatterbot
     
     # internal search code
     def search(queries, opts = {}, &block)
-      return unless init_client
-      
       debug "check for tweets since #{since_id}"
 
       if queries.is_a?(String)
@@ -26,17 +24,14 @@ module Chatterbot
       #
       queries.each { |query|
         debug "search: #{query} #{opts.merge(default_opts)}"
-        
-        search = client.search(exclude_retweets(query), opts.merge(default_opts))
-        update_since_id(search)
+        result = search_client.search(exclude_retweets(query), opts.merge(default_opts))
 
-        if search != nil
-          search["results"].each { |s|
-            s.symbolize_keys!
-            debug s[:text]
-            #if s[:text].downcase.include?(query.downcase)
+        update_since_id(result)
+
+        if result != nil
+          result.each { |s|
+            debug s.text
             yield s unless ! block_given? || on_blacklist?(s) || skip_me?(s)
-            #end
           }
         end
       }

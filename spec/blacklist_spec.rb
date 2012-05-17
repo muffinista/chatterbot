@@ -27,8 +27,8 @@ describe "Chatterbot::Blacklist" do
     end
 
     it "works with result hashes" do
-      @bot.skip_me?({:text => "did you know that i hate bots?"}).should == true
-      @bot.skip_me?({:text => "a tweet without any bad content"}).should == false
+      @bot.skip_me?(Twitter::Status.new('text' => "did you know that i hate bots?")).should == true
+      @bot.skip_me?(Twitter::Status.new('text' => "a tweet without any bad content")).should == false
     end
   end
 
@@ -52,8 +52,8 @@ describe "Chatterbot::Blacklist" do
     end
 
     it "works with result hashes" do
-      @bot.on_blacklist?({:from_user => "skippy"}).should == true
-      @bot.on_blacklist?({:from_user => "flippy"}).should == false
+      @bot.on_blacklist?(Twitter::Status.new('from_user' => "skippy")).should == true
+      @bot.on_blacklist?(Twitter::Status.new('from_user' => "flippy")).should == false
     end   
   end
 

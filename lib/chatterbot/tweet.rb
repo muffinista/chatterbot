@@ -3,7 +3,6 @@ module Chatterbot
   #
   # routines for sending tweets
   module Tweet 
-    
     # simple wrapper for sending a message
     def tweet(txt, params = {}, original = nil)
       return if require_login == false
@@ -22,7 +21,7 @@ module Chatterbot
     # reply to a tweet
     def reply(txt, source)
       debug txt
-      self.tweet txt, {:in_reply_to_status_id => source[:id]}, source
-    end   
+      tweet txt, {:in_reply_to_status_id => source[:id]}, source
+    end
   end
 end

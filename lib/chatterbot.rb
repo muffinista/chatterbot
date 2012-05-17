@@ -1,5 +1,6 @@
 require 'yaml'
-require 'twitter_oauth'
+require 'oauth'
+require 'twitter'
 
 #
 # Try and load Sequel, but don't freak out if it's not there

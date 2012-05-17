@@ -41,7 +41,7 @@ describe "Chatterbot::Helpers" do
     before(:each) do
       class TestBot < Chatterbot::Bot; end
       @bot = Chatterbot::Bot.new
-      @bot.client = mock(Object)
+      #@bot.client = mock(Object)
     end
 
     it "can set botname" do

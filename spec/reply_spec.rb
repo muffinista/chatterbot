@@ -17,6 +17,21 @@ describe "Chatterbot::Reply" do
   #   bot.replies
   # end
 
+  it "updates since_id when complete" do
+    bot = test_bot
+    bot.should_receive(:require_login).and_return(true)
+    results = fake_replies(100, 1, 1000)
+
+    bot.stub!(:client).and_return(results)
+    
+    bot.replies do |x|
+      ;
+    end
+
+    bot.config[:tmp_since_id].should == 1000
+  end
+
+
   it "iterates results" do
     bot = test_bot
     bot.should_receive(:require_login).and_return(true)
@@ -26,7 +41,7 @@ describe "Chatterbot::Reply" do
 
     indexes = []
     bot.replies do |x|
-      indexes << x[:index]
+      indexes << x['id']
     end
 
     indexes.should == [1,2,3]
@@ -41,9 +56,10 @@ describe "Chatterbot::Reply" do
 
     bot.stub!(:on_blacklist?).and_return(true, false)
 
+
     indexes = []
     bot.replies do |x|
-      indexes << x[:index]
+      indexes << x['id']
     end
 
     indexes.should == [2,3]
@@ -56,7 +72,7 @@ describe "Chatterbot::Reply" do
     bot.stub!(:client).and_return(fake_replies(100, 3))    
     bot.stub!(:since_id).and_return(123)
     
-    bot.client.should_receive(:replies).with({:since_id => 123})
+    bot.client.should_receive(:mentions).with({:since_id => 123, :count => 200})
 
     bot.replies
   end
@@ -68,16 +84,16 @@ describe "Chatterbot::Reply" do
     bot.stub!(:client).and_return(fake_replies(100, 3))    
     bot.stub!(:since_id).and_return(0)
     
-    bot.client.should_receive(:replies).with({ })
+    bot.client.should_receive(:mentions).with({:count => 200})
 
     bot.replies
   end
 
 
-  it "outputs an error if we get one from API" do
+  pending "outputs an error if we get one from API" do
     bot = test_bot
     bot.stub!(:require_login).and_return(true)
-    bot.stub!(:client).and_return(mock(Object, :replies => {"error" => "You messed up"}))
+    bot.stub!(:client).and_return(mock(Object, :mentions => {"error" => "You messed up"}))
 
     bot.should_receive(:critical).with("You messed up")
 

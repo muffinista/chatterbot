@@ -120,26 +120,25 @@ describe "Chatterbot::Config" do
   
   describe "update_since_id" do
     it "works with searches" do
+      data = [ fake_tweet(1000) ]
+
       @bot.config[:tmp_since_id] = 100
-      @bot.update_since_id({ "max_id" => 1000 })
+      @bot.update_since_id(data)
       @bot.config[:tmp_since_id].should == 1000
     end
 
     it "works with tweets" do
       @bot.config[:tmp_since_id] = 100
-      @bot.update_since_id({ :id => 1000 })
-      @bot.config[:tmp_since_id].should == 1000
-    end
 
-    it "handles weird results" do
-      @bot.config[:tmp_since_id] = 100
-      @bot.update_since_id({ :foo => 1000 })
-      @bot.config[:tmp_since_id].should == 100
+      data = fake_tweet(1000)
+      @bot.update_since_id(data)
+      @bot.config[:tmp_since_id].should == 1000
     end
 
     it "never rolls back" do
       @bot.config[:tmp_since_id] = 100
-      @bot.update_since_id({ :id => 50 })
+      data = fake_tweet(50)
+      @bot.update_since_id(data)
       @bot.config[:tmp_since_id].should == 100     
     end
   end

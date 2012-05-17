@@ -15,7 +15,7 @@ describe "Chatterbot::Tweet" do
       bot = test_bot
 
       bot.should_receive(:require_login).and_return(true)
-      bot.stub!(:client).and_return(mock(TwitterOAuth::Client))
+      bot.stub!(:client).and_return(mock(Twitter::Client))
 
       bot.stub!(:debug_mode?).and_return(false)
 
@@ -28,7 +28,7 @@ describe "Chatterbot::Tweet" do
       bot = test_bot
       
       bot.should_receive(:require_login).and_return(true)
-      bot.stub!(:client).and_return(mock(TwitterOAuth::Client))
+      bot.stub!(:client).and_return(mock(Twitter::Client))
 
       bot.stub!(:debug_mode?).and_return(true)
 
@@ -47,7 +47,7 @@ describe "Chatterbot::Tweet" do
     it "calls client.update with the right values" do
       bot = test_bot
       bot.should_receive(:require_login).and_return(true)
-      bot.stub!(:client).and_return(mock(TwitterOAuth::Client))
+      bot.stub!(:client).and_return(mock(Twitter::Client))
 
       bot.stub!(:debug_mode?).and_return(false)
 
@@ -64,7 +64,7 @@ describe "Chatterbot::Tweet" do
     it "doesn't reply when debug_mode? is set" do
       bot = test_bot
       bot.should_receive(:require_login).and_return(true)
-      bot.stub!(:client).and_return(mock(TwitterOAuth::Client))
+      bot.stub!(:client).and_return(mock(Twitter::Client))
 
       bot.stub!(:debug_mode?).and_return(true)
 
