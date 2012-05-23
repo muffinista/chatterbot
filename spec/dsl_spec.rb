@@ -62,15 +62,21 @@ describe "Chatterbot::DSL" do
       end
     end
 
+    describe "search" do
+      it "passes along to bot object" do
+        @bot.should_receive(:search).with("foo", { })
+        search("foo")
+      end
 
-    it "#search passes along to bot object" do
-      @bot.should_receive(:search).with("foo", { })
-      search("foo")
+      it "passes multiple queries along to bot object" do
+        @bot.should_receive(:search).with(["foo","bar"], { })
+        search(["foo","bar"])
+      end
     end
 
-    it "#search passes along to bot object" do
-      @bot.should_receive(:search).with(["foo","bar"], { })
-      search(["foo","bar"])
+    it "#retweet passes along to bot object" do
+      @bot.should_receive(:retweet).with(1234)
+      retweet(1234)
     end
 
     it "#replies passes along to bot object" do

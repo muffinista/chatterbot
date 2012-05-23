@@ -8,15 +8,6 @@ describe "Chatterbot::Reply" do
     bot.replies
   end
 
-  # it "calls update_since_id" do
-  #   bot = Chatterbot::Bot.new
-  #   bot.should_receive(:require_login).and_return(true)
-  #   bot.stub!(:client).and_return(fake_replies(100))
-  #   bot.should_receive(:update_since_id).with({'results' => []})
-
-  #   bot.replies
-  # end
-
   it "updates since_id when complete" do
     bot = test_bot
     bot.should_receive(:require_login).and_return(true)
@@ -88,16 +79,4 @@ describe "Chatterbot::Reply" do
 
     bot.replies
   end
-
-
-  pending "outputs an error if we get one from API" do
-    bot = test_bot
-    bot.stub!(:require_login).and_return(true)
-    bot.stub!(:client).and_return(mock(Object, :mentions => {"error" => "You messed up"}))
-
-    bot.should_receive(:critical).with("You messed up")
-
-    bot.replies
-  end
-  
 end

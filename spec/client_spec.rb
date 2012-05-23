@@ -12,6 +12,24 @@ describe "Chatterbot::Client" do
     @bot.require_login
   end
 
+  describe "init_client" do
+    before(:each) do
+      @client = mock(Twitter::Client)
+      @bot.should_receive(:client).and_return(@client)
+    end
+
+    it "returns true when client has credentials" do
+      @client.should_receive(:credentials?).and_return(true)
+      @bot.init_client.should == true
+    end
+
+    it "returns false when client does not have credentials" do
+      @client.should_receive(:credentials?).and_return(false)
+      @bot.init_client.should == false
+    end
+  end
+
+
   it "reset_client resets the client instance" do
     @bot.should_receive(:init_client).and_return(true)
     @bot.reset_client
@@ -31,18 +49,19 @@ describe "Chatterbot::Client" do
       @bot.should_receive(:needs_api_key?).and_return(false)
       @bot.should_receive(:needs_auth_token?).and_return(true)
       @bot.should_receive(:get_oauth_verifier).and_return("pin")
-      @bot.client.should_receive(:request_token).and_return(
-                                                            mock(:token => "token",
-                                                                 :secret => "secret"
-                                                                 )
-                                                            )
-      @bot.client.should_receive(:authorize).
-        with("token", "secret", { :oauth_verifier => "pin"}).
-        and_return(mock(:token => "access_token", :secret => "access_secret"))
     end
 
     it "handles getting an auth token" do
-      @bot.client.should_receive(:authorized?).and_return(true)
+      token = mock(Object,
+                   :token => "token",
+                   :secret => "secret"                                                                
+                   )
+
+      @bot.should_receive(:request_token).and_return(token)
+      token.should_receive(:get_access_token).with(:oauth_verifier => "pin").
+        and_return(mock(:token => "access_token", :secret => "access_secret"))
+
+      @bot.should_receive(:get_screen_name)
       @bot.should_receive(:update_config)
       
       @bot.login
@@ -52,7 +71,6 @@ describe "Chatterbot::Client" do
     end
 
     it "handles errors" do
-      @bot.client.should_receive(:authorized?).and_return(false)
       @bot.should_receive(:display_oauth_error)
       @bot.login
     end

@@ -46,8 +46,8 @@ describe "Chatterbot::Search" do
     #bot = Chatterbot::Bot.new
 
     bot.stub!(:search_client).and_return(fake_search(100, 1))
-    bot.search_client.should_receive(:search).with("foo -include:retweets", {})
-    bot.search_client.should_receive(:search).with("bar -include:retweets", {})    
+    bot.search_client.should_receive(:search).with("foo -include:retweets", {:result_type=>"recent"})
+    bot.search_client.should_receive(:search).with("bar -include:retweets", {:result_type=>"recent"})
 
     bot.search(["foo", "bar"])
   end
@@ -56,7 +56,7 @@ describe "Chatterbot::Search" do
     bot = test_bot
 
     bot.stub!(:search_client).and_return(fake_search(100, 1))
-    bot.search_client.should_receive(:search).with("foo -include:retweets", {:lang => "en"})
+    bot.search_client.should_receive(:search).with("foo -include:retweets", {:lang => "en", :result_type=>"recent"})
 
     bot.search("foo", :lang => "en")
   end
@@ -65,7 +65,7 @@ describe "Chatterbot::Search" do
     bot = test_bot
 
     bot.stub!(:search_client).and_return(fake_search(100, 1))
-    bot.search_client.should_receive(:search).with("foo -include:retweets", {})
+    bot.search_client.should_receive(:search).with("foo -include:retweets", {:result_type=>"recent"})
 
     bot.search("foo")
   end
