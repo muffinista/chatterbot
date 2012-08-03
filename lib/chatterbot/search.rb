@@ -24,16 +24,17 @@ module Chatterbot
       #
       queries.each { |query|
         debug "search: #{query} #{opts.merge(default_opts)}"
-        result = search_client.search(exclude_retweets(query), opts.merge(default_opts))
+        result = search_client.search(
+                                      exclude_retweets(query),
+                                      opts.merge(default_opts)
+                                      )
 
-        update_since_id(result)
+        update_since_id(result.max_id)
 
-        if result != nil
-          result.each { |s|
-            debug s.text
-            yield s unless ! block_given? || on_blacklist?(s) || skip_me?(s)
-          }
-        end
+        result.collection.each { |s|
+          debug s.text
+          yield s unless ! block_given? || on_blacklist?(s) || skip_me?(s)
+        }
       }
     end
   

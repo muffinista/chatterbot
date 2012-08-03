@@ -36,7 +36,7 @@ describe "Chatterbot::Search" do
 
     data = fake_search(100, 1)
     bot.stub!(:search_client).and_return(data)
-    bot.should_receive(:update_since_id).with(data.search)
+    bot.should_receive(:update_since_id).with(100)
     
     bot.search("foo")
   end
@@ -82,13 +82,11 @@ describe "Chatterbot::Search" do
 
   it "updates since_id when complete" do
     bot = test_bot
-    results = fake_search(100, 1, 1000)
-
+    results = fake_search(1000, 1)
     bot.stub!(:search_client).and_return(results)
     
+    bot.should_receive(:update_since_id).with(1000)
     bot.search("foo")
-
-    bot.config[:tmp_since_id].should == 1000
   end
   
   it "iterates results" do
@@ -97,7 +95,7 @@ describe "Chatterbot::Search" do
     indexes = []
 
     bot.search("foo") do |x|
-      indexes << x.attrs['index']
+      indexes << x.attrs[:index]
     end
     
     indexes.should == [1,2,3]
@@ -111,7 +109,7 @@ describe "Chatterbot::Search" do
     
     indexes = []
     bot.search("foo") do |x|
-      indexes << x.attrs['index']
+      indexes << x.attrs[:index]
     end
 
     indexes.should == [2,3]

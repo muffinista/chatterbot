@@ -22,7 +22,6 @@ describe "Chatterbot::Reply" do
     bot.config[:tmp_since_id].should == 1000
   end
 
-
   it "iterates results" do
     bot = test_bot
     bot.should_receive(:require_login).and_return(true)
@@ -32,7 +31,7 @@ describe "Chatterbot::Reply" do
 
     indexes = []
     bot.replies do |x|
-      indexes << x['id']
+      indexes << x[:id]
     end
 
     indexes.should == [1,2,3]
@@ -50,7 +49,7 @@ describe "Chatterbot::Reply" do
 
     indexes = []
     bot.replies do |x|
-      indexes << x['id']
+      indexes << x[:id]
     end
 
     indexes.should == [2,3]

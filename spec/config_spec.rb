@@ -120,7 +120,9 @@ describe "Chatterbot::Config" do
   
   describe "update_since_id" do
     it "works with searches" do
-      data = [ fake_tweet(1000) ]
+#      data = [ fake_tweet(1000) ]
+
+      data = fake_search(1000, 1).search
 
       @bot.config[:tmp_since_id] = 100
       @bot.update_since_id(data)
@@ -130,14 +132,14 @@ describe "Chatterbot::Config" do
     it "works with tweets" do
       @bot.config[:tmp_since_id] = 100
 
-      data = fake_tweet(1000)
+      data = fake_tweet(1000, 1000, true)
       @bot.update_since_id(data)
       @bot.config[:tmp_since_id].should == 1000
     end
 
     it "never rolls back" do
       @bot.config[:tmp_since_id] = 100
-      data = fake_tweet(50)
+      data = fake_tweet(50, 50, true)
       @bot.update_since_id(data)
       @bot.config[:tmp_since_id].should == 100     
     end

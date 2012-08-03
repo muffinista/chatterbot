@@ -27,30 +27,38 @@ end
 
 def fake_search(max_id = 100, result_count = 0, id_base=0)
   mock(Twitter::Client,
-       {
-         :credentials? => true,
-         :search => 1.upto(result_count).collect { |i| fake_tweet(i, id_base) }
-       }
+       :credentials? => true,
+       :search => Twitter::SearchResults.new(:max_id => max_id,
+                                             :results => 1.upto(result_count).collect { |i| fake_tweet(i, id_base) } )
        )
+
+  # mock(Twitter::Client,
+  #      {
+  #        :credentials? => true,
+  #        :search => 1.upto(result_count).collect { |i| fake_tweet(i, id_base) }
+  #      }
+  #      )
 end
 
 def fake_replies(max_id = 100, result_count = 0, id_base = 0)
   mock(Twitter::Client,
        {
          :credentials? => true,
-         :mentions => 1.upto(result_count).collect { |i| fake_tweet(i, id_base) }
+         :mentions => 1.upto(result_count).collect { |i| fake_tweet(i, id_base, true) }
        }
        )
 end
 
-def fake_tweet(index, id=0)
+def fake_tweet(index, id=0, as_object = false)
   id = index if id <= 0
+  x = {
+    :from_user => "chatterbot",
+    :index => index,
+    :id => id,
+    :user => {
+      'screen_name' => "chatterbot"
+    }
+  }
 
-  Twitter::Status.new(
-                      'from_user' => "chatterbot",
-                      'index' => index,
-                      'id' => id,
-                      'user' => {
-                        'screen_name' => "chatterbot"
-                      })
+  as_object == true ? Twitter::Status.new(x) : x
 end
