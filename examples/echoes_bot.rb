@@ -19,10 +19,6 @@ blacklist "mean_user, private_user"
 
 puts "checking for replies to me"
 replies do |tweet|
-  
-  # replace the incoming username with the handle of the user who tweeted us
-  # src = tweet[:text].gsub(/@echoes_bot/, tweet_user(tweet))
-
   # replace the incoming username with #USER#, which will be replaced
   # with the handle of the user who tweeted us by the
   # replace_variables helper
