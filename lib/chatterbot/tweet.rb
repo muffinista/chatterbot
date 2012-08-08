@@ -16,6 +16,9 @@ module Chatterbot
         log txt, original
         client.update txt, params
       end
+    rescue Twitter::Error::Forbidden => e
+      debug e
+      false
     end   
 
     # reply to a tweet

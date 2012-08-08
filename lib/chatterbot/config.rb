@@ -106,18 +106,22 @@ module Chatterbot
     # tweets, unless it is lower than what we have already
     def update_since_id(search)
       return if search.nil?
+      
       tmp_id = case
                  # Twitter::SearchResults
                when search.respond_to?(:max_id) then search.max_id
+
                  # incoming tweets
                when search.respond_to?(:id) then search.id
+
+                 # an enumeration
                when search.respond_to?(:max) then search.max { |a, b| a.id <=> b.id }.id
-                 # incoming searches
-                 #                 when search.has_key?("max_id") then search["max_id"]
                  
-                 # other?
-               else 1
+                 # probably an actual tweet ID at this point,
+                 # otherwise it will fail and return 0
+               else search
                end.to_i
+
       config[:tmp_since_id] = [config[:tmp_since_id].to_i, tmp_id].max        
     end
 

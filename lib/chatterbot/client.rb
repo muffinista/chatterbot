@@ -24,6 +24,8 @@ module Chatterbot
     # the endpoint for searches in a destructive fashion. This takes care of that problem
     #
     def search_client
+      return client
+
       @search_client ||= Twitter::Client.new(
                                       :endpoint => base_url,
                                       :consumer_key => client_params[:consumer_key],

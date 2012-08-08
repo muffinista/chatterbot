@@ -7,6 +7,7 @@ module Chatterbot
     # handle replies for the bot
     def replies(&block)
       return unless require_login
+
       debug "check for replies since #{since_id}"
 
       opts = since_id > 0 ? {:since_id => since_id} : {}
