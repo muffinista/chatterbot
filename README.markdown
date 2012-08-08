@@ -64,6 +64,12 @@ Or, you can create a bot object yourself, extend it if needed, and use it like s
 
 That's it!
 
+Chatterbot uses the the Twitter gem
+(https://github.com/sferik/twitter) to handle the underlying API
+calls. Any calls to the search/reply methods will return
+Twitter::Status objects, which are basically extended hashes.
+
+
 Authorization
 -------------
 
