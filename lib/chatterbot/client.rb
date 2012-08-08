@@ -20,19 +20,21 @@ module Chatterbot
     end
 
     #
-    # client for running searches -- for some reason Twitter::Client is overwriting
-    # the endpoint for searches in a destructive fashion. This takes care of that problem
+    # client for running searches -- for some reason Twitter::Client was overwriting
+    # the endpoint for searches in a destructive fashion, so I had two
+    # clients. That appears to be fixed, but if not, this takes care of that problem
     #
     def search_client
-      return client
+      client
+      # return client
 
-      @search_client ||= Twitter::Client.new(
-                                      :endpoint => base_url,
-                                      :consumer_key => client_params[:consumer_key],
-                                      :consumer_secret => client_params[:consumer_secret],
-                                      :oauth_token => client_params[:token],
-                                      :oauth_token_secret => client_params[:secret]
-                                      )
+      # @search_client ||= Twitter::Client.new(
+      #                                 :endpoint => base_url,
+      #                                 :consumer_key => client_params[:consumer_key],
+      #                                 :consumer_secret => client_params[:consumer_secret],
+      #                                 :oauth_token => client_params[:token],
+      #                                 :oauth_token_secret => client_params[:secret]
+      #                                 )
     end
 
 
@@ -79,57 +81,6 @@ module Chatterbot
       login(do_update_config)
     end
 
-    #
-    # print out a message about getting a PIN from twitter, then output
-    # the URL the user needs to visit to authorize
-    #
-    def get_oauth_verifier
-      #url = generate_authorize_url(request_token)
-
-      puts "Please go to the following URL and authorize the bot.\n"        
-      puts "#{request_token.authorize_url}\n"
-
-      puts "Paste your PIN and hit enter when you have completed authorization."
-      STDIN.readline.chomp
-    rescue Interrupt => e
-
-    end
-
-    #
-    # Ask the user to get an API key from Twitter.
-    def get_api_key
-      puts "****************************************"
-      puts "****************************************"
-      puts "****        API SETUP TIME!         ****"
-      puts "****************************************"
-      puts "****************************************"      
-      
-      puts "Hey, looks like you need to get an API key from Twitter before you can get started."
-      puts "Please go to this URL: https://twitter.com/apps/new"
-
-      print "\n\nPaste the 'Consumer Key' here: "
-      STDOUT.flush
-      config[:consumer_key] = STDIN.readline.chomp
-
-      print "Paste the 'Consumer Secret' here: "
-      STDOUT.flush
-      config[:consumer_secret] = STDIN.readline.chomp
-
-      # reset the client so we can re-init with new OAuth credentials
-      reset_client
-      
-      #
-      # capture ctrl-c and exit without a stack trace
-      #
-    rescue Interrupt => e
-#      exit
-    end
-
-    #
-    # error message for auth
-    def display_oauth_error
-      STDERR.puts "Oops!  Looks like something went wrong there, please try again!"
-    end
 
 
     #
@@ -173,8 +124,6 @@ module Chatterbot
 
       oauth_response = @access_token.get('/1/account/verify_credentials.json')
       @screen_name = JSON.parse(oauth_response.body)["screen_name"]
-
-#      @screen_name = oauth_response.body.match(/"screen_name"\s*:\s*"(.*?)"/).captures.first
     end
     
     #

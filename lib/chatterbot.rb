@@ -1,6 +1,7 @@
 require 'yaml'
 require 'oauth'
 require 'twitter'
+require 'launchy'
 
 #
 # Try and load Sequel, but don't freak out if it's not there
@@ -35,7 +36,8 @@ module Chatterbot
     require "chatterbot/db"
     require "chatterbot/logging"
     require "chatterbot/blacklist"
-    require "chatterbot/client"
+    require "chatterbot/ui"
+    require "chatterbot/client"    
     require "chatterbot/search"
     require "chatterbot/tweet"
     require "chatterbot/retweet"
