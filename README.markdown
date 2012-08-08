@@ -220,7 +220,6 @@ TODO
 
 * document DSL methods
 * document database setup
-* consider switching to Twitter gem for API
 * web-based frontend for tracking bot activity
 * opt-out system that adds people to blacklist if they reply to a bot
   in the right way
