@@ -1,5 +1,9 @@
 #!/usr/bin/env ruby
 
+## This is a very simple working example of a bot you can build with
+## chatterbot. It looks for mentions of '@echoes_bot' (the twitter
+## handle the bot uses), and sends replies with the name switched to
+## the handle of the sending user
 
 #
 # require the dsl lib to include all the methods you see below.
