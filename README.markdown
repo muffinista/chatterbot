@@ -15,6 +15,16 @@ Features
 * Simple blacklistling system to limit your annoyance of users
 * Optionally log tweets to the database for metrics and tracking purposes
 
+Is Writing Bots a Good Use of My Time?
+======================================
+
+Quick answer: if you're planning on being spammish on Twitter, you
+should probably find something else to do. If you're planning on
+writing a bot that isn't too rude or annoying, or that expects a
+certain amount of opt-in from users, then you're probably good. I've
+written a blog post about bots on Twitter here: http://muffinlabs.com/2012/06/04/the-current-state-of-bots-on-twitter/
+
+
 Using Chatterbot
 ================
 
