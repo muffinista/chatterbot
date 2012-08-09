@@ -22,7 +22,9 @@ Quick answer: if you're planning on being spammish on Twitter, you
 should probably find something else to do. If you're planning on
 writing a bot that isn't too rude or annoying, or that expects a
 certain amount of opt-in from users, then you're probably good. I've
-written a blog post about bots on Twitter here: http://muffinlabs.com/2012/06/04/the-current-state-of-bots-on-twitter/
+written a blog post about bots on Twitter here:
+http://muffinlabs.com/2012/06/04/the-current-state-of-bots-on-twitter/
+
 
 
 Using Chatterbot
@@ -68,6 +70,61 @@ Chatterbot uses the the Twitter gem
 (https://github.com/sferik/twitter) to handle the underlying API
 calls. Any calls to the search/reply methods will return
 Twitter::Status objects, which are basically extended hashes.
+
+What Can I Do?
+--------------
+
+Here's a list of the important methods in the Chatterbot DSL:
+
+**search** -- You can use this to perform a search on Twitter:
+
+    search("'surely you must be joking'") do |tweet|
+      reply "@#{tweet_user(tweet)} I am serious, and don't call me Shirley!", tweet
+    end
+
+**replies** -- Use this to check for replies and mentions:
+
+    replies do |tweet|
+      reply "Thanks for contacting me!", tweet
+    end
+
+**tweet** -- send a Tweet out for this bot:
+
+    tweet "I AM A BOT!!!"
+
+**reply** -- reply to another tweet:
+
+    reply "THIS IS A REPLY!", original_tweet
+
+**retweet** -- Chatterbot can retweet tweets as well:
+
+```rb
+  search "xyzzy" do |tweet|
+    retweet(tweet[:id])
+  end
+```
+
+
+**blacklist** -- you can use this to specify a list of users you don't
+  want to interact with. If you put the following line at the top of
+  your bot:
+  
+    blacklist "user1, user2, user3"
+    
+None of those users will trigger your bot if they come up in a
+search. However, if a user replies to one of your tweets or mentions
+your bot in a tweet, you will receive that tweet when calling the
+reply method.
+
+**exclude** -- similarly, you can specify a list of words/phrases
+  which shouldn't trigger your bot. If you use the following:
+  
+    exclude "spam"
+    
+Any tweets or mentions with the word 'spam' in them will be ignored by
+the bot. 
+
+For more details, check out dsl.rb in the source code.
 
 
 Authorization
@@ -177,17 +234,6 @@ end
 **NOTE:** You need to call `update_config` to update the last tweet your script
 has processed -- if you don't have this call, you will get duplicate
 tweets.
-
-Retweet
--------
-
-Chatterbot can retweet the tweets found based upon the search:
-
-```rb
-  search "xyzzy" do |tweet|
-    retweet(tweet[:id])
-  end
-```
 
 
 Database logging

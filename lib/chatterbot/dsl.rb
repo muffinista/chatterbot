@@ -7,6 +7,60 @@ module Chatterbot
   module DSL
 
     #
+    # search twitter for the specified terms, then pass any matches to
+    # the block.
+    # @example
+    #   search("chatterbot is cool!") do |tweet|
+    #     puts tweet[:text] # this is the actual tweeted text
+    #     reply "I agree!", tweet
+    #   end
+    def search(query, opts = {}, &block)
+      bot.search(query, opts, &block)
+    end
+
+    #
+    # handle replies to the bot. Each time this is called, chatterbot
+    # will pass any replies since the last call to the specified block
+    #
+    # @example
+    #   replies do |tweet|
+    #     puts tweet[:text] # this is the actual tweeted text
+    #     reply "Thanks for the mention!", tweet
+    #   end
+    def replies(&block)
+      bot.replies(&block)
+    end
+
+    #
+    # send a tweet
+    #
+    # @param [String] txt the text you want to tweet
+    # @param [Hash] params opts for the tweet
+    #   @see http://rdoc.info/gems/twitter/Twitter/API#update-instance_method
+    # @param [Tweet] original if this is a reply, the original tweet. this will
+    #   be used for variable substitution, and for logging
+    def tweet(txt, params = {}, original = nil)
+      bot.tweet(txt, params, original)
+    end
+
+    #
+    # retweet a tweet
+    # @param [id] id the ID of the tweet
+    def retweet(id)
+      bot.retweet(id)
+    end
+
+    #
+    # reply to a tweet
+    #
+    # @param [String] txt the text you want to tweet
+    # @param [Tweet] source the original tweet you are replying to
+    def reply(txt, source)
+      bot.reply(txt, source)
+    end
+
+    
+    #
     # generate a Bot object. if the DSL is being called from a Bot object, just return it
     # otherwise create a bot and return that
     def bot
@@ -43,6 +97,7 @@ module Chatterbot
 
     #
     # should we send tweets?
+    # @param [Boolean] d true/false if we should send tweets
     #
     def debug_mode(d=nil)
       d = true if d.nil?
@@ -51,6 +106,7 @@ module Chatterbot
 
     #
     # should we update the db with a new since_id?
+    # @param [Boolean] d true/false if we should update the database
     #
     def no_update(d=nil)
       d = true if d.nil?
@@ -59,12 +115,76 @@ module Chatterbot
 
     #
     # turn on/off verbose output
+    # @param [Boolean] d true/false use verbose output
     #
     def verbose(d=nil)
       d = true if d.nil?
       bot.verbose = d
     end
 
+    #
+    # specify a bot-specific blacklist of users.  accepts an array, or a
+    # comma-delimited string. when called, any subsequent calls to
+    # search or replies will filter out these users.
+    #
+    # @param [Array, String] args list of usernames
+    # @example
+    #   blacklist "mean_user, private_user"
+    #
+    def blacklist(*args)
+      list = flatten_list_of_strings(args)
+
+      if list.nil? || list.empty?
+        bot.blacklist = []
+      else
+        bot.blacklist += list
+      end
+    end
+
+    #
+    # specify list of strings we will check when deciding to respond
+    # to a tweet or not. accepts an array or a comma-delimited string.
+    # when called, any subsequent calls to search or replies will
+    # filter out tweets with these strings
+    #
+    # @param [Array, String] args list of usernames
+    # @example
+    #   exclude "spam, junk, something"
+    def exclude(*args)
+      e = flatten_list_of_strings(args)
+      if e.nil? || e.empty?
+        bot.exclude = []
+      else
+        bot.exclude += e
+      end
+    end
+
+    
+    #
+    # The ID of the most recent tweet processed by the bot
+    #
+    def since_id
+      bot.config[:since_id]
+    end
+
+    #
+    # explicitly save the configuration/state of the bot.
+    #
+    def update_config
+      bot.update_config
+    end
+
+    #
+    # return the bot's current database connection, if available.
+    # handy if you need to manage data with your bot
+    #
+    def db
+      bot.db
+    end
+
+    
+    protected
+    
     #
     # take a variable list of strings and possibly arrays and turn
     # them into a single flat array of strings
@@ -80,72 +200,7 @@ module Chatterbot
         end
       end.flatten
     end
-
-    #
-    # specify a bot-specific blacklist of users.  accepts an array, or a
-    # comma-delimited string
-    def blacklist(*args)
-      list = flatten_list_of_strings(args)
-
-      if list.nil? || list.empty?
-        bot.blacklist = []
-      else
-        bot.blacklist += list
-      end
-    end
-
-    #
-    # specify list of strings we will check when deciding to respond to a tweet or not
-    def exclude(*args)
-      e = flatten_list_of_strings(args)
-      if e.nil? || e.empty?
-        bot.exclude = []
-      else
-        bot.exclude += e
-      end
-    end
-
-    #
-    # search twitter for the specified terms
-    def search(query, opts = {}, &block)
-      bot.search(query, opts, &block)
-    end
-
-    #
-    # handle replies to the bot
-    def replies(&block)
-      bot.replies(&block)
-    end
-
-    #
-    # send a tweet
-    def tweet(txt, params = {}, original = nil)
-      bot.tweet(txt, params, original)
-    end
-
-    #
-    # retweet
-    def retweet(id)
-      bot.retweet(id)
-    end
-
-    #
-    # reply to a tweet
-    def reply(txt, source)
-      bot.reply(txt, source)
-    end
-
-    def since_id
-      bot.config[:since_id]
-    end
-
-    def update_config
-      bot.update_config
-    end
-
-    def db
-      bot.db
-    end
+    
   end
 end
 

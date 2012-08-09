@@ -19,7 +19,7 @@ module Chatterbot
     rescue Twitter::Error::Forbidden => e
       debug e
       false
-    end   
+    end
 
     # reply to a tweet
     def reply(txt, source)

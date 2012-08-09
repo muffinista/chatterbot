@@ -23,6 +23,8 @@ Gem::Specification.new do |s|
   s.add_runtime_dependency(%q<oauth>, [">= 0"])
   s.add_runtime_dependency(%q<twitter>, [">= 3.4.1"])
   s.add_runtime_dependency(%q<launchy>, [">= 2.1.2"])
+  s.add_development_dependency(%q<yard>, [">= 0"])
+  s.add_development_dependency(%q<redcarpet>, [">= 0"])
   s.add_development_dependency(%q<shoulda>, [">= 0"])
   s.add_development_dependency(%q<rake>, [">= 0"])
   s.add_development_dependency(%q<rspec>, [">= 0"])
