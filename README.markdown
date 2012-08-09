@@ -7,6 +7,9 @@ pretty involved bots. It handles searches, replies and tweets, and has
 a simple blacklist system to help keep you from spamming people who
 don't want to hear from your bot.
 
+[![Build Status](https://secure.travis-ci.org/muffinista/chatterbot.png?branch=master)](http://travis-ci.org/muffinista/chatterbot)
+
+
 Features
 --------
 * Works via Twitter's OAuth system.
