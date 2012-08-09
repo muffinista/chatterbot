@@ -125,7 +125,10 @@ reply method.
     exclude "spam"
     
 Any tweets or mentions with the word 'spam' in them will be ignored by
-the bot. 
+the bot. If you wanted to ignore any tweets with links in them (a wise
+precaution if you want to avoid spreading spam), you could call:
+
+    exclude "http://"
 
 For more details, check out dsl.rb in the source code.
 
