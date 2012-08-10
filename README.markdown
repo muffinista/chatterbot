@@ -88,8 +88,10 @@ Here's a list of the important methods in the Chatterbot DSL:
 **replies** -- Use this to check for replies and mentions:
 
     replies do |tweet|
-      reply "Thanks for contacting me!", tweet
+      reply "#USER# Thanks for contacting me!", tweet
     end
+
+Note that the string #USER# will be replaced with the username of the person who sent the original tweet.
 
 **tweet** -- send a Tweet out for this bot:
 
@@ -97,7 +99,7 @@ Here's a list of the important methods in the Chatterbot DSL:
 
 **reply** -- reply to another tweet:
 
-    reply "THIS IS A REPLY!", original_tweet
+    reply "THIS IS A REPLY TO #USER#!", original_tweet
 
 **retweet** -- Chatterbot can retweet tweets as well:
 
