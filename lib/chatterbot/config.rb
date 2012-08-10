@@ -41,6 +41,13 @@ module Chatterbot
     def no_update=(d)
       config[:no_update] = d
     end
+
+    #
+    # should we reset the since_id for this bot?
+    # 
+    def reset_bot?
+      config[:reset_since_id] || false
+    end
     
     #
     # are we in debug mode?

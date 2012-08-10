@@ -6,6 +6,18 @@ describe "Chatterbot::Client" do
     @bot.client = mock(Object)
   end
 
+  describe "reset_since_id" do
+    it "runs a search to get a new max_id" do
+      bot = test_bot
+
+      bot.stub!(:search_client).and_return(fake_search(100, 1))
+      bot.search_client.should_receive(:search).with("a")
+      bot.reset_since_id
+
+      bot.config[:tmp_since_id].should == 100
+    end
+  end
+  
   it "runs init_client and login on #require_login" do
     @bot.should_receive(:init_client).and_return(true)
     @bot.should_receive(:login).and_return(true)

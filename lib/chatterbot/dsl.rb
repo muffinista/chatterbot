@@ -84,6 +84,10 @@ module Chatterbot
       opts.on('-v', '--verbose', "verbose output to stdout")    { params[:verbose] = true }
       opts.on('--dry-run', "Run the bot in test mode, and also don't update the database")    { params[:debug_mode] = true ; params[:no_update] = true }
       opts.on('-s', '--since_id [ARG]', "Check for tweets since tweet id #[ARG]")    { |s| params[:since_id] = s.to_i }
+      opts.on('-r', '--reset', "Reset your bot to ignore old tweets") {
+        params[:debug_mode] = true
+        params[:reset_since_id] = true
+      }
 
       opts.on_tail("-h", "--help", "Show this message") do
         puts opts

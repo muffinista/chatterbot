@@ -96,6 +96,20 @@ describe "Chatterbot::Config" do
     end
   end
   
+  describe "reset_bot?" do
+    it "works when reset_bot isn't set" do
+      @bot.reset_bot?.should == false
+    end
+
+    it "works when reset_bot is set" do
+      @bot.config[:reset_since_id] = false
+      @bot.reset_bot?.should == false
+
+      @bot.config[:reset_since_id] = true
+      @bot.reset_bot?.should == true
+    end
+  end
+
   
   describe "debug_mode?" do
     it "works when debug_mode isn't set" do

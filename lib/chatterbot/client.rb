@@ -37,6 +37,17 @@ module Chatterbot
       #                                 )
     end
 
+    #
+    # reset the since_id for this bot to the highest since_id we can
+    # get, by running a really open search and updating config with
+    # the max_id   
+    #
+    def reset_since_id
+      result = search_client.search("a")
+      update_since_id(result)
+    end
+
+    
 
     #
     # the URL we should use for api calls

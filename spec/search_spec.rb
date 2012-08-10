@@ -24,12 +24,7 @@ describe "Chatterbot::Search" do
     bot.should_receive(:search)
     bot.search("foo")
   end
-  
-  it "calls init_client" do
-    bot = test_bot
-#    bot.should_receive(:init_client).and_return(false)
-    bot.search("foo")
-  end
+ 
 
   it "calls update_since_id" do
     bot = test_bot
@@ -43,7 +38,6 @@ describe "Chatterbot::Search" do
 
   it "accepts multiple searches at once" do
     bot = test_bot
-    #bot = Chatterbot::Bot.new
 
     bot.stub!(:search_client).and_return(fake_search(100, 1))
     bot.search_client.should_receive(:search).with("foo -include:retweets", {:result_type=>"recent"})
