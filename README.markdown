@@ -109,7 +109,6 @@ Note that the string #USER# will be replaced with the username of the person who
   end
 ```
 
-
 **blacklist** -- you can use this to specify a list of users you don't
   want to interact with. If you put the following line at the top of
   your bot:
@@ -133,6 +132,18 @@ precaution if you want to avoid spreading spam), you could call:
     exclude "http://"
 
 For more details, check out dsl.rb in the source code.
+
+Direct Client Access
+--------------------
+
+If you want to do something not provided by the DSL, you have access
+to an instance of Twitter::Client provided by the **client** method.
+In theory, you can do something like this in your bot to unfollow
+users who DM you:
+
+    client.direct_messages_received(:since_id => since_id).each do |m|
+        client.unfollow(m.user.name)
+    end
 
 
 Authorization
