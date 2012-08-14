@@ -60,5 +60,5 @@ def fake_tweet(index, id=0, as_object = false)
     }
   }
 
-  as_object == true ? Twitter::Status.new(x) : x
+  as_object == true ? Twitter::Tweet.new(x) : x
 end

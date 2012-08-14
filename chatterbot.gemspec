@@ -21,7 +21,7 @@ Gem::Specification.new do |s|
   s.licenses = ["WTFDBAL"]
 
   s.add_runtime_dependency(%q<oauth>, [">= 0"])
-  s.add_runtime_dependency(%q<twitter>, [">= 3.4.1"])
+  s.add_runtime_dependency(%q<twitter>, [">= 3.6.0"])
   s.add_runtime_dependency(%q<launchy>, [">= 2.1.2"])
   s.add_development_dependency(%q<yard>, [">= 0"])
   s.add_development_dependency(%q<redcarpet>, [">= 0"])
