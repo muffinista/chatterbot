@@ -87,4 +87,22 @@ describe "Chatterbot::Client" do
       @bot.login
     end
   end
+
+  describe "get_screen_name" do
+    before(:each) do
+      @json = '{"id":12345,"screen_name":"mockbot"}'
+
+      @token = mock(Object)
+      response = mock(Object, :body => @json)
+      @token.should_receive(:get).with("/1/account/verify_credentials.json").and_return(response)
+    end
+
+    it "should work" do
+      @bot.get_screen_name(@token)
+      @bot.screen_name.should == "mockbot"
+    end
+  end
+  
+
+
 end
