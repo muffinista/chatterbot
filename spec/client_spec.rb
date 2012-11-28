@@ -12,6 +12,7 @@ describe "Chatterbot::Client" do
 
       bot.stub!(:search_client).and_return(fake_search(100, 1))
       bot.search_client.should_receive(:search).with("a")
+      bot.search("a")
       bot.reset_since_id
 
       bot.config[:tmp_since_id].should == 100

@@ -28,16 +28,9 @@ end
 def fake_search(max_id = 100, result_count = 0, id_base=0)
   mock(Twitter::Client,
        :credentials? => true,
-       :search => Twitter::SearchResults.new(:max_id => max_id,
-                                             :results => 1.upto(result_count).collect { |i| fake_tweet(i, id_base) } )
+       :search => Twitter::SearchResults.new(:search_metadata => {:max_id => max_id},
+                                             :statuses => 1.upto(result_count).collect { |i| fake_tweet(i, id_base) } )
        )
-
-  # mock(Twitter::Client,
-  #      {
-  #        :credentials? => true,
-  #        :search => 1.upto(result_count).collect { |i| fake_tweet(i, id_base) }
-  #      }
-  #      )
 end
 
 def fake_replies(max_id = 100, result_count = 0, id_base = 0)
