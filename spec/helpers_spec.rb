@@ -28,8 +28,8 @@ describe "Chatterbot::Helpers" do
       @bot.from_user("x").should == "x"
     end
 
-    it "should accept :from_user" do
-      @bot.from_user(:from_user => "x").should == "x"
+    it "should accept :from_user tweet" do
+      @bot.from_user(Twitter::Tweet.new(:id => 123, :from_user => "x")).should == "x"
     end
 
     it "should accept :screen_name" do

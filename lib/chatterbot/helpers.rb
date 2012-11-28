@@ -23,11 +23,14 @@ module Chatterbot
     # Pull the username from a tweet hash -- this is different depending on
     # if we're doing a search, or parsing through replies/mentions.
     def from_user(s)
-      return s if s.is_a?(String)
-      return s.from_user if s.respond_to?(:from_user) #&& ! s.from_user.nil?
-#      return s.user.screen_name if s.respond_to?(:user)
-
-      s.has_key?(:from_user) ? s[:from_user] : s[:user][:screen_name]
+      case s
+      when Twitter::Tweet
+        s.from_user
+      when String
+        s
+      else
+        s.has_key?(:from_user) ? s[:from_user] : s[:user][:screen_name]
+      end
     end
 
     
