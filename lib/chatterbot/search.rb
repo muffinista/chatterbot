@@ -28,7 +28,7 @@ module Chatterbot
                                       exclude_retweets(query),
                                       opts.merge(default_opts)
                                       )
-        update_since_id(result.max_id)
+        update_since_id(result)
 
         result.collection.each { |s|
           debug s.text
