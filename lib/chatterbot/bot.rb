@@ -29,7 +29,7 @@ module Chatterbot
         update_config
         puts "Reset to #{@config[:since_id]}"
         exit
-      else    
+      else
         # update config when we exit
         at_exit do
           raise $! if $!
