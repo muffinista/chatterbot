@@ -18,23 +18,29 @@ describe "Chatterbot::DB" do
       @bot.db
     end
   end
-  
-  describe "table creation" do
-    [:blacklist, :tweets, :config].each do |table|
-      it "should create table #{table}" do
-        @tmp_conn = @bot.db
-        @tmp_conn.tables.include?(table).should == true
-      end
-    end      
-  end
-  
-  describe "store_database_config" do
-    it "doesn't fail" do
-      @bot = Chatterbot::Bot.new    
-      @bot.config[:db_uri] = @db_uri
 
-      @bot.db      
-      @bot.store_database_config.should == true
+  context "db interactions" do
+    after(:each) do
+      @bot.db.disconnect unless @bot.db.nil?
+    end
+  
+    describe "table creation" do
+      [:blacklist, :tweets, :config].each do |table|
+        it "should create table #{table}" do
+          @tmp_conn = @bot.db
+          @tmp_conn.tables.include?(table).should == true
+        end
+      end      
+    end
+    
+    describe "store_database_config" do
+      it "doesn't fail" do
+        @bot = Chatterbot::Bot.new    
+        @bot.config[:db_uri] = @db_uri
+        
+        @bot.db      
+        @bot.store_database_config.should == true
+      end
     end
   end
 end
