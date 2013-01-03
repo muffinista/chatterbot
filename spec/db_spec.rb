@@ -4,9 +4,10 @@ require 'sequel'
 
 describe "Chatterbot::DB" do
   before(:each) do
-    @db_uri = "sqlite:/"
-
-    @bot = Chatterbot::Bot.new    
+    @db_uri = "sqlite:/tmp/chatterbot.db"
+    File.delete("/tmp/chatterbot.db") if File.exist?("/tmp/chatterbot.db")
+    
+    @bot = Chatterbot::Bot.new
     @bot.config[:db_uri] = @db_uri
   end
 
