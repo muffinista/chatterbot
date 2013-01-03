@@ -10,8 +10,8 @@ Bundler.require
 #require "twitter_oauth"
 require "twitter"
 
-require 'tempfile'
-require 'sqlite3'
+#require 'tempfile'
+#require 'sqlite3'
 
 
 # Requires supporting files with custom matchers and macros, etc,
@@ -22,6 +22,7 @@ Dir["#{File.dirname(__FILE__)}/support/**/*.rb"].each {|f| require f}
 def test_bot
   bot = Chatterbot::Bot.new
   bot.stub!(:load_config).and_return({})
+  bot.stub!(:update_config_at_exit)
   bot
 end
 

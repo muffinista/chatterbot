@@ -39,7 +39,7 @@ describe "Chatterbot::DB" do
         @bot = Chatterbot::Bot.new    
         @bot.config[:db_uri] = @db_uri
         
-        @bot.db      
+        @bot.db
         @bot.store_database_config.should == true
       end
     end

@@ -92,8 +92,8 @@ describe "Chatterbot::Blacklist" do
 
   describe "db interaction" do
     before(:each) do
-      @db_tmp = Tempfile.new("blacklist.db")
-      @db_uri = "sqlite://#{@db_tmp.path}"
+#      @db_tmp = Tempfile.new("blacklist.db")
+      @db_uri = "sqlite:/"
 
       @bot = Chatterbot::Bot.new    
       @bot.config[:db_uri] = @db_uri
