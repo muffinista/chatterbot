@@ -108,6 +108,10 @@ module Chatterbot
       end
     end
 
+    def update_config_at_exit
+      update_config
+    end
+    
     #
     # update the since_id with either the highest ID of the specified
     # tweets, unless it is lower than what we have already

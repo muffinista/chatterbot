@@ -8,6 +8,7 @@ describe "Chatterbot::DB" do
     File.delete("/tmp/chatterbot.db") if File.exist?("/tmp/chatterbot.db")
     
     @bot = Chatterbot::Bot.new
+    @bot.stub!(:update_config_at_exit)
     @bot.config[:db_uri] = @db_uri
   end
 
