@@ -114,15 +114,14 @@ module Chatterbot
     def update_since_id(search)
       return if search.nil?
       
-      tmp_id = case
-                 # Twitter::SearchResults
-               when search.respond_to?(:max_id) then search.max_id
+      tmp_id = case search
+               when Twitter::SearchResults then search.max_id
 
                  # incoming tweets
-               when search.respond_to?(:id) then search.id
+               when Twitter::Tweet then search.id
 
                  # an enumeration
-               when search.respond_to?(:max) then search.max { |a, b| a.id <=> b.id }.id
+               when Array then search.max { |a, b| a.id <=> b.id }.id
                  
                  # probably an actual tweet ID at this point,
                  # otherwise it will fail and return 0
