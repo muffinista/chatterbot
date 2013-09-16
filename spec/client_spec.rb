@@ -95,7 +95,7 @@ describe "Chatterbot::Client" do
 
       @token = mock(Object)
       response = mock(Object, :body => @json)
-      @token.should_receive(:get).with("/1/account/verify_credentials.json").and_return(response)
+      @token.should_receive(:get).with("/1.1/account/verify_credentials.json").and_return(response)
     end
 
     it "should work" do

@@ -135,7 +135,7 @@ module Chatterbot
     def get_screen_name(t = @access_token)
       return unless @screen_name.nil?
 
-      oauth_response = t.get('/1/account/verify_credentials.json')
+      oauth_response = t.get('/1.1/account/verify_credentials.json')
       @screen_name = JSON.parse(oauth_response.body)["screen_name"]
     end
     
