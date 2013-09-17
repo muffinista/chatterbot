@@ -22,13 +22,20 @@ Gem::Specification.new do |s|
 
   if RUBY_VERSION < "1.9"
     s.add_dependency "activesupport", "~> 3.0.11"
+    s.add_development_dependency(%q<redcarpet>, ["2.3.0"])
+  else
+    s.add_development_dependency(%q<redcarpet>, [">= 0"])
   end
+
+
+
+  
+
   
   s.add_runtime_dependency(%q<oauth>, [">= 0"])
   s.add_runtime_dependency(%q<twitter>, [">= 4.4.0"])
   s.add_runtime_dependency(%q<launchy>, [">= 2.1.2"])
   s.add_development_dependency(%q<yard>, [">= 0"])
-  s.add_development_dependency(%q<redcarpet>, [">= 0"])
   s.add_development_dependency(%q<shoulda>, [">= 0"])
   s.add_development_dependency(%q<rake>, [">= 0"])
   s.add_development_dependency(%q<rspec>, [">= 2.12.0"])
