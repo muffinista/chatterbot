@@ -1,4 +1,5 @@
-source :rubygems
+source 'https://rubygems.org'
+
 gemspec
 
 #gem "twitter_oauth"

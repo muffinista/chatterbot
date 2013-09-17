@@ -20,6 +20,10 @@ Gem::Specification.new do |s|
   s.require_paths = ["lib"]
   s.licenses = ["WTFDBAL"]
 
+  if RUBY_VERSION < "1.9"
+    s.add_dependency "activesupport", "~> 3.0.11"
+  end
+  
   s.add_runtime_dependency(%q<oauth>, [">= 0"])
   s.add_runtime_dependency(%q<twitter>, [">= 4.4.0"])
   s.add_runtime_dependency(%q<launchy>, [">= 2.1.2"])
