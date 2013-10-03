@@ -3,7 +3,7 @@ require File.expand_path(File.dirname(__FILE__) + '/spec_helper')
 describe "Chatterbot::DSL" do
   describe "client routines" do
     before(:each) do
-      @bot = mock(Chatterbot::Bot)
+      @bot = mock(Chatterbot::Bot, config:{})
       @bot.send :require, 'chatterbot/dsl'
 
       Chatterbot::DSL.stub!(:bot).and_return(@bot)
@@ -94,6 +94,15 @@ describe "Chatterbot::DSL" do
       reply "hello sailor!", { :source => "source "}
     end
 
+    context "setters" do
+      [:consumer_secret, :consumer_key, :token, :secret].each do |k|
+        it "should be able to set #{k}" do
+          send(k, "foo")
+          @bot.config[k].should == "foo"
+        end
+      end
+    end
+    
     describe "update_config" do
       it "should pass to bot object" do
         @bot.should_receive(:update_config)

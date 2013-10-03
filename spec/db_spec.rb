@@ -1,26 +1,32 @@
 require File.expand_path(File.dirname(__FILE__) + '/spec_helper')
 
-require 'sequel'
+#require 'sequel'
 
 describe "Chatterbot::DB" do
   before(:each) do
     @db_uri = "sqlite:/tmp/chatterbot.db"
     File.delete("/tmp/chatterbot.db") if File.exist?("/tmp/chatterbot.db")
-    
-    @bot = Chatterbot::Bot.new
-    @bot.stub!(:update_config_at_exit)
-    @bot.config[:db_uri] = @db_uri
   end
 
-  describe "get_connection" do
-    it "should make sure sequel is actually installed" do
-      @bot.stub!(:has_sequel?).and_return(false)
-      @bot.should_receive(:display_db_config_notice)
-      @bot.db
+  context "prerequisites" do
+    describe "get_connection" do
+      it "should make sure sequel is actually installed" do
+        Chatterbot::Bot.any_instance.stub(:has_sequel?) { false }
+        @bot = Chatterbot::Bot.new
+        @bot.config[:db_uri] = @db_uri
+        @bot.should_receive(:display_db_config_notice)
+        @bot.db
+      end
     end
   end
 
   context "db interactions" do
+    before(:each) do
+      @bot = Chatterbot::Bot.new
+      @bot.stub!(:update_config_at_exit)
+      @bot.config[:db_uri] = @db_uri
+    end
+
     after(:each) do
       @bot.db.disconnect unless @bot.db.nil?
     end

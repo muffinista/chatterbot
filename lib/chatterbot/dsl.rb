@@ -171,6 +171,25 @@ module Chatterbot
       bot.config[:since_id]
     end
 
+    def consumer_secret(s)
+      bot.config[:consumer_secret] = s
+    end
+
+    def consumer_key(k)
+      bot.config[:consumer_key] = k
+    end
+
+    def secret(s)
+      bot.config[:secret] = s
+    end
+    def token(s)
+      bot.config[:token] = s
+    end
+
+    def consumer_key(k)
+      bot.config[:consumer_key] = k
+    end
+    
     #
     # explicitly save the configuration/state of the bot.
     #

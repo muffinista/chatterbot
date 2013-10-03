@@ -175,6 +175,7 @@ module Chatterbot
         Dir.getwd
       else
         File.dirname($0)
+        #Dir.pwd
       end
     end
     
@@ -220,7 +221,6 @@ module Chatterbot
     # get any config from our global config files
     def global_config
       tmp = {}
-
       global_config_files.each { |f|
         tmp.merge!(slurp_file(f) || {})      
       }

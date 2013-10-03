@@ -40,7 +40,7 @@ module Chatterbot
 
       STDIN.readline.chomp
     rescue Interrupt => e
-      
+      exit
     end
 
     #
