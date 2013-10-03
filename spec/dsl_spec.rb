@@ -3,7 +3,7 @@ require File.expand_path(File.dirname(__FILE__) + '/spec_helper')
 describe "Chatterbot::DSL" do
   describe "client routines" do
     before(:each) do
-      @bot = mock(Chatterbot::Bot, config:{})
+      @bot = mock(Chatterbot::Bot, :config => {})
       @bot.send :require, 'chatterbot/dsl'
 
       Chatterbot::DSL.stub!(:bot).and_return(@bot)
