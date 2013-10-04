@@ -10,9 +10,9 @@ describe "Chatterbot::Client" do
     it "runs a search to get a new max_id" do
       bot = test_bot
 
-      bot.stub!(:search_client).and_return(fake_search(100, 1))
-      bot.search_client.should_receive(:search).with("a")
-      bot.search("a")
+      bot.stub!(:client).and_return(fake_search(100, 1))
+      bot.client.should_receive(:search).with("a")
+#      bot.search("a")
       bot.reset_since_id
 
       bot.config[:tmp_since_id].should == 100

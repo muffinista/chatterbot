@@ -111,28 +111,40 @@ module Chatterbot
     def update_config_at_exit
       update_config
     end
+
+    def max_id_from(s)
+      s.max { |a, b| a.id <=> b.id }.id
+    end
     
     #
     # update the since_id with either the highest ID of the specified
     # tweets, unless it is lower than what we have already
     def update_since_id(search)
       return if search.nil?
+
       
       tmp_id = case search
-               when Twitter::SearchResults then search.max_id
+               when Twitter::SearchResults then
+                 # don't use max_id if it's this ridiculous number
+                 # @see https://dev.twitter.com/issues/1300
+                 if search.max_id != 9223372036854775807
+                   search.max_id
+                 else
+                   max_id_from(search)
+                 end
 
                  # incoming tweets
                when Twitter::Tweet then search.id
 
                  # an enumeration
-               when Array then search.max { |a, b| a.id <=> b.id }.id
+               when Array then max_id_from(search)
                  
                  # probably an actual tweet ID at this point,
                  # otherwise it will fail and return 0
                else search
                end.to_i
 
-      config[:tmp_since_id] = [config[:tmp_since_id].to_i, tmp_id].max        
+      config[:tmp_since_id] = [config[:tmp_since_id].to_i, tmp_id].max
     end
 
     #

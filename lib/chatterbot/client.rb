@@ -45,11 +45,11 @@ module Chatterbot
     # the max_id   
     #
     def reset_since_id
-      result = search_client.search("a")
+      config[:tmp_since_id] = 0
+      result = client.search("a")
       update_since_id(result)
     end
-
-    
+   
 
     #
     # the URL we should use for api calls
