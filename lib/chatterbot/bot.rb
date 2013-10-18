@@ -10,6 +10,7 @@ module Chatterbot
     include Tweet
     include Retweet
     include Reply
+    include Followers
     include UI
     include Client
     include DB

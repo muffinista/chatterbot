@@ -3,7 +3,6 @@ require File.expand_path(File.dirname(__FILE__) + '/spec_helper')
 describe "Chatterbot::Reply" do
   it "calls require_login" do
     bot = test_bot
-    #bot = Chatterbot::Bot.new
     bot.should_receive(:require_login).and_return(false)
     bot.replies
   end

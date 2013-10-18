@@ -145,6 +145,10 @@ module Chatterbot
       end
     end
 
+    def followers(opts={})
+      bot.followers(opts)
+    end
+    
     #
     # specify list of strings we will check when deciding to respond
     # to a tweet or not. accepts an array or a comma-delimited string.
@@ -184,10 +188,6 @@ module Chatterbot
     end
     def token(s)
       bot.config[:token] = s
-    end
-
-    def consumer_key(k)
-      bot.config[:consumer_key] = k
     end
     
     #

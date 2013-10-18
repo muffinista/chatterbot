@@ -84,6 +84,11 @@ describe "Chatterbot::DSL" do
       replies
     end
 
+    it "#followers passes along to bot object" do
+      @bot.should_receive(:followers)
+      followers
+    end
+
     it "#tweet passes along to bot object" do
       @bot.should_receive(:tweet).with("hello sailor!", {:foo => "bar" }, nil)
       tweet "hello sailor!", {:foo => "bar"}

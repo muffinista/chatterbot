@@ -43,6 +43,15 @@ def fake_replies(max_id = 100, result_count = 0, id_base = 0)
        )
 end
 
+def fake_followers(count)
+  mock(Twitter::Client,
+       {
+         :credentials? => true,
+         :followers => 1.upto(count).collect { |i| fake_follower(i) }
+       }
+       )
+end
+
 def fake_tweet(index, id=0, as_object = false)
   id = index if id <= 0
   x = {
@@ -55,4 +64,8 @@ def fake_tweet(index, id=0, as_object = false)
   }
 
   as_object == true ? Twitter::Tweet.new(x) : x
+end
+
+def fake_follower(index=0)
+  Twitter::User.new(:id => index, :name => "Follower #{index}")
 end

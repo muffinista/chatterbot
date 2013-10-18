@@ -41,6 +41,7 @@ module Chatterbot
     require "chatterbot/tweet"
     require "chatterbot/retweet"
     require "chatterbot/reply"
+    require "chatterbot/followers"
     require "chatterbot/helpers"    
 
     require "chatterbot/bot"
