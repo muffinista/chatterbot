@@ -2,6 +2,7 @@
 #$LOAD_PATH.unshift File.join(File.dirname(__FILE__), '..', 'lib')
 
 require 'chatterbot'
+require 'chatterbot/skeleton'
 require 'optparse'
 
 include Chatterbot::Helpers
@@ -39,39 +40,6 @@ opts.on_tail("-h", "--help", "Show this message") do
   exit
 end
 
-#
-# skeleton code for a bot -- pretty basic but covers the bases
-#
-skeleton = <<'EOF'
-#!/usr/bin/env ruby
-
-require 'rubygems'
-require 'chatterbot/dsl'
-
-# remove this to send out tweets
-debug_mode
-
-# remove this to update the db
-no_update
-# remove this to get less output when running
-verbose
-
-# here's a list of users to ignore
-blacklist "abc", "def"
-
-# here's a list of things to exclude from searches
-exclude "hi", "spammer", "junk"
-
-search "keyword" do |tweet|
- reply "Hey #USER# nice to meet you!", tweet
-end
-
-replies do |tweet|
-  reply "Yes #USER#, you are very kind to say that!", tweet
-end
-
-EOF
-
 extra = opts.parse!(ARGV)
 
 
@@ -106,7 +74,8 @@ unless @bot.screen_name.nil?
       puts "writing skeleton to #{skel_dest}"
 
       f = File.new(skel_dest, "w")
-      f.write(skeleton)
+      script = Chatterbot::Skeleton.generate(@bot)
+      f.write(script)
       f.close
 
       File.chmod(0740, skel_dest)
