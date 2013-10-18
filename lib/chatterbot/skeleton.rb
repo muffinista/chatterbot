@@ -11,8 +11,38 @@ module Chatterbot
           :name => bot.botname,
           :timestamp => Time.now
         })
+
+        if RUBY_VERSION =~ /^1\.8\./
+          apply_vars(src, opts)
+        else
+          src % opts
+        end
+      end
+
+      #
+      # handle string interpolation in ruby 1.8. modified from
+      # https://raw.github.com/svenfuchs/i18n/master/lib/i18n/core_ext/string/interpolate.rb
+      #
+      def apply_vars(s, args)
+        pattern = Regexp.union(
+                                             /%\{(\w+)\}/,                               # matches placeholders like "%{foo}"
+                                             /%<(\w+)>(.*?\d*\.?\d*[bBdiouxXeEfgGcps])/  # matches placeholders like "%<foo>.d"
+                                             )
         
-        src % opts
+        pattern_with_escape = Regexp.union(
+                                                         /%%/,
+                                                         pattern
+                                                         )
+        
+        s.gsub(pattern_with_escape) do |match|
+          if match == '%%'
+            '%'
+          else
+            key = ($1 || $2).to_sym
+            raise KeyError unless args.has_key?(key)
+            $3 ? sprintf("%#{$3}", args[key]) : args[key]
+          end
+        end
       end
     end
   end
