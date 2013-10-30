@@ -131,6 +131,9 @@ precaution if you want to avoid spreading spam), you could call:
 
     exclude "http://"
 
+**followers** -- get a list of your followers. This is an experimental
+  feature but should work for most purposes.
+
 For more details, check out dsl.rb in the source code.
 
 Direct Client Access
@@ -200,16 +203,19 @@ Configuration
 Chatterbot offers a couple different methods of storing the config for
 your bot:
 
-1. In a YAML file with the same name as the bot, so if you have
+1. Your credentials can be stored as variables in the script itself.
+   `chatterbot-register` will do this for you. If your bot is using
+   replies or searches, that data will be written to a YAML file.
+2. In a YAML file with the same name as the bot, so if you have
    botname.rb or a Botname class, store your config in botname.yaml
-2. In a global config file at `/etc/chatterbot.yml` -- values stored here
+3. In a global config file at `/etc/chatterbot.yml` -- values stored here
    will apply to any bots you run.
-3. In another global config file specified in the environment variable
+4. In another global config file specified in the environment variable
    `'chatterbot_config'`.
-4. In a `global.yml` file in the same directory as your bot.  This
+5. In a `global.yml` file in the same directory as your bot.  This
    gives you the ability to have a global configuration file, but keep
    it with your bots if desired.
-5. In a database.  You can store your configuration in a DB, and then
+6. In a database.  You can store your configuration in a DB, and then
    specify the connection string either in one of the global config
    files, or on the command-line by using the `--db="db_uri"`
    configuration option.  Any calls to the database are handled by the
@@ -308,7 +314,7 @@ sense if requested.
 Copyright/License
 -----------------
 
-Copyright (c) 2011 Colin Mitchell. Chatterbot is distributed under a
+Copyright (c) 2013 Colin Mitchell. Chatterbot is distributed under a
 modified WTFPL licence -- it's the 'Do what the fuck you want to --
 but don't be an asshole' public license.  Please see LICENSE.txt for
 further details. Basically, do whatever you want with this code, but
