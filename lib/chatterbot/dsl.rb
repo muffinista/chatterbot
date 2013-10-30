@@ -145,6 +145,11 @@ module Chatterbot
       end
     end
 
+    #
+    # return a list of users following the bot. This passes directly
+    # to the underlying Twitter API call
+    # @see http://rdoc.info/gems/twitter/Twitter/API/FriendsAndFollowers#followers-instance_method
+    #
     def followers(opts={})
       bot.followers(opts)
     end
