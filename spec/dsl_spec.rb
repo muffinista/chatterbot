@@ -122,6 +122,13 @@ describe "Chatterbot::DSL" do
       end
     end
 
+    describe "since_id_reply" do
+      it "should pass to bot object" do
+        @bot.should_receive(:config).and_return({:since_id_reply => 1234})
+        since_id_reply.should == 1234
+      end
+    end
+
     describe "db" do
       it "should pass to bot object" do
         bot_db = mock(Object)

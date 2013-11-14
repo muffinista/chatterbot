@@ -49,6 +49,16 @@ module Chatterbot
       result = client.search("a")
       update_since_id(result)
     end
+
+    #
+    # resets the since_id_reply for this bot to the last mention received
+    # resets the since_id_reply for this bot to the last mention received
+    #
+    def reset_since_id_reply
+      config[:tmp_since_id_reply] = 0
+      result = client.mentions.max_by(&:id)
+      update_since_id_reply(result)
+    end
    
 
     #
@@ -67,6 +77,7 @@ module Chatterbot
         :result_type => "recent"
       }
       opts[:since_id] = since_id if since_id > 0
+      opts[:since_id_reply] = since_id_reply if since_id_reply > 0
 
       opts
     end

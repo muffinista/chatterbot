@@ -34,7 +34,7 @@ def fake_search(max_id = 100, result_count = 0, id_base=0)
        )
 end
 
-def fake_replies(max_id = 100, result_count = 0, id_base = 0)
+def fake_replies(result_count = 0, id_base = 0)
   mock(Twitter::Client,
        {
          :credentials? => true,

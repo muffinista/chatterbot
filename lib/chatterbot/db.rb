@@ -58,6 +58,7 @@ module Chatterbot
           String :id, :primary_key => true
 
           Bignum :since_id
+          Bignum :since_id_reply
 
           String :secret
           String :token

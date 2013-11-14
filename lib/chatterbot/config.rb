@@ -38,6 +38,7 @@ module Chatterbot
     def debug_mode=(d)
       config[:debug_mode] = d
     end
+
     def no_update=(d)
       config[:no_update] = d
     end
@@ -92,7 +93,20 @@ module Chatterbot
     # return the ID of the most recent tweet pulled up in searches
     def since_id
       config[:since_id] || 0
-    end   
+    end
+
+    #
+    # store since_id_reply to a different key so that it doesn't actually
+    # get updated until the bot is done running
+    def since_id_reply=(x)
+      config[:tmp_since_id_reply] = x
+    end
+
+    #
+    # return the ID of the most recent tweet pulled up in mentions
+    def since_id_reply
+      config[:since_id_reply] || 0
+    end
 
     #
     # write out our config file
@@ -114,6 +128,18 @@ module Chatterbot
 
     def max_id_from(s)
       s.max { |a, b| a.id <=> b.id }.id
+    end
+
+    #
+    # update the since_id_reply with the id of the given tweet,
+    # unless it is lower thant what we have already
+    #
+    def update_since_id_reply(tweet)
+      return if tweet.nil? or tweet.class != Twitter::Tweet
+
+      tmp_id = tweet.id
+
+      config[:tmp_since_id_reply] = [config[:tmp_since_id_reply].to_i, tmp_id].max
     end
     
     #
@@ -268,6 +294,7 @@ module Chatterbot
       
       # update the since_id now
       tmp[:since_id] = tmp.delete(:tmp_since_id) unless ! tmp.has_key?(:tmp_since_id)
+      tmp[:since_id_reply] = tmp.delete(:tmp_since_id_reply) unless ! tmp.has_key?(:tmp_since_id_reply)
 
       tmp
     end
@@ -302,6 +329,7 @@ module Chatterbot
       configs = db[:config]
       data = {
         :since_id => config.has_key?(:tmp_since_id) ? config[:tmp_since_id] : config[:since_id],
+        :since_id_reply => config.has_key?(:tmp_since_id_reply) ? config[:tmp_since_id_reply] : config[:since_id_reply],
         :token => config[:token],
         :secret => config[:secret],
         :consumer_secret => config[:consumer_secret],

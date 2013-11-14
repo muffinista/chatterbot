@@ -125,13 +125,46 @@ describe "Chatterbot::Config" do
     end
   end
 
+  describe "since_id_reply=" do
+    it "works" do
+
+      @bot.since_id_reply = 123
+      @bot.config[:tmp_since_id_reply].should == 123
+    end
+  end
+
+  describe "update_since_id_reply" do
+    it "works with tweets" do
+      @bot.config[:tmp_since_id_reply] = 100
+
+      data = fake_tweet(1000, 1000, true)
+      @bot.update_since_id_reply(data)
+      @bot.config[:tmp_since_id_reply].should == 1000
+    end
+
+    it "doesn't work with searches" do
+      data = fake_search(1000, 1).search
+
+      @bot.config[:tmp_since_id_reply] = 100
+      @bot.update_since_id_reply(data)
+      @bot.config[:tmp_since_id_reply].should == 100
+    end
+
+    it "never rolls back" do
+      @bot.config[:tmp_since_id_reply] = 100
+      data = fake_tweet(50, 50, true)
+      @bot.update_since_id(data)
+      @bot.config[:tmp_since_id_reply].should == 100
+    end
+  end
+
   describe "since_id=" do
     it "works" do
       @bot.since_id = 123
       @bot.config[:tmp_since_id].should == 123
     end
   end
-  
+
   describe "update_since_id" do
     it "works with searches" do
       data = fake_search(1000, 1).search
@@ -199,6 +232,11 @@ describe "Chatterbot::Config" do
     it "updates since_id" do
       @bot.config[:tmp_since_id] = 100
       @bot.config_to_save[:since_id].should == 100
+    end
+
+    it "updates since_id_reply" do
+      @bot.config[:tmp_since_id_reply] = 100
+      @bot.config_to_save[:since_id_reply].should == 100
     end
   end
 
