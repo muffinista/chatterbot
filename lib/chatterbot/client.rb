@@ -52,7 +52,6 @@ module Chatterbot
 
     #
     # resets the since_id_reply for this bot to the last mention received
-    # resets the since_id_reply for this bot to the last mention received
     #
     def reset_since_id_reply
       config[:tmp_since_id_reply] = 0
