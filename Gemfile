@@ -12,6 +12,7 @@ group :development do
 
   gem "shoulda", ">= 0"
   gem "rspec"
+  gem "twitter", "~> 4.4.0"
 
   gem "watchr"
 end
