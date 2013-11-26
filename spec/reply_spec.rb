@@ -76,4 +76,16 @@ describe "Chatterbot::Reply" do
 
     bot.replies
   end
+
+  it "pass along since_id if since_id_reply is nil or zero" do
+    bot = test_bot
+    bot.should_receive(:require_login).and_return(true)
+    bot.stub!(:client).and_return(fake_replies(100, 3))
+    bot.stub!(:since_id).and_return(12345)
+
+    bot.client.should_receive(:mentions).with({:count => 200, :since_id_reply => 12345})
+
+    bot.replies
+
+  end
 end

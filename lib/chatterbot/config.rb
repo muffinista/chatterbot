@@ -103,9 +103,9 @@ module Chatterbot
     end
 
     #
-    # return the ID of the most recent tweet pulled up in mentions
+    # return the ID of the most recent tweet pulled up in mentions or since_id if since_id_reply is nil
     def since_id_reply
-      config[:since_id_reply] || 0
+      config[:since_id_reply] || since_id
     end
 
     #
