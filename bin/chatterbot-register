@@ -64,8 +64,10 @@ unless @bot.screen_name.nil?
   end
 
   puts "Storing config info"
+  puts @bot.config.inspect
   @bot.update_config
-
+  @bot.config = nil
+  
   if @skeleton
     skel_dest = File.join(Dir.getwd, "#{@bot.botname}.rb")
     if File.exist?(skel_dest)

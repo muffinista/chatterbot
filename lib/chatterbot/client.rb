@@ -171,14 +171,15 @@ module Chatterbot
           @access_token = request_token.get_access_token(:oauth_verifier => pin.chomp)
           get_screen_name
 
-          config[:token] = @access_token.token
-          config[:secret] = @access_token.secret
+          self.config[:token] = @access_token.token
+          self.config[:secret] = @access_token.secret
 
           update_config unless ! do_update_config
           reset_client
 
         rescue OAuth::Unauthorized => e
           display_oauth_error
+          puts e.inspect
           return false
         end
       end

@@ -7,11 +7,14 @@ module Chatterbot
       def generate(bot)
         path = File.join(Chatterbot.libdir, "..", "templates", "skeleton.txt")
         src = File.read(path)
+        puts bot.config.inspect
         opts = bot.config.merge({
           :name => bot.botname,
           :timestamp => Time.now
         })
 
+        puts opts.inspect
+        
         if RUBY_VERSION =~ /^1\.8\./
           apply_vars(src, opts)
         else
