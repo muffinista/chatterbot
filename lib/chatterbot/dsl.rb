@@ -5,7 +5,10 @@ module Chatterbot
   #
   # very basic DSL to handle the common stuff you would want to do with a bot.
   module DSL
-
+    def client
+      bot.client
+    end
+    
     #
     # search twitter for the specified terms, then pass any matches to
     # the block.
@@ -177,7 +180,10 @@ module Chatterbot
     #
     # The ID of the most recent tweet processed by the bot
     #
-    def since_id
+    def since_id(s=nil)
+      if s
+        bot.config[:since_id] = s
+      end
       bot.config[:since_id]
     end
 

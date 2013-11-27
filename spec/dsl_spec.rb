@@ -9,6 +9,12 @@ describe "Chatterbot::DSL" do
       Chatterbot::DSL.stub!(:bot).and_return(@bot)
     end
 
+    describe "client" do
+      it "returns the bot object" do
+        client.should eql(@bot.client)
+      end
+    end
+
     describe "blacklist" do
       it "#blacklist passes along to bot object" do
         @bot.should_receive(:blacklist=).with(["foo"])
@@ -119,6 +125,11 @@ describe "Chatterbot::DSL" do
       it "should pass to bot object" do
         @bot.should_receive(:config).and_return({:since_id => 1234})
         since_id.should == 1234
+      end
+
+      it "can be set" do
+        since_id(1234)
+        @bot.config[:since_id].should == 1234
       end
     end
 
