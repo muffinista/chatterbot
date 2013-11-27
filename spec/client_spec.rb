@@ -6,6 +6,19 @@ describe "Chatterbot::Client" do
     @bot.client = mock(Object)
   end
 
+  describe "reset_since_id_reply" do
+    it "gets the id of the last reply" do
+      bot = test_bot
+      bot.stub(:client).and_return(fake_replies(1, 1000))
+      bot.client.should_receive(:mentions)
+
+      bot.reset_since_id_reply
+
+      bot.config[:tmp_since_id_reply].should == 1000
+    end
+
+  end
+
   describe "reset_since_id" do
     it "runs a search to get a new max_id" do
       bot = test_bot

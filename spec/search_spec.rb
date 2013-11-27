@@ -67,9 +67,10 @@ describe "Chatterbot::Search" do
   it "passes along since_id" do
     bot = test_bot
     bot.stub!(:since_id).and_return(123)
+    bot.stub(:since_id_reply).and_return(456)
     
     bot.stub!(:search_client).and_return(fake_search(100, 1))
-    bot.search_client.should_receive(:search).with("foo -include:retweets", {:since_id => 123, :result_type => "recent"})
+    bot.search_client.should_receive(:search).with("foo -include:retweets", {:since_id => 123, :result_type => "recent", :since_id_reply => 456})
 
     bot.search("foo")
   end

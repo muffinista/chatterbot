@@ -8,15 +8,15 @@ module Chatterbot
     def replies(&block)
       return unless require_login
 
-      debug "check for replies since #{since_id}"
+      debug "check for replies since #{since_id_reply}"
 
-      opts = since_id > 0 ? {:since_id => since_id} : {}
+      opts = since_id_reply > 0 ? {:since_id_reply => since_id_reply} : {}
       opts[:count] = 200
 
       results = client.mentions(opts)
       results.each { |s|
         unless ! block_given? || on_blacklist?(s) || skip_me?(s)
-          update_since_id(s)
+          update_since_id_reply(s)
           yield s         
         end
       }
