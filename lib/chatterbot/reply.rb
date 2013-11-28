@@ -15,8 +15,8 @@ module Chatterbot
 
       results = client.mentions(opts)
       results.each { |s|
+        update_since_id_reply(s)
         unless ! block_given? || on_blacklist?(s) || skip_me?(s)
-          update_since_id_reply(s)
           yield s         
         end
       }

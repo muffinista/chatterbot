@@ -40,8 +40,6 @@ describe "Chatterbot::Reply" do
     bot.should_receive(:require_login).and_return(true)
     bot.stub!(:client).and_return(fake_replies(3))
     
-    bot.should_receive(:update_since_id_reply).exactly(2).times
-
     bot.stub!(:on_blacklist?).and_return(true, false, false)
 
 
