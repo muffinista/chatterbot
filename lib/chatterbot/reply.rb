@@ -10,7 +10,7 @@ module Chatterbot
 
       debug "check for replies since #{since_id_reply}"
 
-      opts = since_id_reply > 0 ? {:since_id_reply => since_id_reply} : {}
+      opts = since_id_reply > 0 ? {:since_id => since_id_reply} : {}
       opts[:count] = 200
 
       results = client.mentions(opts)
