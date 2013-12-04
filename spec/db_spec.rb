@@ -23,7 +23,7 @@ describe "Chatterbot::DB" do
   context "db interactions" do
     before(:each) do
       @bot = Chatterbot::Bot.new
-      @bot.stub!(:update_config_at_exit)
+      @bot.stub(:update_config_at_exit)
       @bot.config[:db_uri] = @db_uri
     end
 

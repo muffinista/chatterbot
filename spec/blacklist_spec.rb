@@ -10,7 +10,7 @@ describe "Chatterbot::Blacklist" do
   describe "skip_me?" do
     before(:each) do
       @bot = test_bot
-      @bot.stub!(:exclude).and_return(["junk", "i hate bots", "foobar", "spam"])
+      @bot.stub(:exclude).and_return(["junk", "i hate bots", "foobar", "spam"])
     end
 
     it "blocks tweets with phrases we don't want" do
@@ -35,7 +35,7 @@ describe "Chatterbot::Blacklist" do
   describe "on_blacklist?" do
     before(:each) do
       @bot = test_bot
-      @bot.stub!(:blacklist).and_return(["skippy", "blippy", "dippy"])
+      @bot.stub(:blacklist).and_return(["skippy", "blippy", "dippy"])
     end
 
     it "blocks users we don't want" do
@@ -68,20 +68,20 @@ describe "Chatterbot::Blacklist" do
     end
 
     it "collects name from the db if it exists" do
-      @bot.stub!(:has_db?).and_return(true)
-      blacklist_table = mock(Object)
-      mock_dataset = mock(Object, {:count => 1})
+      @bot.stub(:has_db?).and_return(true)
+      blacklist_table = double(Object)
+      double_dataset = double(Object, {:count => 1})
       blacklist_table.should_receive(:where).
         with({ :user => "a"}).
-        and_return( mock_dataset )
+        and_return( double_dataset )
 
       
-      missing_dataset = mock(Object, {:count => 0})
+      missing_dataset = double(Object, {:count => 0})
       blacklist_table.should_receive(:where).
         with({ :user => "b"}).
         and_return( missing_dataset )
       
-      @bot.stub!(:db).and_return({ 
+      @bot.stub(:db).and_return({ 
                                    :blacklist => blacklist_table
                                  })
       @bot.on_global_blacklist?("a").should == true

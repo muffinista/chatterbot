@@ -10,7 +10,7 @@ describe "Chatterbot::Followers" do
   it "returns followers" do
     bot = test_bot
     bot.should_receive(:require_login).and_return(true)
-    bot.stub!(:client).and_return(fake_followers(3))
+    bot.stub(:client).and_return(fake_followers(3))
 
     result = bot.followers
     result.size.should == 3

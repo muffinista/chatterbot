@@ -15,9 +15,9 @@ describe "Chatterbot::Retweet" do
       bot = test_bot
 
       bot.should_receive(:require_login).and_return(true)
-      bot.stub!(:client).and_return(mock(Twitter::Client))
+      bot.stub(:client).and_return(mock(Twitter::Client))
 
-      bot.stub!(:debug_mode?).and_return(false)
+      bot.stub(:debug_mode?).and_return(false)
 
       tweet_id = 12345
       bot.client.should_receive(:retweet).with(tweet_id)

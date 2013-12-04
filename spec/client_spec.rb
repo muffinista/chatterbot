@@ -3,7 +3,7 @@ require File.expand_path(File.dirname(__FILE__) + '/spec_helper')
 describe "Chatterbot::Client" do
   before(:each) do
     @bot = Chatterbot::Bot.new
-    @bot.client = mock(Object)
+    @bot.client = double(Object)
   end
 
   describe "reset_since_id_reply" do
@@ -23,7 +23,7 @@ describe "Chatterbot::Client" do
     it "runs a search to get a new max_id" do
       bot = test_bot
 
-      bot.stub!(:client).and_return(fake_search(100, 1))
+      bot.stub(:client).and_return(fake_search(100, 1))
       bot.client.should_receive(:search).with("a")
 #      bot.search("a")
       bot.reset_since_id
@@ -40,7 +40,7 @@ describe "Chatterbot::Client" do
 
   describe "init_client" do
     before(:each) do
-      @client = mock(Twitter::Client)
+      @client = double(Twitter::Client)
       @bot.should_receive(:client).and_return(@client)
     end
 
@@ -78,14 +78,14 @@ describe "Chatterbot::Client" do
     end
 
     it "handles getting an auth token" do
-      token = mock(Object,
+      token = double(Object,
                    :token => "token",
                    :secret => "secret"                                                                
                    )
 
       @bot.should_receive(:request_token).and_return(token)
       token.should_receive(:get_access_token).with(:oauth_verifier => "pin").
-        and_return(mock(:token => "access_token", :secret => "access_secret"))
+        and_return(double(:token => "access_token", :secret => "access_secret"))
 
       @bot.should_receive(:get_screen_name)
       @bot.should_receive(:update_config)
@@ -104,16 +104,16 @@ describe "Chatterbot::Client" do
 
   describe "get_screen_name" do
     before(:each) do
-      @json = '{"id":12345,"screen_name":"mockbot"}'
+      @json = '{"id":12345,"screen_name":"bot"}'
 
-      @token = mock(Object)
-      response = mock(Object, :body => @json)
+      @token = double(Object)
+      response = double(Object, :body => @json)
       @token.should_receive(:get).with("/1.1/account/verify_credentials.json").and_return(response)
     end
 
     it "should work" do
       @bot.get_screen_name(@token)
-      @bot.screen_name.should == "mockbot"
+      @bot.screen_name.should == "bot"
     end
   end
   

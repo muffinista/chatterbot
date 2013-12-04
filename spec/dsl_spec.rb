@@ -3,10 +3,10 @@ require File.expand_path(File.dirname(__FILE__) + '/spec_helper')
 describe "Chatterbot::DSL" do
   describe "client routines" do
     before(:each) do
-      @bot = mock(Chatterbot::Bot, :config => {})
+      @bot = double(Chatterbot::Bot, :config => {})
       @bot.send :require, 'chatterbot/dsl'
 
-      Chatterbot::DSL.stub!(:bot).and_return(@bot)
+      Chatterbot::DSL.stub(:bot).and_return(@bot)
     end
 
     describe "client" do
@@ -142,7 +142,7 @@ describe "Chatterbot::DSL" do
 
     describe "db" do
       it "should pass to bot object" do
-        bot_db = mock(Object)
+        bot_db = double(Object)
         @bot.should_receive(:db).and_return(bot_db)
 
         db.should eql(bot_db)

@@ -11,7 +11,7 @@ describe "Chatterbot::Skeleton" do
       :secret => "secret",
       :token => "token"
     }
-    @bot.stub!(:botname).and_return("Skelley_The_Skeleton")
+    @bot.stub(:botname).and_return("Skelley_The_Skeleton")
 
     @output = Chatterbot::Skeleton.generate(@bot)
   end

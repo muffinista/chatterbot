@@ -35,6 +35,7 @@ Gem::Specification.new do |s|
   s.add_development_dependency(%q<shoulda>, [">= 0"])
   s.add_development_dependency(%q<rake>, [">= 0"])
   s.add_development_dependency(%q<rspec>, [">= 2.14.1"])
+  s.add_development_dependency(%q<rspec-mocks>, [">= 2.14.1"])
   s.add_development_dependency(%q<rdoc>, [">= 0"])
   s.add_development_dependency(%q<simplecov>, [">= 0"])
   s.add_development_dependency(%q<watchr>, [">= 0"])

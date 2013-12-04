@@ -212,8 +212,8 @@ describe "Chatterbot::Config" do
     end
 
     it "doesn't update keys from the global config" do
-      @bot.stub!(:global_config).and_return({:foo => :bar, :a => :b})
-      @bot.stub!(:bot_config).and_return({:foo => :bar, :custom => :value})      
+      @bot.stub(:global_config).and_return({:foo => :bar, :a => :b})
+      @bot.stub(:bot_config).and_return({:foo => :bar, :custom => :value})      
 
       @bot.config = nil
       
@@ -221,8 +221,8 @@ describe "Chatterbot::Config" do
     end
     
     it "does update keys from the global config if they've been customized" do
-      @bot.stub!(:global_config).and_return({:foo => :bar, :a => :b})
-      @bot.stub!(:bot_config).and_return({:foo => :baz, :custom => :value})      
+      @bot.stub(:global_config).and_return({:foo => :bar, :a => :b})
+      @bot.stub(:bot_config).and_return({:foo => :baz, :custom => :value})      
 
       @bot.config = nil
       
@@ -321,8 +321,8 @@ describe "Chatterbot::Config" do
       
       @src = Tempfile.new("config")
 
-      @bot.stub!(:config_file).and_return(@src.path)
-      @bot.stub!(:config_to_save).and_return(tmp)
+      @bot.stub(:config_file).and_return(@src.path)
+      @bot.stub(:config_to_save).and_return(tmp)
     end
 
     it "should work" do

@@ -4,8 +4,8 @@ describe "Chatterbot::Logging" do
   describe "debug logging" do
     before(:each) do
       @bot = Chatterbot::Bot.new
-      @logger = mock(Logger)
-      @bot.stub!(:logger).and_return(@logger)
+      @logger = double(Logger)
+      @bot.stub(:logger).and_return(@logger)
     end
 
     it "should call logger on debug" do
@@ -39,10 +39,10 @@ describe "Chatterbot::Logging" do
       @bot.should_receive(:log_tweets?).and_return(true)
 
       @bot.should_receive(:botname).and_return("logger")
-      Time.stub!(:now).and_return(123)                
+      Time.stub(:now).and_return(123)                
 
-      @tweets_table = mock(Object)     
-      @bot.stub!(:db).and_return({ 
+      @tweets_table = double(Object)     
+      @bot.stub(:db).and_return({ 
                                    :tweets => @tweets_table
                                  })   
     end
