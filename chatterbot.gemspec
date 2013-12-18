@@ -29,7 +29,7 @@ Gem::Specification.new do |s|
   end
    
   s.add_runtime_dependency(%q<oauth>, [">= 0"])
-  s.add_runtime_dependency(%q<twitter>, [">= 4.4.0"])
+  s.add_runtime_dependency(%q<twitter>, ["4.8.1"])
   s.add_runtime_dependency(%q<launchy>, [">= 2.1.2"])
   s.add_development_dependency(%q<yard>, [">= 0"])
   s.add_development_dependency(%q<shoulda>, [">= 0"])
