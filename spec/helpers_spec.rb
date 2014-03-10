@@ -28,10 +28,16 @@ describe "Chatterbot::Helpers" do
       @bot.from_user("x").should == "x"
     end
 
-    it "should accept :from_user tweet" do
-      @bot.from_user(Twitter::Tweet.new(:id => 123, :from_user => "x")).should == "x"
+    it "should accept tweet" do
+      t = Twitter::Tweet.new(:id => 123, :text => 'Tweet text.', :user => {:id => 123, :name => "x"})
+      @bot.from_user(t).should == "x"
     end
 
+    it "should accept user" do    
+      u = Twitter::User.new(:id => 123, :name => "x")
+      @bot.from_user(fake_user("x")).should == "x"
+    end
+    
     it "should accept :screen_name" do
       @bot.from_user(:user => {:screen_name => "x"}).should == "x"
     end
@@ -41,7 +47,6 @@ describe "Chatterbot::Helpers" do
     before(:each) do
       class TestBot < Chatterbot::Bot; end
       @bot = Chatterbot::Bot.new
-      #@bot.client = mock(Object)
     end
 
     it "can set botname" do

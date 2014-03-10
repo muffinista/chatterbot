@@ -58,7 +58,7 @@ describe "Chatterbot::Reply" do
     bot.stub(:client).and_return(fake_replies(100, 3))    
     bot.stub(:since_id_reply).and_return(123)
     
-    bot.client.should_receive(:mentions).with({:since_id => 123, :count => 200})
+    bot.client.should_receive(:mentions_timeline).with({:since_id => 123, :count => 200})
 
     bot.replies
   end
@@ -70,7 +70,7 @@ describe "Chatterbot::Reply" do
     bot.stub(:client).and_return(fake_replies(100, 3))    
     bot.stub(:since_id_reply).and_return(0)
     
-    bot.client.should_receive(:mentions).with({:count => 200})
+    bot.client.should_receive(:mentions_timeline).with({:count => 200})
 
     bot.replies
   end
@@ -81,7 +81,7 @@ describe "Chatterbot::Reply" do
     bot.stub(:client).and_return(fake_replies(100, 3))
     bot.stub(:since_id).and_return(12345)
 
-    bot.client.should_receive(:mentions).with({:count => 200, :since_id => 12345})
+    bot.client.should_receive(:mentions_timeline).with({:count => 200, :since_id => 12345})
 
     bot.replies
 

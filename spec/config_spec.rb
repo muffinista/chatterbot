@@ -137,7 +137,7 @@ describe "Chatterbot::Config" do
     it "works with tweets" do
       @bot.config[:tmp_since_id_reply] = 100
 
-      data = fake_tweet(1000, 1000, true)
+      data = fake_tweet(1000, 1000)
       @bot.update_since_id_reply(data)
       @bot.config[:tmp_since_id_reply].should == 1000
     end
@@ -152,7 +152,7 @@ describe "Chatterbot::Config" do
 
     it "never rolls back" do
       @bot.config[:tmp_since_id_reply] = 100
-      data = fake_tweet(50, 50, true)
+      data = fake_tweet(50, 50)
       @bot.update_since_id(data)
       @bot.config[:tmp_since_id_reply].should == 100
     end
@@ -177,7 +177,7 @@ describe "Chatterbot::Config" do
     it "works with tweets" do
       @bot.config[:tmp_since_id] = 100
 
-      data = fake_tweet(1000, 1000, true)
+      data = fake_tweet(1000, 1000)
       @bot.update_since_id(data)
       @bot.config[:tmp_since_id].should == 1000
     end
@@ -186,9 +186,9 @@ describe "Chatterbot::Config" do
       @bot.config[:tmp_since_id] = 100
 
       data = [
-              fake_tweet(500, 1000, true),
-              fake_tweet(1000, 1000, true),
-              fake_tweet(400, 1000, true)
+              fake_tweet(500, 1000),
+              fake_tweet(1000, 1000),
+              fake_tweet(400, 1000)
              ]
               
       @bot.update_since_id(data)
@@ -197,7 +197,7 @@ describe "Chatterbot::Config" do
     
     it "never rolls back" do
       @bot.config[:tmp_since_id] = 100
-      data = fake_tweet(50, 50, true)
+      data = fake_tweet(50, 50)
       @bot.update_since_id(data)
       @bot.config[:tmp_since_id].should == 100     
     end

@@ -13,11 +13,10 @@ module Chatterbot
     #
     def client
       @client ||= Twitter::Client.new(
-                                      :endpoint => base_url,
                                       :consumer_key => client_params[:consumer_key],
                                       :consumer_secret => client_params[:consumer_secret],
-                                      :oauth_token => client_params[:token],
-                                      :oauth_token_secret => client_params[:secret]
+                                      :access_token => client_params[:token],
+                                      :access_token_secret => client_params[:secret]
                                       )
     end
 
@@ -28,17 +27,13 @@ module Chatterbot
     #
     def search_client
       client
-      # return client
-
-      # @search_client ||= Twitter::Client.new(
-      #                                 :endpoint => base_url,
-      #                                 :consumer_key => client_params[:consumer_key],
-      #                                 :consumer_secret => client_params[:consumer_secret],
-      #                                 :oauth_token => client_params[:token],
-      #                                 :oauth_token_secret => client_params[:secret]
-      #                                 )
     end
 
+    def reset!
+      config[:since_id] = 0
+      config[:since_id_reply] = 0
+    end
+    
     #
     # reset the since_id for this bot to the highest since_id we can
     # get, by running a really open search and updating config with
@@ -55,7 +50,7 @@ module Chatterbot
     #
     def reset_since_id_reply
       config[:tmp_since_id_reply] = 0
-      result = client.mentions.max_by(&:id)
+      result = client.mentions_timeline.max_by(&:id)
       update_since_id_reply(result)
     end
    

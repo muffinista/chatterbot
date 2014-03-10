@@ -24,3 +24,11 @@ Rake::RDocTask.new do |rdoc|
   rdoc.rdoc_dir = 'rdoc'
   rdoc.title = "'chatterbot #{Chatterbot::VERSION}'"
 end
+
+task :console do
+  require 'irb'
+  require 'irb/completion'
+  require 'chatterbot' # You know what to do.
+  ARGV.clear
+  IRB.start
+end

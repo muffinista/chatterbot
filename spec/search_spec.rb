@@ -28,7 +28,7 @@ describe "Chatterbot::Search" do
 
   it "calls update_since_id" do
     bot = test_bot
-
+    
     data = fake_search(100, 1)
     bot.stub(:search_client).and_return(data)
     bot.should_receive(:update_since_id).with(100)
@@ -38,10 +38,10 @@ describe "Chatterbot::Search" do
 
   it "accepts multiple searches at once" do
     bot = test_bot
-
+    
     bot.stub(:search_client).and_return(fake_search(100, 1))
-    bot.search_client.should_receive(:search).with("foo -include:retweets", {:result_type=>"recent"})
-    bot.search_client.should_receive(:search).with("bar -include:retweets", {:result_type=>"recent"})
+    bot.search_client.should_receive(:search).once.ordered.with("foo -include:retweets", {:result_type=>"recent"})
+    bot.search_client.should_receive(:search).once.ordered.with("bar -include:retweets", {:result_type=>"recent"})
 
     bot.search(["foo", "bar"])
   end
@@ -93,7 +93,7 @@ describe "Chatterbot::Search" do
       indexes << x.attrs[:index]
     end
     
-    indexes.should == [1,2,3]
+    indexes.should == [100, 99, 98]
   end
 
   it "checks blacklist" do
@@ -107,7 +107,7 @@ describe "Chatterbot::Search" do
       indexes << x.attrs[:index]
     end
 
-    indexes.should == [2,3]
+    indexes.should == [99, 98]
   end
 
 end

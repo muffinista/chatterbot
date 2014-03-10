@@ -10,7 +10,7 @@ describe "Chatterbot::Client" do
     it "gets the id of the last reply" do
       bot = test_bot
       bot.stub(:client).and_return(fake_replies(1, 1000))
-      bot.client.should_receive(:mentions)
+      bot.client.should_receive(:mentions_timeline)
 
       bot.reset_since_id_reply
 

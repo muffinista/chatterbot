@@ -30,7 +30,7 @@ module Chatterbot
                                       )
         update_since_id(result.max_id)
 
-        result.collection.each { |s|
+        result.each { |s|
           debug s.text
           yield s unless ! block_given? || on_blacklist?(s) || skip_me?(s)
         }

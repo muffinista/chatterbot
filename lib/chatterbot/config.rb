@@ -4,6 +4,8 @@ module Chatterbot
   # routines for storing config information for the bot
   module Config  
     attr_accessor :config
+
+    MAX_TWEET_ID = 9223372036854775807
     
     #
     # the entire config for the bot, loaded from YAML files and the DB if applicable
@@ -127,7 +129,9 @@ module Chatterbot
     end
 
     def max_id_from(s)
-      s.max { |a, b| a.id <=> b.id }.id
+      # don't use max_id if it's this ridiculous number
+      # @see https://dev.twitter.com/issues/1300
+      s.reject { |t| t.id == MAX_TWEET_ID }.max { |a, b| a.id <=> b.id }.id
     end
 
     #
@@ -147,23 +151,10 @@ module Chatterbot
     # tweets, unless it is lower than what we have already
     def update_since_id(search)
       return if search.nil?
-
-      
       tmp_id = case search
-               when Twitter::SearchResults then
-                 # don't use max_id if it's this ridiculous number
-                 # @see https://dev.twitter.com/issues/1300
-                 if search.max_id != 9223372036854775807
-                   search.max_id
-                 else
-                   max_id_from(search)
-                 end
-
-                 # incoming tweets
+               when Twitter::SearchResults, Array then
+                 max_id_from(search)
                when Twitter::Tweet then search.id
-
-                 # an enumeration
-               when Array then max_id_from(search)
                  
                  # probably an actual tweet ID at this point,
                  # otherwise it will fail and return 0
