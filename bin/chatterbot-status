@@ -8,6 +8,8 @@ include Chatterbot::Helpers
 include Chatterbot::Config
 include Chatterbot::DB
 
+Chatterbot::from_helper = true
+
 @tweet_count = 5
 
 #

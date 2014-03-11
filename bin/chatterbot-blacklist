@@ -10,6 +10,8 @@ include Chatterbot::Config
 include Chatterbot::DB
 include Chatterbot::Logging
 
+Chatterbot::from_helper = true
+
 @display_blacklist = false
 
 #

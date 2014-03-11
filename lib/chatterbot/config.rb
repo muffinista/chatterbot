@@ -191,7 +191,7 @@ module Chatterbot
     # determine if we're being called by one of our internal scripts
     #
     def chatterbot_helper?
-      File.basename($0).include?("chatterbot-")
+      Chatterbot::from_helper == true
     end
     
     #

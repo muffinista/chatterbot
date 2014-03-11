@@ -28,6 +28,8 @@ end
 #
 # the big kahuna!
 module Chatterbot
+  @@from_helper = false
+
   #
   # load in our assorted modules
   def self.load
@@ -47,6 +49,14 @@ module Chatterbot
     require "chatterbot/bot"
   end
 
+  def self.from_helper=(x)
+    @@from_helper = x
+  end
+
+  def self.from_helper
+    @@from_helper
+  end
+  
   require 'chatterbot/version'
   
   # Return a directory with the project libraries.
