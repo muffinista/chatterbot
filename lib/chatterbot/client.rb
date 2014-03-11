@@ -12,7 +12,7 @@ module Chatterbot
     # the main interface to the Twitter API
     #
     def client
-      @client ||= Twitter::Client.new(
+      @client ||= Twitter::REST::Client.new(
                                       :consumer_key => client_params[:consumer_key],
                                       :consumer_secret => client_params[:consumer_secret],
                                       :access_token => client_params[:token],
