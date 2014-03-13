@@ -31,7 +31,7 @@ describe "Chatterbot::Search" do
     
     data = fake_search(100, 1)
     bot.stub(:search_client).and_return(data)
-    bot.should_receive(:update_since_id).with(100)
+    bot.should_receive(:update_since_id).with(data.search)
     
     bot.search("foo")
   end
@@ -80,7 +80,7 @@ describe "Chatterbot::Search" do
     results = fake_search(1000, 1)
     bot.stub(:search_client).and_return(results)
     
-    bot.should_receive(:update_since_id).with(1000)
+    bot.should_receive(:update_since_id).with(results.search)
     bot.search("foo")
   end
   

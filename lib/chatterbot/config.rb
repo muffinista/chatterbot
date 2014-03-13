@@ -131,6 +131,7 @@ module Chatterbot
     def max_id_from(s)
       # don't use max_id if it's this ridiculous number
       # @see https://dev.twitter.com/issues/1300
+      puts "****"
       s.reject { |t| t.id == MAX_TWEET_ID }.max { |a, b| a.id <=> b.id }.id
     end
 
@@ -139,7 +140,7 @@ module Chatterbot
     # unless it is lower thant what we have already
     #
     def update_since_id_reply(tweet)
-      return if tweet.nil? or tweet.class != Twitter::Tweet
+      return if tweet.nil? or tweet.class != Twitter::Tweet || tweet.id ==  MAX_TWEET_ID
 
       tmp_id = tweet.id
 
@@ -151,16 +152,15 @@ module Chatterbot
     # tweets, unless it is lower than what we have already
     def update_since_id(search)
       return if search.nil?
-      tmp_id = case search
-               when Twitter::SearchResults, Array then
-                 max_id_from(search)
-               when Twitter::Tweet then search.id
-                 
-                 # probably an actual tweet ID at this point,
-                 # otherwise it will fail and return 0
-               else search
-               end.to_i
 
+      tmp_id = if search.respond_to?(:max)
+                 max_id_from(search)
+               elsif search.is_a?(Twitter::Tweet)
+                 search.id
+               else
+                 search
+               end.to_i
+      
       config[:tmp_since_id] = [config[:tmp_since_id].to_i, tmp_id].max
     end
 
