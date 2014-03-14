@@ -63,7 +63,7 @@ def fake_tweet(index, id=0)
     :from_user => "chatterbot",
     :index => index,
     :id => id,
-    :user => { :id => 1, :name => "chatterbot" }
+    :user => { :id => 1, :screen_name => "chatterbot" }
   }
 
   #as_object == true ? Twitter::Tweet.new(x) : x
@@ -71,10 +71,11 @@ def fake_tweet(index, id=0)
 end
 
 def fake_follower(index=0)
-  Twitter::User.new(:id => index, :name => "Follower #{index}")
+  Twitter::User.new(:id => index, :name => "Follower #{index}",
+                    :screen_name => "follower#{index}")
 end
 
 def fake_user(name)
-  Twitter::User.new(:id => 1, :name => name)
+  Twitter::User.new(:id => 1, :name => name, :screen_name => name)
 end
 

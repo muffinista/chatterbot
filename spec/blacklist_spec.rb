@@ -53,9 +53,9 @@ describe "Chatterbot::Blacklist" do
 
     it "works with result hashes" do
       @bot.on_blacklist?(Twitter::Tweet.new(:id => 1,
-                                            :user => {:id => 1, :name => "skippy"})).should == true
+                                            :user => {:id => 1, :screen_name => "skippy"})).should == true
       @bot.on_blacklist?(Twitter::Tweet.new(:id => 1,
-                                            :user => {:id => 1, :name => "flippy"})).should == false
+                                            :user => {:id => 1, :screen_name => "flippy"})).should == false
     end   
   end
 

@@ -29,7 +29,7 @@ describe "Chatterbot::Helpers" do
     end
 
     it "should accept tweet" do
-      t = Twitter::Tweet.new(:id => 123, :text => 'Tweet text.', :user => {:id => 123, :name => "x"})
+      t = Twitter::Tweet.new(:id => 123, :text => 'Tweet text.', :user => {:id => 123, :screen_name => "x"})
       @bot.from_user(t).should == "x"
     end
 

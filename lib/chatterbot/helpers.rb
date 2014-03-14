@@ -25,9 +25,9 @@ module Chatterbot
     def from_user(s)
       case s
       when Twitter::Tweet
-        s.user.name
+        s.user.screen_name
       when Twitter::User
-        s.name
+        s.screen_name
       when String
         s
       else

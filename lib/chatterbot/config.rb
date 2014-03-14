@@ -131,7 +131,6 @@ module Chatterbot
     def max_id_from(s)
       # don't use max_id if it's this ridiculous number
       # @see https://dev.twitter.com/issues/1300
-      puts "****"
       s.reject { |t| t.id == MAX_TWEET_ID }.max { |a, b| a.id <=> b.id }.id
     end
 
