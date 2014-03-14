@@ -18,6 +18,8 @@ group :development do
   #gem "watchr"
 end
 
+gem "pry"
+
 #
 # couple extra gems for testing db connectivity
 #

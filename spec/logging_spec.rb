@@ -1,4 +1,5 @@
 require File.expand_path(File.dirname(__FILE__) + '/spec_helper')
+require 'tempfile'
 
 describe "Chatterbot::Logging" do
   describe "debug logging" do
@@ -53,7 +54,7 @@ describe "Chatterbot::Logging" do
     end
 
     it "logs tweets with some source info to the db" do
-      source_tweet = {:from_user => "replytome", :id => 12345, :text => "i should trigger a bot" }
+      source_tweet = Twitter::Tweet.new({:id => 12345, :text => "i should trigger a bot", :user => {:screen_name => "replytome", :id => 456}})
 
       params = {:txt=>"TEST", :bot=>"logger", :created_at=>123, :user=>"replytome", :source_id=>12345, :source_tweet=>"i should trigger a bot"}      
       

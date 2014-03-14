@@ -27,10 +27,11 @@ module Chatterbot
       return unless log_tweets?
 
       data = {:txt => txt, :bot => botname, :created_at => Time.now}
+
       if source != nil
-        data = data.merge(:user => source[:from_user],
-                          :source_id => source[:id],
-                          :source_tweet => source[:text])
+        data = data.merge(:user => source.user.screen_name,
+                          :source_id => source.id,
+                          :source_tweet => source.text)
       end
 
       # populate the table
