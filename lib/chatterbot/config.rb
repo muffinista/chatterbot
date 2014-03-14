@@ -153,6 +153,10 @@ module Chatterbot
     def update_since_id(search)
       return if search.nil?
 
+      if search.is_a?(Twitter::SearchResults)
+        return search.attrs[:search_metadata][:max_id]
+      end
+
       tmp_id = if search.respond_to?(:max)
                  max_id_from(search)
                elsif search.is_a?(Twitter::Tweet)
