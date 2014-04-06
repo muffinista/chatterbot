@@ -217,7 +217,7 @@ your bot:
    it with your bots if desired.
 6. In a database.  You can store your configuration in a DB, and then
    specify the connection string either in one of the global config
-   files, or on the command-line by using the `--db="db_uri"`
+   files by setting `:db_uri: postgres://username:password@host/database`, or on the command-line by using the `--db="db_uri"`
    configuration option.  Any calls to the database are handled by the
    Sequel gem, and MySQL and Sqlite should work.  The DB URI should
    be in the form of `mysql://username:password@host/database` -- see
