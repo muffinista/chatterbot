@@ -6,7 +6,7 @@ module Chatterbot
     attr_accessor :config
 
     MAX_TWEET_ID = 9223372036854775807
-    
+
     #
     # the entire config for the bot, loaded from YAML files and the DB if applicable
     def config
@@ -140,7 +140,7 @@ module Chatterbot
     # unless it is lower thant what we have already
     #
     def update_since_id_reply(tweet)
-      return if tweet.nil? or tweet.class != Twitter::Tweet || tweet.id ==  MAX_TWEET_ID
+      return if tweet.nil? or tweet.class != Twitter::Tweet || tweet.id == MAX_TWEET_ID
 
       tmp_id = tweet.id
 

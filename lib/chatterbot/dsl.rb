@@ -14,7 +14,7 @@ module Chatterbot
     # the block.
     # @example
     #   search("chatterbot is cool!") do |tweet|
-    #     puts tweet[:text] # this is the actual tweeted text
+    #     puts tweet.text # this is the actual tweeted text
     #     reply "I agree!", tweet
     #   end
     def search(query, opts = {}, &block)
@@ -27,7 +27,7 @@ module Chatterbot
     #
     # @example
     #   replies do |tweet|
-    #     puts tweet[:text] # this is the actual tweeted text
+    #     puts tweet.text # this is the actual tweeted text
     #     reply "Thanks for the mention!", tweet
     #   end
     def replies(&block)
