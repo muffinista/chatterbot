@@ -6,18 +6,27 @@ module Chatterbot
   # routines for connecting to Twitter and validating the bot
   #
   module Client
-    attr_accessor :screen_name, :client, :search_client
+    attr_accessor :screen_name, :client, :streaming_client, :search_client
 
     #
     # the main interface to the Twitter API
     #
     def client
       @client ||= Twitter::REST::Client.new(
-                                      :consumer_key => client_params[:consumer_key],
-                                      :consumer_secret => client_params[:consumer_secret],
-                                      :access_token => client_params[:token],
-                                      :access_token_secret => client_params[:secret]
-                                      )
+                                           :consumer_key => client_params[:consumer_key],
+                                           :consumer_secret => client_params[:consumer_secret],
+                                           :access_token => client_params[:token],
+                                           :access_token_secret => client_params[:secret]
+                                           )
+    end
+
+    def streaming_client
+      @streaming_client ||= Twitter::Streaming::Client.new(
+                                                           :consumer_key => client_params[:consumer_key],
+                                                           :consumer_secret => client_params[:consumer_secret],
+                                                           :access_token => client_params[:token],
+                                                           :access_token_secret => client_params[:secret]
+                                                           )
     end
 
     #
@@ -174,7 +183,7 @@ module Chatterbot
 
         rescue OAuth::Unauthorized => e
           display_oauth_error
-          puts e.inspect
+          warn e.inspect
           return false
         end
       end

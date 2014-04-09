@@ -3,9 +3,15 @@ require File.expand_path(File.dirname(__FILE__) + '/spec_helper')
 describe "Chatterbot::Client" do
   before(:each) do
     @bot = Chatterbot::Bot.new
-    @bot.client = double(Object)
   end
 
+  it "should initialize client" do
+    @bot.client.should be_a(Twitter::REST::Client)
+  end
+  it "should initialize streaming client" do
+    @bot.streaming_client.should be_a(Twitter::Streaming::Client)
+  end
+  
   describe "reset_since_id_reply" do
     it "gets the id of the last reply" do
       bot = test_bot
@@ -16,7 +22,6 @@ describe "Chatterbot::Client" do
 
       bot.config[:tmp_since_id_reply].should == 1000
     end
-
   end
 
   describe "reset_since_id" do
@@ -25,7 +30,6 @@ describe "Chatterbot::Client" do
 
       bot.stub(:client).and_return(fake_search(100, 1))
       bot.client.should_receive(:search).with("a")
-#      bot.search("a")
       bot.reset_since_id
 
       bot.config[:tmp_since_id].should == 100

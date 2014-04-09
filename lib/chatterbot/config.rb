@@ -77,6 +77,15 @@ module Chatterbot
     def verbose?
       config[:verbose] || false
     end
+
+    def streaming=(s)
+      config[:streaming] = s
+    end
+   
+    def streaming?
+      config[:streaming] || false
+    end
+
     
     #
     # destination for log entries

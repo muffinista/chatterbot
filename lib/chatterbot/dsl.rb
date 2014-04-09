@@ -5,8 +5,16 @@ module Chatterbot
   #
   # very basic DSL to handle the common stuff you would want to do with a bot.
   module DSL
+    #
+    # @return initialized Twitter::REST::Client
     def client
       bot.client
+    end
+
+    #
+    # @return initialized Twitter::Streaming::Client
+    def streaming_client
+      bot.streaming_client
     end
     
     #
@@ -34,6 +42,10 @@ module Chatterbot
       bot.replies(&block)
     end
 
+    def streaming_tweets(opts={}, &block)
+      bot.streaming_tweets(&block)
+    end
+    
     #
     # send a tweet
     #
@@ -187,25 +199,42 @@ module Chatterbot
       bot.config[:since_id]
     end
 
+    #
+    # set the consumer secret
+    # @param s [String] the consumer secret
     def consumer_secret(s)
       bot.config[:consumer_secret] = s
     end
 
+    #
+    # set the consumer key
+    # @param k [String] the consumer key
     def consumer_key(k)
       bot.config[:consumer_key] = k
     end
 
+    #
+    # set the secret
+    # @param s [String] the secret
     def secret(s)
       bot.config[:secret] = s
     end
+
+    #
+    # set the token
+    # @param s [String] the token
     def token(s)
       bot.config[:token] = s
     end
 
+    #
+    # get the id of the last tweet the bot replied to
+    # @return tweet id
     def since_id_reply
       bot.config[:since_id_reply]
     end
 
+    
     #
     # explicitly save the configuration/state of the bot.
     #

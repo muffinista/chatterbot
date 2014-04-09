@@ -15,6 +15,12 @@ describe "Chatterbot::DSL" do
       end
     end
 
+    describe "streaming_client" do
+      it "returns the bot object" do
+        streaming_client.should eql(@bot.streaming_client)
+      end
+    end
+
     describe "blacklist" do
       it "#blacklist passes along to bot object" do
         @bot.should_receive(:blacklist=).with(["foo"])
@@ -90,6 +96,12 @@ describe "Chatterbot::DSL" do
       replies
     end
 
+    it "#streaming_tweets passes along to bot object" do
+      @bot.should_receive(:streaming_tweets)
+      streaming_tweets
+    end
+
+    
     it "#followers passes along to bot object" do
       @bot.should_receive(:followers)
       followers
