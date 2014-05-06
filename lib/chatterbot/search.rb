@@ -18,6 +18,7 @@ module Chatterbot
       if queries.is_a?(String)
         queries = [queries]
       end
+
       
       #
       # search twitter
@@ -30,10 +31,15 @@ module Chatterbot
                                       )
         update_since_id(result)
 
+        @current_tweet = nil
         result.each { |s|
           debug s.text
-          yield s unless ! block_given? || on_blacklist?(s) || skip_me?(s)
+          if block_given? && !on_blacklist?(s) && !skip_me?(s)
+            @current_tweet = s
+            yield s
+          end
         }
+        @current_tweet = nil
       }
     end
   

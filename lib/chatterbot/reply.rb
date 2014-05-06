@@ -19,12 +19,15 @@ module Chatterbot
       opts[:count] = 200
 
       results = client.mentions_timeline(opts)
+      @current_tweet = nil
       results.each { |s|
         update_since_id_reply(s)
         unless ! block_given? || on_blacklist?(s) || skip_me?(s)
+          @current_tweet = s
           yield s         
         end
       }
+      @current_tweet = nil
     end
   end
 end

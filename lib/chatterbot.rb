@@ -42,10 +42,12 @@ module Chatterbot
     require "chatterbot/search"
     require "chatterbot/tweet"
     require "chatterbot/retweet"
+    require "chatterbot/favorite"
     require "chatterbot/reply"
     require "chatterbot/streaming"
     require "chatterbot/followers"
-    require "chatterbot/helpers"    
+    require "chatterbot/helpers"
+    require "chatterbot/utils"
 
     require "chatterbot/bot"
   end

@@ -3,6 +3,7 @@ module Chatterbot
   #
   # primary Bot object, includes all the other modules
   class Bot
+    include Utils
     include Blacklist
     include Streaming
     include Config
@@ -10,6 +11,7 @@ module Chatterbot
     include Search
     include Tweet
     include Retweet
+    include Favorite
     include Reply
     include Followers
     include UI

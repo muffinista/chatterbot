@@ -60,11 +60,19 @@ module Chatterbot
 
     #
     # retweet a tweet
-    # @param [id] id the ID of the tweet
+    # @param [id] id A tweet or the ID of a tweet
     def retweet(id)
       bot.retweet(id)
     end
 
+
+    #
+    # favorite a tweet
+    # @param [id] id A tweet or the ID of a tweet
+    def favorite(id)
+      bot.favorite(id)
+    end
+    
     #
     # reply to a tweet
     #
@@ -168,6 +176,18 @@ module Chatterbot
     #
     def followers(opts={})
       bot.followers(opts)
+    end
+
+
+    #
+    # a common list of bad words, which you might want to filter out.
+    # lifted from https://github.com/dariusk/wordfilter/blob/master/lib/badwords.json
+    #
+    def bad_words
+      ["skank", "wetback", "bitch", "cunt", "dick", "douchebag", "dyke", "fag", "nigger", "tranny", "trannies",
+       "paki", "pussy", "retard", "slut", "titt", "tits", "wop", "whore", "chink", "fatass", "shemale", "daygo",
+       "dego", "dago", "gook", "kike", "kraut", "spic", "twat", "lesbo", "homo", "fatso", "lardass", "jap",
+       "biatch", "tard", "gimp", "gyp", "chinaman", "chinamen", "golliwog", "crip", "raghead" ]     
     end
     
     #

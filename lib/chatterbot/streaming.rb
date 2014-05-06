@@ -30,7 +30,11 @@ module Chatterbot
         case object
         when Twitter::Tweet
           debug object.text
-          yield object unless ! block_given? || on_blacklist?(object) || skip_me?(object)
+          if block_given? && !on_blacklist?(object) && !skip_me?(object)
+            @current_tweet = object
+            yield object
+            @current_tweet = nil
+          end
         #when Twitter::DirectMessage
         #  debug "Received a DM, not doing anything"
         end
