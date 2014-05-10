@@ -174,6 +174,17 @@ describe "Chatterbot::Config" do
       @bot.config[:tmp_since_id].should == 1000
     end
 
+    it "works with SearchResults" do
+      s = Twitter::SearchResults.new(
+                                     {:search_metadata => {:max_id => 1000}},
+                                     double(Twitter::Request, :client => nil, :verb => nil, :path => nil, :options => nil)
+                                     )
+
+      @bot.config[:tmp_since_id] = 100
+      @bot.update_since_id(s)
+      @bot.config[:tmp_since_id].should == 1000
+    end
+    
     it "works with tweets" do
       @bot.config[:tmp_since_id] = 100
 
@@ -192,6 +203,13 @@ describe "Chatterbot::Config" do
              ]
               
       @bot.update_since_id(data)
+      @bot.config[:tmp_since_id].should == 1000
+    end
+
+    it "works with an id" do
+      @bot.config[:tmp_since_id] = 100
+              
+      @bot.update_since_id(1000)
       @bot.config[:tmp_since_id].should == 1000
     end
     

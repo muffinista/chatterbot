@@ -57,6 +57,10 @@ describe "Chatterbot::DSL" do
       end
     end
 
+    it "#badwords returns an array" do
+      bad_words.should be_a(Array)
+    end
+    
     describe "exclude" do
       it "#exclude passes along to bot object" do
         @bot.should_receive(:exclude=).with(["foo"])
@@ -91,6 +95,11 @@ describe "Chatterbot::DSL" do
       retweet(1234)
     end
 
+    it "#favorite passes along to bot object" do
+      @bot.should_receive(:favorite).with(1234)
+      favorite(1234)
+    end
+    
     it "#replies passes along to bot object" do
       @bot.should_receive(:replies)
       replies
@@ -100,13 +109,17 @@ describe "Chatterbot::DSL" do
       @bot.should_receive(:streaming_tweets)
       streaming_tweets
     end
-
     
     it "#followers passes along to bot object" do
       @bot.should_receive(:followers)
       followers
     end
 
+    it "#follow passes along to bot object" do
+      @bot.should_receive(:follow).with(1234)
+      follow(1234)
+    end
+    
     it "#tweet passes along to bot object" do
       @bot.should_receive(:tweet).with("hello sailor!", {:foo => "bar" }, nil)
       tweet "hello sailor!", {:foo => "bar"}

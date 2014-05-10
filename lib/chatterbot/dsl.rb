@@ -43,7 +43,7 @@ module Chatterbot
     end
 
     def streaming_tweets(opts={}, &block)
-      bot.streaming_tweets(&block)
+      bot.streaming_tweets(opts, &block)
     end
     
     #
@@ -178,7 +178,15 @@ module Chatterbot
       bot.followers(opts)
     end
 
+    #
+    # follow a user
+    #
+    # @param u a Twitter::User or user id
+    def follow(u)
+      bot.follow(u)
+    end
 
+    
     #
     # a common list of bad words, which you might want to filter out.
     # lifted from https://github.com/dariusk/wordfilter/blob/master/lib/badwords.json

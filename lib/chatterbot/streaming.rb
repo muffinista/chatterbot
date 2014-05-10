@@ -17,6 +17,8 @@ module Chatterbot
     def streaming_tweets(opts = {}, &block)
       debug "streaming twitter client"
 
+      on_event = opts.delete(:on_event)
+
       opts = {
         :with => false,
         :replies => true,
@@ -34,6 +36,11 @@ module Chatterbot
             @current_tweet = object
             yield object
             @current_tweet = nil
+          end
+        when Twitter::Streaming::Event
+          if on_event
+            debug "passing event to handler"
+            on_event.call(object)
           end
         #when Twitter::DirectMessage
         #  debug "Received a DM, not doing anything"
