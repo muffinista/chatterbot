@@ -36,8 +36,8 @@ module Chatterbot
       else
         # update config when we exit
         at_exit do
-          raise $! if $!
-          update_config_at_exit
+#          raise $! if $!
+#          update_config_at_exit
         end  
       end
     end

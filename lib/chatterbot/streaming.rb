@@ -27,7 +27,9 @@ module Chatterbot
 
       # convert true/false to strings
       opts.each { |k, v| opts[k] = v.to_s }
-      
+
+      puts opts.inspect
+      puts "hi"
       streaming_client.user(opts) do |object|
         case object
         when Twitter::Tweet
