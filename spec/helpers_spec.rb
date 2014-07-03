@@ -3,20 +3,20 @@ require File.expand_path(File.dirname(__FILE__) + '/spec_helper')
 describe "Chatterbot::Helpers" do
   it "#tweet_user works with [:from_user]" do
     bot = Chatterbot::Bot.new
-    bot.tweet_user({:from_user => "foo"}).should == "@foo"
-    bot.tweet_user({:from_user => "@foo"}).should == "@foo"    
+    expect(bot.tweet_user({:from_user => "foo"})).to eq("@foo")
+    expect(bot.tweet_user({:from_user => "@foo"})).to eq("@foo")    
   end
 
   it "#tweet_user works with [:user][:screen_name]" do
     bot = Chatterbot::Bot.new
-    bot.tweet_user({:user => {:screen_name => "foo"}}).should == "@foo"
-    bot.tweet_user({:user => {:screen_name => "@foo"}}).should == "@foo"    
+    expect(bot.tweet_user({:user => {:screen_name => "foo"}})).to eq("@foo")
+    expect(bot.tweet_user({:user => {:screen_name => "@foo"}})).to eq("@foo")    
   end
    
   it "#tweet_user works with string" do
     bot = Chatterbot::Bot.new
-    bot.tweet_user("foo").should == "@foo"
-    bot.tweet_user("@foo").should == "@foo"    
+    expect(bot.tweet_user("foo")).to eq("@foo")
+    expect(bot.tweet_user("@foo")).to eq("@foo")    
   end
 
   describe "#from_user" do
@@ -25,21 +25,21 @@ describe "Chatterbot::Helpers" do
     end
 
     it "should accept strings" do
-      @bot.from_user("x").should == "x"
+      expect(@bot.from_user("x")).to eq("x")
     end
 
     it "should accept tweet" do
       t = Twitter::Tweet.new(:id => 123, :text => 'Tweet text.', :user => {:id => 123, :screen_name => "x"})
-      @bot.from_user(t).should == "x"
+      expect(@bot.from_user(t)).to eq("x")
     end
 
     it "should accept user" do    
       u = Twitter::User.new(:id => 123, :name => "x")
-      @bot.from_user(fake_user("x")).should == "x"
+      expect(@bot.from_user(fake_user("x"))).to eq("x")
     end
     
     it "should accept :screen_name" do
-      @bot.from_user(:user => {:screen_name => "x"}).should == "x"
+      expect(@bot.from_user(:user => {:screen_name => "x"})).to eq("x")
     end
   end
   
@@ -52,22 +52,22 @@ describe "Chatterbot::Helpers" do
     it "can set botname" do
       @bot = TestBot.new
       @bot.botname = "foo"
-      @bot.botname.should == "foo"
+      expect(@bot.botname).to eq("foo")
     end
     
     it "calls botname smartly for inherited classes" do
       @bot2 = TestBot.new
-      @bot2.botname.should == "testbot"
+      expect(@bot2.botname).to eq("testbot")
     end
 
     it "calls botname for non-inherited bots" do
-      File.should_receive(:basename).and_return("bot")
-      @bot.botname.should == "bot"
+      expect(File).to receive(:basename).and_return("bot")
+      expect(@bot.botname).to eq("bot")
     end
 
     it "uses specified name" do
       @bot = Chatterbot::Bot.new(:name => 'xyzzy')
-      @bot.botname.should == "xyzzy"
+      expect(@bot.botname).to eq("xyzzy")
     end
   end
 
@@ -78,16 +78,16 @@ describe "Chatterbot::Helpers" do
     end
 
     it "should replace username by calling tweet_user" do
-      @bot.should_receive(:tweet_user).and_return("@foobar")
-      @bot.replace_variables("#USER#", @tweet).should == "@foobar"
+      expect(@bot).to receive(:tweet_user).and_return("@foobar")
+      expect(@bot.replace_variables("#USER#", @tweet)).to eq("@foobar")
     end
     
     it "should be fine with not replacing anything" do
-      @bot.replace_variables("foobar", @tweet).should == "foobar"
+      expect(@bot.replace_variables("foobar", @tweet)).to eq("foobar")
     end
     
     it "should be fine without a tweet" do
-      @bot.replace_variables("foobar").should == "foobar"
+      expect(@bot.replace_variables("foobar")).to eq("foobar")
     end
   end  
 end

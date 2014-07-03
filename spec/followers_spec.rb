@@ -7,30 +7,30 @@ describe "Chatterbot::Followers" do
 
   describe "followers" do
     it "calls require_login" do
-      @bot.should_receive(:require_login).and_return(false)
+      expect(@bot).to receive(:require_login).and_return(false)
       @bot.followers
     end
 
     it "returns followers" do
-      @bot.should_receive(:require_login).and_return(true)
-      @bot.stub(:client).and_return(fake_followers(3))
+      expect(@bot).to receive(:require_login).and_return(true)
+      allow(@bot).to receive(:client).and_return(fake_followers(3))
 
       result = @bot.followers
-      result.size.should == 3
-      result[0].name.should == "Follower 1"
+      expect(result.size).to eq(3)
+      expect(result[0].name).to eq("Follower 1")
     end
   end
 
   describe "follow" do
     it "calls require_login" do
-      @bot.should_receive(:require_login).and_return(false)
+      expect(@bot).to receive(:require_login).and_return(false)
       @bot.follow(1234)
     end
 
     it "works" do
-      @bot.should_receive(:require_login).and_return(true)
-      @bot.stub(:client).and_return(double(Twitter::Client))
-      @bot.client.should_receive(:follow).with(1234)
+      expect(@bot).to receive(:require_login).and_return(true)
+      allow(@bot).to receive(:client).and_return(double(Twitter::Client))
+      expect(@bot.client).to receive(:follow).with(1234)
       
       @bot.follow(1234)
     end

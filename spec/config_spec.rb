@@ -8,120 +8,120 @@ describe "Chatterbot::Config" do
   
   describe "loading" do
     it "overrides with incoming params" do
-      @bot.should_receive(:global_config).and_return({:foo => :bar})      
+      expect(@bot).to receive(:global_config).and_return({:foo => :bar})      
       tmp = @bot.load_config({:foo => :baz})
-      tmp[:foo].should == :baz
+      expect(tmp[:foo]).to eq(:baz)
     end
     
     it "loads config when we need a variable" do
-      @bot.should_receive(:load_config).and_return({:foo => :bar})
+      expect(@bot).to receive(:load_config).and_return({:foo => :bar})
       @bot.config = nil
 
-      @bot.config[:foo].should == :bar
+      expect(@bot.config[:foo]).to eq(:bar)
     end
 
     it "loads both global config and local config" do
-      @bot.should_receive(:global_config).and_return({:foo => :bar, :a => :b})
-      @bot.should_receive(:bot_config).and_return({:foo => :baz, :custom => :value})
+      expect(@bot).to receive(:global_config).and_return({:foo => :bar, :a => :b})
+      expect(@bot).to receive(:bot_config).and_return({:foo => :baz, :custom => :value})
 
       @bot.config = nil
       
       
-      @bot.config[:foo].should == :baz
-      @bot.config[:a].should == :b
-      @bot.config[:custom].should == :value
+      expect(@bot.config[:foo]).to eq(:baz)
+      expect(@bot.config[:a]).to eq(:b)
+      expect(@bot.config[:custom]).to eq(:value)
     end
 
     it "update_config? is true by default" do
-      @bot.update_config?.should == true
+      expect(@bot.update_config?).to eq(true)
     end
 
     it "update_config? is false if this is a dry run" do
       @bot.config[:no_update] = true
-      @bot.update_config?.should == false
+      expect(@bot.update_config?).to eq(false)
     end
 
     
     it "returns a log dest" do
-      @bot.should_receive(:load_config).and_return({:log_dest => :bar})    
+      expect(@bot).to receive(:load_config).and_return({:log_dest => :bar})    
       @bot.config = nil
 
-      @bot.log_dest.should == :bar
+      expect(@bot.log_dest).to eq(:bar)
     end
 
     it "checks for an auth_token" do
-      @bot.should_receive(:load_config).and_return({:token => "123"})
+      expect(@bot).to receive(:load_config).and_return({:token => "123"})
       @bot.config = nil
 
-      @bot.needs_auth_token?.should == false
+      expect(@bot.needs_auth_token?).to eq(false)
     end
 
     it "checks for an auth_token" do
-      @bot.should_receive(:load_config).and_return({})
+      expect(@bot).to receive(:load_config).and_return({})
       @bot.config = nil
 
-      @bot.needs_auth_token?.should == true
+      expect(@bot.needs_auth_token?).to eq(true)
     end
 
 
     it "checks for an API key" do
-      @bot.should_receive(:load_config).and_return({})
+      expect(@bot).to receive(:load_config).and_return({})
       @bot.config = nil
 
-      @bot.needs_api_key?.should == true
+      expect(@bot.needs_api_key?).to eq(true)
 
       @bot.config = {:consumer_key => "ck", :consumer_secret => "cs" }
-      @bot.needs_api_key?.should == false
+      expect(@bot.needs_api_key?).to eq(false)
     end
   end
 
   describe "debug_mode=" do
     it "works" do
       @bot.debug_mode = true
-      @bot.config[:debug_mode].should == true
+      expect(@bot.config[:debug_mode]).to eq(true)
     end
   end
 
   describe "no_update=" do
     it "works" do
       @bot.no_update = true
-      @bot.config[:no_update].should == true
+      expect(@bot.config[:no_update]).to eq(true)
     end
   end
 
   describe "verbose=" do
     it "works" do
       @bot.verbose = true
-      @bot.config[:verbose].should == true
+      expect(@bot.config[:verbose]).to eq(true)
     end
   end
   
   describe "reset_bot?" do
     it "works when reset_bot isn't set" do
-      @bot.reset_bot?.should == false
+      expect(@bot.reset_bot?).to eq(false)
     end
 
     it "works when reset_bot is set" do
       @bot.config[:reset_since_id] = false
-      @bot.reset_bot?.should == false
+      expect(@bot.reset_bot?).to eq(false)
 
       @bot.config[:reset_since_id] = true
-      @bot.reset_bot?.should == true
+      expect(@bot.reset_bot?).to eq(true)
     end
   end
 
   
   describe "debug_mode?" do
     it "works when debug_mode isn't set" do
-      @bot.debug_mode?.should == false
+      expect(@bot.debug_mode?).to eq(false)
     end
 
     it "works when debug_mode is set" do
       @bot.config[:debug_mode] = false
-      @bot.debug_mode?.should == false
+      expect(@bot.debug_mode?).to eq(false)
 
       @bot.config[:debug_mode] = true
-      @bot.debug_mode?.should == true
+      expect(@bot.debug_mode?).to eq(true)
     end
   end
 
@@ -129,7 +129,7 @@ describe "Chatterbot::Config" do
     it "works" do
 
       @bot.since_id_reply = 123
-      @bot.config[:tmp_since_id_reply].should == 123
+      expect(@bot.config[:tmp_since_id_reply]).to eq(123)
     end
   end
 
@@ -139,7 +139,7 @@ describe "Chatterbot::Config" do
 
       data = fake_tweet(1000, 1000)
       @bot.update_since_id_reply(data)
-      @bot.config[:tmp_since_id_reply].should == 1000
+      expect(@bot.config[:tmp_since_id_reply]).to eq(1000)
     end
 
     it "doesn't work with searches" do
@@ -147,21 +147,21 @@ describe "Chatterbot::Config" do
 
       @bot.config[:tmp_since_id_reply] = 100
       @bot.update_since_id_reply(data)
-      @bot.config[:tmp_since_id_reply].should == 100
+      expect(@bot.config[:tmp_since_id_reply]).to eq(100)
     end
 
     it "never rolls back" do
       @bot.config[:tmp_since_id_reply] = 100
       data = fake_tweet(50, 50)
       @bot.update_since_id(data)
-      @bot.config[:tmp_since_id_reply].should == 100
+      expect(@bot.config[:tmp_since_id_reply]).to eq(100)
     end
   end
 
   describe "since_id=" do
     it "works" do
       @bot.since_id = 123
-      @bot.config[:tmp_since_id].should == 123
+      expect(@bot.config[:tmp_since_id]).to eq(123)
     end
   end
 
@@ -171,7 +171,7 @@ describe "Chatterbot::Config" do
 
       @bot.config[:tmp_since_id] = 100
       @bot.update_since_id(data)
-      @bot.config[:tmp_since_id].should == 1000
+      expect(@bot.config[:tmp_since_id]).to eq(1000)
     end
 
     it "works with SearchResults" do
@@ -182,7 +182,7 @@ describe "Chatterbot::Config" do
 
       @bot.config[:tmp_since_id] = 100
       @bot.update_since_id(s)
-      @bot.config[:tmp_since_id].should == 1000
+      expect(@bot.config[:tmp_since_id]).to eq(1000)
     end
     
     it "works with tweets" do
@@ -190,7 +190,7 @@ describe "Chatterbot::Config" do
 
       data = fake_tweet(1000, 1000)
       @bot.update_since_id(data)
-      @bot.config[:tmp_since_id].should == 1000
+      expect(@bot.config[:tmp_since_id]).to eq(1000)
     end
 
     it "works with arrays" do
@@ -203,58 +203,58 @@ describe "Chatterbot::Config" do
              ]
               
       @bot.update_since_id(data)
-      @bot.config[:tmp_since_id].should == 1000
+      expect(@bot.config[:tmp_since_id]).to eq(1000)
     end
 
     it "works with an id" do
       @bot.config[:tmp_since_id] = 100
               
       @bot.update_since_id(1000)
-      @bot.config[:tmp_since_id].should == 1000
+      expect(@bot.config[:tmp_since_id]).to eq(1000)
     end
     
     it "never rolls back" do
       @bot.config[:tmp_since_id] = 100
       data = fake_tweet(50, 50)
       @bot.update_since_id(data)
-      @bot.config[:tmp_since_id].should == 100     
+      expect(@bot.config[:tmp_since_id]).to eq(100)     
     end
   end
   
   
   describe "update_config" do
     it "doesn't update the config if update_config? is false" do
-      @bot.should_receive(:update_config?).and_return(false)
-      @bot.should_not_receive(:has_db?)
+      expect(@bot).to receive(:update_config?).and_return(false)
+      expect(@bot).not_to receive(:has_db?)
       @bot.update_config
     end
 
     it "doesn't update keys from the global config" do
-      @bot.stub(:global_config).and_return({:foo => :bar, :a => :b})
-      @bot.stub(:bot_config).and_return({:foo => :bar, :custom => :value})      
+      allow(@bot).to receive(:global_config).and_return({:foo => :bar, :a => :b})
+      allow(@bot).to receive(:bot_config).and_return({:foo => :bar, :custom => :value})      
 
       @bot.config = nil
       
-      @bot.config_to_save.should == { :custom => :value }
+      expect(@bot.config_to_save).to eq({ :custom => :value })
     end
     
     it "does update keys from the global config if they've been customized" do
-      @bot.stub(:global_config).and_return({:foo => :bar, :a => :b})
-      @bot.stub(:bot_config).and_return({:foo => :baz, :custom => :value})      
+      allow(@bot).to receive(:global_config).and_return({:foo => :bar, :a => :b})
+      allow(@bot).to receive(:bot_config).and_return({:foo => :baz, :custom => :value})      
 
       @bot.config = nil
       
-      @bot.config_to_save.should == { :foo => :baz, :custom => :value }
+      expect(@bot.config_to_save).to eq({ :foo => :baz, :custom => :value })
     end
 
     it "updates since_id" do
       @bot.config[:tmp_since_id] = 100
-      @bot.config_to_save[:since_id].should == 100
+      expect(@bot.config_to_save[:since_id]).to eq(100)
     end
 
     it "updates since_id_reply" do
       @bot.config[:tmp_since_id_reply] = 100
-      @bot.config_to_save[:since_id_reply].should == 100
+      expect(@bot.config_to_save[:since_id_reply]).to eq(100)
     end
   end
 
@@ -262,39 +262,39 @@ describe "Chatterbot::Config" do
   describe "global config files" do
     it "has an array of global_config_files" do
       ENV["chatterbot_config"] = "/tmp/foo.yml"
-      @bot.global_config_files.first.should == "/etc/chatterbot.yml"
-      @bot.global_config_files[1].should == "/tmp/foo.yml"
-      @bot.global_config_files.last.should include("/global.yml")
+      expect(@bot.global_config_files.first).to eq("/etc/chatterbot.yml")
+      expect(@bot.global_config_files[1]).to eq("/tmp/foo.yml")
+      expect(@bot.global_config_files.last).to include("/global.yml")
     end
 
     it "slurps in all the global_config_files" do
-      @bot.stub(:global_config_files).and_return(["config.yml", "config2.yml", "config3.yml"])
-      @bot.should_receive(:slurp_file).with("config.yml").and_return({:a => 1 })
-      @bot.should_receive(:slurp_file).with("config2.yml").and_return({:b => 2 })
-      @bot.should_receive(:slurp_file).with("config3.yml").and_return({:c => 3 })      
+      allow(@bot).to receive(:global_config_files).and_return(["config.yml", "config2.yml", "config3.yml"])
+      expect(@bot).to receive(:slurp_file).with("config.yml").and_return({:a => 1 })
+      expect(@bot).to receive(:slurp_file).with("config2.yml").and_return({:b => 2 })
+      expect(@bot).to receive(:slurp_file).with("config3.yml").and_return({:c => 3 })      
 
-      @bot.global_config.should == { :a => 1, :b => 2, :c => 3}
+      expect(@bot.global_config).to eq({ :a => 1, :b => 2, :c => 3})
     end
 
     it "priorities last file in list" do
-      @bot.stub(:global_config_files).and_return(["config.yml", "config2.yml", "config3.yml"])
-      @bot.should_receive(:slurp_file).with("config.yml").and_return({:a => 1 })
-      @bot.should_receive(:slurp_file).with("config2.yml").and_return({:b => 2 })
-      @bot.should_receive(:slurp_file).with("config3.yml").and_return({:a => 100, :b => 50, :c => 3 })      
-      @bot.global_config.should == { :a => 100, :b => 50, :c => 3}
+      allow(@bot).to receive(:global_config_files).and_return(["config.yml", "config2.yml", "config3.yml"])
+      expect(@bot).to receive(:slurp_file).with("config.yml").and_return({:a => 1 })
+      expect(@bot).to receive(:slurp_file).with("config2.yml").and_return({:b => 2 })
+      expect(@bot).to receive(:slurp_file).with("config3.yml").and_return({:a => 100, :b => 50, :c => 3 })      
+      expect(@bot.global_config).to eq({ :a => 100, :b => 50, :c => 3})
     end
   end
 
   
   describe "working_dir" do
     it "returns getwd for chatterbot scripts" do
-      @bot.should_receive(:chatterbot_helper?).and_return(true)
-      @bot.working_dir.should == Dir.getwd
+      expect(@bot).to receive(:chatterbot_helper?).and_return(true)
+      expect(@bot.working_dir).to eq(Dir.getwd)
     end
 
     it "returns calling dir for non-chatterbot scripts" do
-      @bot.should_receive(:chatterbot_helper?).and_return(false)
-      @bot.working_dir.should == File.dirname($0)
+      expect(@bot).to receive(:chatterbot_helper?).and_return(false)
+      expect(@bot.working_dir).to eq(File.dirname($0))
     end
   end
   
@@ -306,7 +306,7 @@ describe "Chatterbot::Config" do
       src << tmp.to_yaml
       src.flush
       
-      @bot.slurp_file(src.path).should == tmp
+      expect(@bot.slurp_file(src.path)).to eq(tmp)
     end
 
     it "symbolizes keys" do
@@ -316,19 +316,19 @@ describe "Chatterbot::Config" do
       src << tmp.to_yaml
       src.flush
       
-      @bot.slurp_file(src.path).should == { :since_id => 0 }
+      expect(@bot.slurp_file(src.path)).to eq({ :since_id => 0 })
     end
   
     it "doesn't store local file if we can store to db instead" do
-      @bot.should_receive(:has_db?).and_return(true)
-      @bot.should_receive(:store_database_config)
+      expect(@bot).to receive(:has_db?).and_return(true)
+      expect(@bot).to receive(:store_database_config)
       @bot.update_config     
     end
   
     it "stores local file if no db" do
-      @bot.should_receive(:has_db?).and_return(false)
-      @bot.should_not_receive(:store_database_config)
-      @bot.should_receive(:store_local_config)      
+      expect(@bot).to receive(:has_db?).and_return(false)
+      expect(@bot).not_to receive(:store_database_config)
+      expect(@bot).to receive(:store_local_config)      
       @bot.update_config     
     end
   end
@@ -339,13 +339,13 @@ describe "Chatterbot::Config" do
       
       @src = Tempfile.new("config")
 
-      @bot.stub(:config_file).and_return(@src.path)
-      @bot.stub(:config_to_save).and_return(tmp)
+      allow(@bot).to receive(:config_file).and_return(@src.path)
+      allow(@bot).to receive(:config_to_save).and_return(tmp)
     end
 
     it "should work" do
       @bot.store_local_config
-      @bot.slurp_file(@src.path).should == { :x => 123, :foo => :bar }
+      expect(@bot.slurp_file(@src.path)).to eq({ :x => 123, :foo => :bar })
     end
   end
   

@@ -6,34 +6,34 @@ describe "Chatterbot::DSL" do
       @bot = double(Chatterbot::Bot, :config => {})
       @bot.send :require, 'chatterbot/dsl'
 
-      Chatterbot::DSL.stub(:bot).and_return(@bot)
+      allow(Chatterbot::DSL).to receive(:bot).and_return(@bot)
     end
 
     describe "client" do
       it "returns the bot object" do
-        client.should eql(@bot.client)
+        expect(client).to eql(@bot.client)
       end
     end
 
     describe "streaming_client" do
       it "returns the bot object" do
-        streaming_client.should eql(@bot.streaming_client)
+        expect(streaming_client).to eql(@bot.streaming_client)
       end
     end
 
     describe "blacklist" do
       it "#blacklist passes along to bot object" do
-        @bot.should_receive(:blacklist=).with(["foo"])
+        expect(@bot).to receive(:blacklist=).with(["foo"])
         blacklist ["foo"]
       end
 
       it "#blacklist turns single-string arg into an array" do
-        @bot.should_receive(:blacklist=).with(["foo"])
+        expect(@bot).to receive(:blacklist=).with(["foo"])
         blacklist "foo"
       end
 
       it "#blacklist turns comma-delimited string arg into an array" do
-        @bot.should_receive(:blacklist=).with(["foo", "bar"])
+        expect(@bot).to receive(:blacklist=).with(["foo", "bar"])
         blacklist "foo, bar"
       end
     end
@@ -41,92 +41,92 @@ describe "Chatterbot::DSL" do
     [:no_update, :debug_mode, :verbose].each do |method|
       describe method.to_s do
         it "#{method.to_s} with nil passes along true to bot object" do
-          @bot.should_receive("#{method.to_s}=").with(true)
+          expect(@bot).to receive("#{method.to_s}=").with(true)
           send method
         end
 
         it "#debug_mode with false is passed" do
-          @bot.should_receive("#{method.to_s}=").with(false)
+          expect(@bot).to receive("#{method.to_s}=").with(false)
           send method, false
         end
 
         it "#debug_mode with true is passed" do
-          @bot.should_receive("#{method.to_s}=").with(true)
+          expect(@bot).to receive("#{method.to_s}=").with(true)
           send method, true
         end
       end
     end
 
     it "#badwords returns an array" do
-      bad_words.should be_a(Array)
+      expect(bad_words).to be_a(Array)
     end
     
     describe "exclude" do
       it "#exclude passes along to bot object" do
-        @bot.should_receive(:exclude=).with(["foo"])
+        expect(@bot).to receive(:exclude=).with(["foo"])
         exclude ["foo"]
       end
 
       it "#exclude turns single-string arg into an array" do
-        @bot.should_receive(:exclude=).with(["foo"])
+        expect(@bot).to receive(:exclude=).with(["foo"])
         exclude "foo"
       end
 
       it "#exclude turns comma-delimited string arg into an array" do
-        @bot.should_receive(:exclude=).with(["foo", "bar"])
+        expect(@bot).to receive(:exclude=).with(["foo", "bar"])
         exclude "foo, bar"
       end
     end
 
     describe "search" do
       it "passes along to bot object" do
-        @bot.should_receive(:search).with("foo", { })
+        expect(@bot).to receive(:search).with("foo", { })
         search("foo")
       end
 
       it "passes multiple queries along to bot object" do
-        @bot.should_receive(:search).with(["foo","bar"], { })
+        expect(@bot).to receive(:search).with(["foo","bar"], { })
         search(["foo","bar"])
       end
     end
 
     it "#retweet passes along to bot object" do
-      @bot.should_receive(:retweet).with(1234)
+      expect(@bot).to receive(:retweet).with(1234)
       retweet(1234)
     end
 
     it "#favorite passes along to bot object" do
-      @bot.should_receive(:favorite).with(1234)
+      expect(@bot).to receive(:favorite).with(1234)
       favorite(1234)
     end
     
     it "#replies passes along to bot object" do
-      @bot.should_receive(:replies)
+      expect(@bot).to receive(:replies)
       replies
     end
 
     it "#streaming_tweets passes along to bot object" do
-      @bot.should_receive(:streaming_tweets)
+      expect(@bot).to receive(:streaming_tweets)
       streaming_tweets
     end
     
     it "#followers passes along to bot object" do
-      @bot.should_receive(:followers)
+      expect(@bot).to receive(:followers)
       followers
     end
 
     it "#follow passes along to bot object" do
-      @bot.should_receive(:follow).with(1234)
+      expect(@bot).to receive(:follow).with(1234)
       follow(1234)
     end
     
     it "#tweet passes along to bot object" do
-      @bot.should_receive(:tweet).with("hello sailor!", {:foo => "bar" }, nil)
+      expect(@bot).to receive(:tweet).with("hello sailor!", {:foo => "bar" }, nil)
       tweet "hello sailor!", {:foo => "bar"}
     end
 
     it "#reply passes along to bot object" do
-      @bot.should_receive(:reply).with("hello sailor!", { :source => "source "})
+      expect(@bot).to receive(:reply).with("hello sailor!", { :source => "source "})
       reply "hello sailor!", { :source => "source "}
     end
 
@@ -134,43 +134,43 @@ describe "Chatterbot::DSL" do
       [:consumer_secret, :consumer_key, :token, :secret].each do |k|
         it "should be able to set #{k}" do
           send(k, "foo")
-          @bot.config[k].should == "foo"
+          expect(@bot.config[k]).to eq("foo")
         end
       end
     end
     
     describe "update_config" do
       it "should pass to bot object" do
-        @bot.should_receive(:update_config)
+        expect(@bot).to receive(:update_config)
         update_config
       end
     end
 
     describe "since_id" do
       it "should pass to bot object" do
-        @bot.should_receive(:config).and_return({:since_id => 1234})
-        since_id.should == 1234
+        expect(@bot).to receive(:config).and_return({:since_id => 1234})
+        expect(since_id).to eq(1234)
       end
 
       it "can be set" do
         since_id(1234)
-        @bot.config[:since_id].should == 1234
+        expect(@bot.config[:since_id]).to eq(1234)
       end
     end
 
     describe "since_id_reply" do
       it "should pass to bot object" do
-        @bot.should_receive(:config).and_return({:since_id_reply => 1234})
-        since_id_reply.should == 1234
+        expect(@bot).to receive(:config).and_return({:since_id_reply => 1234})
+        expect(since_id_reply).to eq(1234)
       end
     end
 
     describe "db" do
       it "should pass to bot object" do
         bot_db = double(Object)
-        @bot.should_receive(:db).and_return(bot_db)
+        expect(@bot).to receive(:db).and_return(bot_db)
 
-        db.should eql(bot_db)
+        expect(db).to eql(bot_db)
       end
     end
 

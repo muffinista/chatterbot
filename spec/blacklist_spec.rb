@@ -4,58 +4,58 @@ describe "Chatterbot::Blacklist" do
   it "has a list of excluded phrases" do
     @bot = test_bot
     @bot.exclude = ["junk", "i hate bots", "foobar", "spam"]
-    expect(@bot.skip_me?("did you know that i hate bots?")).to be_true
+    expect(@bot.skip_me?("did you know that i hate bots?")).to be_truthy
   end
 
   describe "skip_me?" do
     before(:each) do
       @bot = test_bot
-      @bot.stub(:exclude).and_return(["junk", "i hate bots", "foobar", "spam"])
+      allow(@bot).to receive(:exclude).and_return(["junk", "i hate bots", "foobar", "spam"])
     end
 
     it "blocks tweets with phrases we don't want" do
-      expect(@bot.skip_me?("did you know that i hate bots?")).to be_true
+      expect(@bot.skip_me?("did you know that i hate bots?")).to be_truthy
     end
 
     it "isn't case-specific" do
-      @bot.skip_me?("DID YOU KNOW THAT I HATE BOTS?").should == true
+      expect(@bot.skip_me?("DID YOU KNOW THAT I HATE BOTS?")).to eq(true)
     end
 
 
     it "allows users we do want" do
-      @bot.skip_me?("a tweet without any bad content").should == false
+      expect(@bot.skip_me?("a tweet without any bad content")).to eq(false)
     end
 
     it "works with result hashes" do
-      @bot.skip_me?(Twitter::Tweet.new(:id => 1, :text => "did you know that i hate bots?")).should == true
-      @bot.skip_me?(Twitter::Tweet.new(:id => 1, :text => "a tweet without any bad content")).should == false
+      expect(@bot.skip_me?(Twitter::Tweet.new(:id => 1, :text => "did you know that i hate bots?"))).to eq(true)
+      expect(@bot.skip_me?(Twitter::Tweet.new(:id => 1, :text => "a tweet without any bad content"))).to eq(false)
     end
   end
 
   describe "on_blacklist?" do
     before(:each) do
       @bot = test_bot
-      @bot.stub(:blacklist).and_return(["skippy", "blippy", "dippy"])
+      allow(@bot).to receive(:blacklist).and_return(["skippy", "blippy", "dippy"])
     end
 
     it "blocks users we don't want" do
-      @bot.on_blacklist?("skippy").should == true
+      expect(@bot.on_blacklist?("skippy")).to eq(true)
     end
 
     it "allows users we do want" do
-      @bot.on_blacklist?("flippy").should == false
+      expect(@bot.on_blacklist?("flippy")).to eq(false)
     end
 
     it "isn't case-specific" do
-      @bot.on_blacklist?("FLIPPY").should == false
-      @bot.on_blacklist?("SKIPPY").should == true
+      expect(@bot.on_blacklist?("FLIPPY")).to eq(false)
+      expect(@bot.on_blacklist?("SKIPPY")).to eq(true)
     end
 
     it "works with result hashes" do
-      @bot.on_blacklist?(Twitter::Tweet.new(:id => 1,
-                                            :user => {:id => 1, :screen_name => "skippy"})).should == true
-      @bot.on_blacklist?(Twitter::Tweet.new(:id => 1,
-                                            :user => {:id => 1, :screen_name => "flippy"})).should == false
+      expect(@bot.on_blacklist?(Twitter::Tweet.new(:id => 1,
+                                            :user => {:id => 1, :screen_name => "skippy"}))).to eq(true)
+      expect(@bot.on_blacklist?(Twitter::Tweet.new(:id => 1,
+                                            :user => {:id => 1, :screen_name => "flippy"}))).to eq(false)
     end   
   end
 
@@ -65,29 +65,29 @@ describe "Chatterbot::Blacklist" do
     end
 
     it "doesn't freak out if no db" do
-      @bot.should_receive(:has_db?).and_return(false)
-      @bot.on_global_blacklist?("foobar").should == false
+      expect(@bot).to receive(:has_db?).and_return(false)
+      expect(@bot.on_global_blacklist?("foobar")).to eq(false)
     end
 
     it "collects name from the db if it exists" do
-      @bot.stub(:has_db?).and_return(true)
+      allow(@bot).to receive(:has_db?).and_return(true)
       blacklist_table = double(Object)
       double_dataset = double(Object, {:count => 1})
-      blacklist_table.should_receive(:where).
+      expect(blacklist_table).to receive(:where).
         with({ :user => "a"}).
         and_return( double_dataset )
 
       
       missing_dataset = double(Object, {:count => 0})
-      blacklist_table.should_receive(:where).
+      expect(blacklist_table).to receive(:where).
         with({ :user => "b"}).
         and_return( missing_dataset )
       
-      @bot.stub(:db).and_return({ 
+      allow(@bot).to receive(:db).and_return({ 
                                    :blacklist => blacklist_table
                                  })
-      @bot.on_global_blacklist?("a").should == true
-      @bot.on_global_blacklist?("b").should == false
+      expect(@bot.on_global_blacklist?("a")).to eq(true)
+      expect(@bot.on_global_blacklist?("b")).to eq(false)
     end
   end
 

@@ -21,8 +21,8 @@ Dir["#{File.dirname(__FILE__)}/support/**/*.rb"].each {|f| require f}
 
 def test_bot
   bot = Chatterbot::Bot.new
-  bot.stub(:load_config).and_return({})
-  bot.stub(:update_config_at_exit)
+  allow(bot).to receive(:load_config).and_return({})
+  allow(bot).to receive(:update_config_at_exit)
   bot.reset!
   bot
 end
@@ -31,7 +31,7 @@ def fake_search(max_id = 100, result_count = 0, id_base=0)
   result = 1.upto(result_count).each_with_index.map { |x, i|
     fake_tweet(max_id - i, id_base)
   }
-  result.stub(:max_id).and_return(max_id)
+  allow(result).to receive(:max_id).and_return(max_id)
 
   double(Twitter::Client,
        :credentials? => true,

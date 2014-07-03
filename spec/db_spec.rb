@@ -11,10 +11,10 @@ describe "Chatterbot::DB" do
   context "prerequisites" do
     describe "get_connection" do
       it "should make sure sequel is actually installed" do
-        Chatterbot::Bot.any_instance.stub(:has_sequel?) { false }
+        allow_any_instance_of(Chatterbot::Bot).to receive(:has_sequel?) { false }
         @bot = Chatterbot::Bot.new
         @bot.config[:db_uri] = @db_uri
-        @bot.should_receive(:display_db_config_notice)
+        expect(@bot).to receive(:display_db_config_notice)
         @bot.db
       end
     end
@@ -23,7 +23,7 @@ describe "Chatterbot::DB" do
   context "db interactions" do
     before(:each) do
       @bot = Chatterbot::Bot.new
-      @bot.stub(:update_config_at_exit)
+      allow(@bot).to receive(:update_config_at_exit)
       @bot.config[:db_uri] = @db_uri
     end
 
@@ -35,7 +35,7 @@ describe "Chatterbot::DB" do
       [:blacklist, :tweets, :config].each do |table|
         it "should create table #{table}" do
           @tmp_conn = @bot.db
-          @tmp_conn.tables.include?(table).should == true
+          expect(@tmp_conn.tables.include?(table)).to eq(true)
         end
       end      
     end
@@ -46,7 +46,7 @@ describe "Chatterbot::DB" do
         @bot.config[:db_uri] = @db_uri
         
         @bot.db
-        @bot.store_database_config.should == true
+        expect(@bot.store_database_config).to eq(true)
       end
     end
   end

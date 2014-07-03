@@ -7,21 +7,21 @@ describe "Chatterbot::Search" do
     end
 
     it "should tack onto query" do
-      @bot.exclude_retweets("foo").should == ("foo -include:retweets")
+      expect(@bot.exclude_retweets("foo")).to eq("foo -include:retweets")
     end
 
     it "shouldn't tack onto query" do
-      @bot.exclude_retweets("foo -include:retweets").should == ("foo -include:retweets")
+      expect(@bot.exclude_retweets("foo -include:retweets")).to eq("foo -include:retweets")
     end
 
     it "shouldn't tack onto query" do
-      @bot.exclude_retweets("foo include:retweets").should == ("foo include:retweets")
+      expect(@bot.exclude_retweets("foo include:retweets")).to eq("foo include:retweets")
     end
   end
 
   it "calls search" do
     bot = Chatterbot::Bot.new
-    bot.should_receive(:search)
+    expect(bot).to receive(:search)
     bot.search("foo")
   end
  
@@ -30,8 +30,8 @@ describe "Chatterbot::Search" do
     bot = test_bot
     
     data = fake_search(100, 1)
-    bot.stub(:search_client).and_return(data)
-    bot.should_receive(:update_since_id).with(data.search)
+    allow(bot).to receive(:search_client).and_return(data)
+    expect(bot).to receive(:update_since_id).with(data.search)
     
     bot.search("foo")
   end
@@ -39,9 +39,9 @@ describe "Chatterbot::Search" do
   it "accepts multiple searches at once" do
     bot = test_bot
     
-    bot.stub(:search_client).and_return(fake_search(100, 1))
-    bot.search_client.should_receive(:search).once.ordered.with("foo -include:retweets", {:result_type=>"recent"})
-    bot.search_client.should_receive(:search).once.ordered.with("bar -include:retweets", {:result_type=>"recent"})
+    allow(bot).to receive(:search_client).and_return(fake_search(100, 1))
+    expect(bot.search_client).to receive(:search).once.ordered.with("foo -include:retweets", {:result_type=>"recent"})
+    expect(bot.search_client).to receive(:search).once.ordered.with("bar -include:retweets", {:result_type=>"recent"})
 
     bot.search(["foo", "bar"])
   end
@@ -49,8 +49,8 @@ describe "Chatterbot::Search" do
   it "accepts extra params" do
     bot = test_bot
 
-    bot.stub(:search_client).and_return(fake_search(100, 1))
-    bot.search_client.should_receive(:search).with("foo -include:retweets", {:lang => "en", :result_type=>"recent"})
+    allow(bot).to receive(:search_client).and_return(fake_search(100, 1))
+    expect(bot.search_client).to receive(:search).with("foo -include:retweets", {:lang => "en", :result_type=>"recent"})
 
     bot.search("foo", :lang => "en")
   end
@@ -58,19 +58,19 @@ describe "Chatterbot::Search" do
   it "accepts a single search query" do
     bot = test_bot
 
-    bot.stub(:search_client).and_return(fake_search(100, 1))
-    bot.search_client.should_receive(:search).with("foo -include:retweets", {:result_type=>"recent"})
+    allow(bot).to receive(:search_client).and_return(fake_search(100, 1))
+    expect(bot.search_client).to receive(:search).with("foo -include:retweets", {:result_type=>"recent"})
 
     bot.search("foo")
   end
 
   it "passes along since_id" do
     bot = test_bot
-    bot.stub(:since_id).and_return(123)
-    bot.stub(:since_id_reply).and_return(456)
+    allow(bot).to receive(:since_id).and_return(123)
+    allow(bot).to receive(:since_id_reply).and_return(456)
     
-    bot.stub(:search_client).and_return(fake_search(100, 1))
-    bot.search_client.should_receive(:search).with("foo -include:retweets", {:since_id => 123, :result_type => "recent", :since_id_reply => 456})
+    allow(bot).to receive(:search_client).and_return(fake_search(100, 1))
+    expect(bot.search_client).to receive(:search).with("foo -include:retweets", {:since_id => 123, :result_type => "recent", :since_id_reply => 456})
 
     bot.search("foo")
   end
@@ -78,36 +78,36 @@ describe "Chatterbot::Search" do
   it "updates since_id when complete" do
     bot = test_bot
     results = fake_search(1000, 1)
-    bot.stub(:search_client).and_return(results)
+    allow(bot).to receive(:search_client).and_return(results)
     
-    bot.should_receive(:update_since_id).with(results.search)
+    expect(bot).to receive(:update_since_id).with(results.search)
     bot.search("foo")
   end
   
   it "iterates results" do
     bot = test_bot
-    bot.stub(:search_client).and_return(fake_search(100, 3))
+    allow(bot).to receive(:search_client).and_return(fake_search(100, 3))
     indexes = []
 
     bot.search("foo") do |x|
       indexes << x.attrs[:index]
     end
     
-    indexes.should == [100, 99, 98]
+    expect(indexes).to eq([100, 99, 98])
   end
 
   it "checks blacklist" do
     bot = test_bot
-    bot.stub(:search_client).and_return(fake_search(100, 3))
+    allow(bot).to receive(:search_client).and_return(fake_search(100, 3))
     
-    bot.stub(:on_blacklist?).and_return(true, false)
+    allow(bot).to receive(:on_blacklist?).and_return(true, false)
     
     indexes = []
     bot.search("foo") do |x|
       indexes << x.attrs[:index]
     end
 
-    indexes.should == [99, 98]
+    expect(indexes).to eq([99, 98])
   end
 
 end

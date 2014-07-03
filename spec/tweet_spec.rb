@@ -7,32 +7,32 @@ describe "Chatterbot::Tweet" do
     end
 
     it "calls require_login when tweeting" do
-      @bot.should_receive(:require_login).and_return(false)
+      expect(@bot).to receive(:require_login).and_return(false)
       @bot.tweet "tweet test!"
     end
 
     it "calls client.update with the right values" do
       bot = test_bot
 
-      bot.should_receive(:require_login).and_return(true)
-      bot.stub(:client).and_return(double(Twitter::Client))
+      expect(bot).to receive(:require_login).and_return(true)
+      allow(bot).to receive(:client).and_return(double(Twitter::Client))
 
-      bot.stub(:debug_mode?).and_return(false)
+      allow(bot).to receive(:debug_mode?).and_return(false)
 
       test_str = "test!"
-      bot.client.should_receive(:update).with(test_str, {})
+      expect(bot.client).to receive(:update).with(test_str, {})
       bot.tweet test_str
     end
 
     it "doesn't tweet when debug_mode? is set" do
       bot = test_bot
       
-      bot.should_receive(:require_login).and_return(true)
-      bot.stub(:client).and_return(double(Twitter::Client))
+      expect(bot).to receive(:require_login).and_return(true)
+      allow(bot).to receive(:client).and_return(double(Twitter::Client))
 
-      bot.stub(:debug_mode?).and_return(true)
+      allow(bot).to receive(:debug_mode?).and_return(true)
 
-      bot.client.should_not_receive(:update)
+      expect(bot.client).not_to receive(:update)
       bot.tweet "no tweet!"
     end
   end
@@ -40,35 +40,35 @@ describe "Chatterbot::Tweet" do
   describe "#reply" do
     it "calls require_login when replying" do
       bot = test_bot
-      bot.should_receive(:require_login).and_return(false)
+      expect(bot).to receive(:require_login).and_return(false)
       bot.reply "reply test!", {"id" => 100}
     end
 
     it "calls client.update with the right values" do
       bot = test_bot
-      bot.should_receive(:require_login).and_return(true)
-      bot.stub(:client).and_return(double(Twitter::Client))
+      expect(bot).to receive(:require_login).and_return(true)
+      allow(bot).to receive(:client).and_return(double(Twitter::Client))
 
-      bot.stub(:debug_mode?).and_return(false)
+      allow(bot).to receive(:debug_mode?).and_return(false)
 
       test_str = "test!"
 
       s = {
         :id => 100
       }
-      bot.client.should_receive(:update).with(test_str, {:in_reply_to_status_id => 100})
+      expect(bot.client).to receive(:update).with(test_str, {:in_reply_to_status_id => 100})
       bot.reply test_str, s
     end
 
 
     it "doesn't reply when debug_mode? is set" do
       bot = test_bot
-      bot.should_receive(:require_login).and_return(true)
-      bot.stub(:client).and_return(double(Twitter::Client))
+      expect(bot).to receive(:require_login).and_return(true)
+      allow(bot).to receive(:client).and_return(double(Twitter::Client))
 
-      bot.stub(:debug_mode?).and_return(true)
+      allow(bot).to receive(:debug_mode?).and_return(true)
 
-      bot.client.should_not_receive(:update)
+      expect(bot.client).not_to receive(:update)
       bot.reply "no reply test!", {:id => 100}
     end
   end

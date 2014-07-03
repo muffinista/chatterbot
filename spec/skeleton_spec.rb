@@ -11,19 +11,19 @@ describe "Chatterbot::Skeleton" do
       :secret => "secret",
       :token => "token"
     }
-    @bot.stub(:botname).and_return("Skelley_The_Skeleton")
+    allow(@bot).to receive(:botname).and_return("Skelley_The_Skeleton")
 
     @output = Chatterbot::Skeleton.generate(@bot)
   end
 
   it "should have name" do
-    @output.should include("Skelley_The_Skeleton")
+    expect(@output).to include("Skelley_The_Skeleton")
   end 
 
   it "should have auth info" do
-    @output.should include("'consumer_key'")
-    @output.should include("'consumer_secret'")
-    @output.should include("'secret'")
-    @output.should include("'token'")
+    expect(@output).to include("'consumer_key'")
+    expect(@output).to include("'consumer_secret'")
+    expect(@output).to include("'secret'")
+    expect(@output).to include("'token'")
   end 
 end
