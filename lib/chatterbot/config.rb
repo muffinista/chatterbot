@@ -292,7 +292,6 @@ module Chatterbot
       tmp
     end
     
-    
     #
     # load in the config from the assortment of places it can be specified.
     def load_config(params={})

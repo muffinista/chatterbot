@@ -45,6 +45,7 @@ module Chatterbot
     require "chatterbot/favorite"
     require "chatterbot/reply"
     require "chatterbot/streaming"
+    require "chatterbot/streaming_handler"
     require "chatterbot/followers"
     require "chatterbot/helpers"
     require "chatterbot/utils"

@@ -4,6 +4,13 @@ module Chatterbot
   # simple twitter stream handler
   module Streaming
 
+require 'pry'
+    attr_accessor :streamer
+
+    def authenticated_user
+      @user ||= client.user
+    end
+    
     # Streams messages for a single user, optionally including an
     # additional search/etc
     #
@@ -14,41 +21,61 @@ module Chatterbot
     # @option options [String] :track Includes additional Tweets matching the specified keywords. Phrases of keywords are specified by a comma-separated list.
     # @option options [String] :locations Includes additional Tweets falling within the specified bounding boxes.
     # @yield [Twitter::Tweet, Twitter::Streaming:
-    def streaming_tweets(opts = {}, &block)
+    def do_streaming
       debug "streaming twitter client"
 
-      on_event = opts.delete(:on_event)
-
       opts = {
-        :with => false,
-        :replies => true,
+        #:with => 'followings',
+        #:replies => false,
         :stall_warnings => false
-      }.merge(opts)
+      }.merge(streamer.opts)
 
       # convert true/false to strings
       opts.each { |k, v| opts[k] = v.to_s }
 
-      puts opts.inspect
-      puts "hi"
+      if streamer.filter
+        debug "adding #{streamer.filter} as a search option"
+        opts[:track] = streamer.filter
+      end
+      
+      debug opts.inspect
+
       streaming_client.user(opts) do |object|
+        debug object
         case object
         when Twitter::Tweet
-          debug object.text
-          if block_given? && !on_blacklist?(object) && !skip_me?(object)
+          if object.user == authenticated_user
+            puts "skipping #{object} because it's from me"
+          elsif streamer.tweet_handler && !on_blacklist?(object) && !skip_me?(object)
             @current_tweet = object
-            yield object
+            streamer.tweet_handler.call object
+            @current_tweet = nil
+          end
+        when Twitter::Streaming::DeletedTweet
+          if streamer.delete_handler
+            streamer.delete_handler.call(object)
+          end
+        when Twitter::DirectMessage
+          if streamer.dm_handler # && !on_blacklist?(object) && !skip_me?(object)
+            @current_tweet = object
+            streamer.dm_handler.call object
             @current_tweet = nil
           end
         when Twitter::Streaming::Event
-          if on_event
-            debug "passing event to handler"
-            on_event.call(object)
+          if object.respond_to?(:source) && object.source == authenticated_user
+            puts "skipping #{object} because it's from me"
+          elsif object.name == :follow && streamer.follow_handler
+            streamer.follow_handler.call(object.source)
+          elsif object.name == :favorite && streamer.favorite_handler
+            streamer.favorite_handler.call(object.source, object.target_object)
           end
-        #when Twitter::DirectMessage
-        #  debug "Received a DM, not doing anything"
+        when Twitter::Streaming::FriendList
+          puts "got friend list"
+          if streamer.friends_handler
+            streamer.friends_handler.call(object)
+          end
         end
-      end
-      
+      end    
     end  
   end
 end

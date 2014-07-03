@@ -42,6 +42,13 @@ module Chatterbot
       bot.replies(&block)
     end
 
+    def streaming(&block)
+      bot.streamer = StreamingHandler.new(bot)
+      bot.streamer.apply block
+
+      bot.do_streaming
+    end
+    
     def streaming_tweets(opts={}, &block)
       bot.streaming_tweets(opts, &block)
     end
@@ -87,8 +94,10 @@ module Chatterbot
     # generate a Bot object. if the DSL is being called from a Bot object, just return it
     # otherwise create a bot and return that
     def bot
+      puts @bot.inspect
       return @bot unless @bot.nil?
 
+      
       #
       # parse any command-line options and use them to initialize the bot
       #
