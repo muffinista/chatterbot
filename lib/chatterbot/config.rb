@@ -214,7 +214,6 @@ module Chatterbot
     # figure out what config file to load based on the name of the bot
     def config_file
       dest = working_dir
-
       x = File.join(File.expand_path(dest), "#{botname}.yml")
     end
 
