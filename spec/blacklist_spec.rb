@@ -4,7 +4,7 @@ describe "Chatterbot::Blacklist" do
   it "has a list of excluded phrases" do
     @bot = test_bot
     @bot.exclude = ["junk", "i hate bots", "foobar", "spam"]
-    expect(@bot.skip_me?("did you know that i hate bots?")).to be_truthy
+    expect(@bot.skip_me?("did you know that i hate bots?")).to eq(true)
   end
 
   describe "skip_me?" do
@@ -14,13 +14,12 @@ describe "Chatterbot::Blacklist" do
     end
 
     it "blocks tweets with phrases we don't want" do
-      expect(@bot.skip_me?("did you know that i hate bots?")).to be_truthy
+      expect(@bot.skip_me?("did you know that i hate bots?")).to eq(true)
     end
 
     it "isn't case-specific" do
       expect(@bot.skip_me?("DID YOU KNOW THAT I HATE BOTS?")).to eq(true)
     end
-
 
     it "allows users we do want" do
       expect(@bot.skip_me?("a tweet without any bad content")).to eq(false)

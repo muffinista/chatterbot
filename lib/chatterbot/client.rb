@@ -29,15 +29,6 @@ module Chatterbot
                                                            )
     end
 
-    #
-    # client for running searches -- for some reason Twitter::Client was overwriting
-    # the endpoint for searches in a destructive fashion, so I had two
-    # clients. That appears to be fixed, but if not, this takes care of that problem
-    #
-    def search_client
-      client
-    end
-
     def reset!
       config[:since_id] = 0
       config[:since_id_reply] = 0

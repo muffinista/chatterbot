@@ -25,7 +25,7 @@ module Chatterbot
       #
       queries.each { |query|
         debug "search: #{query} #{opts.merge(default_opts)}"
-        result = search_client.search(
+        result = client.search(
                                       exclude_retweets(query),
                                       opts.merge(default_opts)
                                       )

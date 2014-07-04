@@ -9,6 +9,7 @@ module Chatterbot
     # print out a message about getting a PIN from twitter, then output
     # the URL the user needs to visit to authorize
     #
+    #:nocov:
     def get_oauth_verifier
       puts "****************************************"
       puts "****************************************"
@@ -91,6 +92,6 @@ module Chatterbot
     def display_oauth_error
       STDERR.puts "Oops!  Looks like something went wrong there, please try again!"
     end
-
   end
+  #:nocov:
 end

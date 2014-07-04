@@ -11,9 +11,11 @@ module Chatterbot
       @_db ||= connect_and_validate
     end
 
+    #:nocov:
     def display_db_config_notice
       puts "ERROR: You have specified a DB connection, but you need to install the sequel gem to use it"
     end
+    #:nocov:
 
     protected
 

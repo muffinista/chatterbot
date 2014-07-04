@@ -16,7 +16,10 @@ module Chatterbot
         puts opts.inspect
         
         if RUBY_VERSION =~ /^1\.8\./
+          #:nocov:
           apply_vars(src, opts)
+          #:nocov:
+
         else
           src % opts
         end
@@ -26,6 +29,7 @@ module Chatterbot
       # handle string interpolation in ruby 1.8. modified from
       # https://raw.github.com/svenfuchs/i18n/master/lib/i18n/core_ext/string/interpolate.rb
       #
+      #:nocov:
       def apply_vars(s, args)
         pattern = Regexp.union(
                                              /%\{(\w+)\}/,                               # matches placeholders like "%{foo}"
@@ -47,6 +51,8 @@ module Chatterbot
           end
         end
       end
+      #:nocov:
+
     end
   end
 end

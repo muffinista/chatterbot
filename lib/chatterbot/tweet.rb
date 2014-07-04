@@ -17,8 +17,10 @@ module Chatterbot
         client.update txt, params
       end
     rescue Twitter::Error::Forbidden => e
+      #:nocov:
       debug e
       false
+      #:nocov:
     end
 
     # reply to a tweet

@@ -103,12 +103,14 @@ module Chatterbot
       #
       params = {}
 
+      #:nocov:
       opts = OptionParser.new
 
       opts.banner = "Usage: #{File.basename($0)} [options]"
 
       opts.separator ""
       opts.separator "Specific options:"
+
 
       opts.on('-d', '--db [ARG]', "Specify a DB connection URI")    { |d| ENV["chatterbot_db"] = d }
       opts.on('-c', '--config [ARG]', "Specify a config file to use")    { |c| ENV["chatterbot_config"] = c }
@@ -128,6 +130,7 @@ module Chatterbot
       end
 
       opts.parse!(ARGV)
+      #:nocov:
 
       @bot = Chatterbot::Bot.new(params)
     end

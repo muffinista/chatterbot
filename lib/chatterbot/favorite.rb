@@ -11,11 +11,13 @@ module Chatterbot
 
       id = id_from_tweet(id)
       
+      #:nocov:
       if debug_mode?
         debug "I'm in debug mode, otherwise I would favorite tweet id: #{id}"
-      else
-        client.favorite id
+        return
       end
+      #:nocov:
+      client.favorite id
     end
   end
 end
