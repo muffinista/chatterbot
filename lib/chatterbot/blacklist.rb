@@ -29,6 +29,9 @@ module Chatterbot
     #
     # Is this tweet from a user on our blacklist?
     def on_blacklist?(s)
+      puts s.inspect
+      puts blacklist.inspect
+
       search = (s.respond_to?(:user) ? from_user(s) : s).downcase
       blacklist.any? { |b| search.include?(b.downcase) } ||
         on_global_blacklist?(search)
@@ -52,7 +55,6 @@ module Chatterbot
 
       # make sure we don't have an @ at the beginning of the username
       user.gsub!(/^@/, "")
-
       debug "adding #{user} to blacklist"
 
       db[:blacklist].insert({ :user => user, :created_at => Time.now }) # 

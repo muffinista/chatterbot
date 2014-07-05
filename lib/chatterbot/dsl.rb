@@ -43,10 +43,10 @@ module Chatterbot
     end
 
     def streaming(&block)
-      bot.streamer = StreamingHandler.new(bot)
-      bot.streamer.apply block
+      h = StreamingHandler.new(bot)
+      h.apply block
 
-      bot.do_streaming
+      bot.do_streaming(h)
     end
     
     def streaming_tweets(opts={}, &block)
