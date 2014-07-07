@@ -15,12 +15,6 @@ describe "Chatterbot::DSL" do
       end
     end
 
-    describe "streaming_client" do
-      it "returns the bot object" do
-        expect(streaming_client).to eql(@bot.streaming_client)
-      end
-    end
-
     describe "blacklist" do
       it "#blacklist passes along to bot object" do
         expect(@bot).to receive(:blacklist=).with(["foo"])
@@ -90,6 +84,14 @@ describe "Chatterbot::DSL" do
       end
     end
 
+    describe "streaming" do
+      it "passes along to bot object" do
+        expect(@bot).to receive(:do_streaming)
+        streaming {}
+      end
+    end
+
+    
     it "#retweet passes along to bot object" do
       expect(@bot).to receive(:retweet).with(1234)
       retweet(1234)

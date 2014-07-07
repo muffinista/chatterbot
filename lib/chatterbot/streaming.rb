@@ -20,27 +20,10 @@ module Chatterbot
     # @yield [Twitter::Tweet, Twitter::Streaming:
     def do_streaming(streamer)
       debug "streaming twitter client"
-      
-      opts = {
-        #:with => 'followings',
-        #:replies => false,
-        :stall_warnings => false
-      }.merge(streamer.opts)
-
-      # convert true/false to strings
-      opts.each { |k, v| opts[k] = v.to_s }
-
-      if streamer.filter
-        debug "adding #{streamer.filter} as a search option"
-        opts[:track] = streamer.filter
-      end
-      
-      debug opts.inspect
-
-      streaming_client.user(opts) do |object|
+      streaming_client.send(streamer.endpoint, streamer.connection_params) do |object|
         handle_streaming_object(object, streamer)
       end    
-    end  
+    end
 
     def handle_streaming_object(object, streamer)
       debug object

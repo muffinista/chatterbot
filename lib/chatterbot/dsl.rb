@@ -10,12 +10,6 @@ module Chatterbot
     def client
       bot.client
     end
-
-    #
-    # @return initialized Twitter::Streaming::Client
-    def streaming_client
-      bot.streaming_client
-    end
     
     #
     # search twitter for the specified terms, then pass any matches to
@@ -42,8 +36,12 @@ module Chatterbot
       bot.replies(&block)
     end
 
-    def streaming(&block)
-      h = StreamingHandler.new(bot)
+    def streaming(opts = {}, &block)
+      params = {
+        :endpoint => :user
+      }.merge(opts)
+
+      h = StreamingHandler.new(bot, params)
       h.apply block
 
       bot.do_streaming(h)
