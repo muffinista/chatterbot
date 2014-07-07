@@ -9,15 +9,34 @@
 require 'rubygems'
 require 'chatterbot/dsl'
 
+consumer_secret 'foo'
+secret 'bar'
+token 'biz'
+consumer_key 'bam'
+
+
 puts "Loading echoes_bot.rb using the streaming API"
 
 exclude "http://", "https://"
 
 blacklist "mean_user, private_user"
 
-streaming_tweets do |tweet|
-  puts "It's a tweet!"
-  src = tweet.text.gsub(/@echoes_bot/, "#USER#")  
-  reply src, tweet
+streaming do
+  favorited do |user, tweet|
+    reply "@#{user.screen_name} thanks for the fave!", tweet
+  end
+
+  followed do |user|
+    tweet "@#{user.screen_name} just followed me!"
+    follow user
+  end
+
+  replies do |tweet|
+    favorite tweet
+
+    puts "It's a tweet!"
+    src = tweet.text.gsub(/@echoes_bot/, "#USER#")  
+    reply src, tweet
+  end
 end
 
