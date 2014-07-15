@@ -137,7 +137,16 @@ module Chatterbot
         params[:debug_mode] = true
         params[:reset_since_id] = true
       }
+      opts.on('--profile [ARG]', "get/set your bot's profile text") { |p| 
+        @handle_profile_text = true
+        @profile_text = p
+      }
+      opts.on('--website [ARG]', "get/set your bot's profile URL") { |u| 
+        @handle_profile_website = true
+        @profile_website = u
+      }
 
+      
       opts.on_tail("-h", "--help", "Show this message") do
         puts opts
         exit
@@ -147,6 +156,26 @@ module Chatterbot
       #:nocov:
 
       @bot = Chatterbot::Bot.new(params)
+
+      if @handle_profile_text == true
+        if !@profile_text.nil?
+          @bot.profile_text @profile_text
+        else
+          @bot.profile_text
+        end
+      end
+
+      if @handle_profile_website == true
+        if !@profile_website.nil?
+          @bot.profile_website @profile_website
+        else
+          @bot.profile_website
+        end
+      end
+
+      if @handle_profile_website == true || @handle_profile_text == true
+        exit
+      end
     end
 
     #
