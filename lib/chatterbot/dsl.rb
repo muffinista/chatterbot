@@ -161,7 +161,7 @@ module Chatterbot
         if !@profile_text.nil?
           @bot.profile_text @profile_text
         else
-          @bot.profile_text
+          puts @bot.profile_text
         end
       end
 
@@ -169,7 +169,7 @@ module Chatterbot
         if !@profile_website.nil?
           @bot.profile_website @profile_website
         else
-          @bot.profile_website
+          puts @bot.profile_website
         end
       end
 
