@@ -176,6 +176,8 @@ module Chatterbot
       if @handle_profile_website == true || @handle_profile_text == true
         exit
       end
+
+      @bot
     end
 
     #
