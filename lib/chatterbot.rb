@@ -43,6 +43,7 @@ module Chatterbot
     require "chatterbot/tweet"
     require "chatterbot/retweet"
     require "chatterbot/favorite"
+    require "chatterbot/profile"
     require "chatterbot/reply"
     require "chatterbot/streaming"
     require "chatterbot/streaming_handler"

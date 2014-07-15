@@ -87,6 +87,22 @@ module Chatterbot
       bot.reply(txt, source)
     end
 
+    def profile_text(p=nil)
+      if p.nil?
+        bot.profile_text
+      else
+        bot.profile_text(p)
+      end
+    end
+
+    def profile_website(w=nil)
+      if w.nil?
+        bot.profile_website
+      else
+        bot.profile_website(w)
+      end
+    end
+    
     
     #
     # generate a Bot object. if the DSL is being called from a Bot object, just return it

@@ -10,6 +10,7 @@ module Chatterbot
     include Logging
     include Search
     include Tweet
+    include Profile
     include Retweet
     include Favorite
     include Reply

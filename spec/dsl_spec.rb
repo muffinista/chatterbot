@@ -132,6 +132,45 @@ describe "Chatterbot::DSL" do
       reply "hello sailor!", { :source => "source "}
     end
 
+    it "#profile_text setter passes along to bot object" do
+      expect(@bot).to receive(:profile_text).with("hello sailor!")
+      profile_text "hello sailor!"
+    end
+
+    it "#profile_text getter passes along to bot object" do
+      expect(@bot).to receive(:profile_text)
+      profile_text
+    end
+
+    it "#profile_website passes along to bot object" do
+      expect(@bot).to receive(:profile_website).with("http://hellosailor.com")
+      profile_website "http://hellosailor.com"
+    end
+
+    it "#profile_website getter passes along to bot object" do
+      expect(@bot).to receive(:profile_website)
+      profile_website
+    end
+
+    
+    
+    def profile_text(p=nil)
+      if p.nil?
+        @bot.profile_text
+      else
+        @bot.profile_text(p)
+      end
+    end
+
+    def profile_website(w=nil)
+      if w.nil?
+        @bot.profile_website
+      else
+        @bot.profile_website(w)
+      end
+    end
+
+    
     context "setters" do
       [:consumer_secret, :consumer_key, :token, :secret].each do |k|
         it "should be able to set #{k}" do
