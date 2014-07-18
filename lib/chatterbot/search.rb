@@ -24,10 +24,10 @@ module Chatterbot
       # search twitter
       #
       queries.each { |query|
-        debug "search: #{query} #{opts.merge(default_opts)}"
+        debug "search: #{query} #{default_opts.merge(opts)}"
         result = client.search(
                                       exclude_retweets(query),
-                                      opts.merge(default_opts)
+                                      default_opts.merge(opts)
                                       )
         update_since_id(result)
 
