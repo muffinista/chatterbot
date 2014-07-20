@@ -260,7 +260,12 @@ module Chatterbot
     #
     # bot-specific config settings
     def bot_config
-      slurp_file(config_file) || { }
+      {
+        :consumer_key => ENV["chatterbot_consumer_key"],
+        :consumer_secret => ENV["chatterbot_consumer_secret"],
+        :token => ENV["chatterbot_token"],
+        :secret => ENV["chatterbot_secret"]
+      }.merge(slurp_file(config_file) || {})
     end
 
     #
