@@ -3,7 +3,14 @@ require 'tempfile'
 
 describe "Chatterbot::Config" do
   before(:each) do
-    @bot = Chatterbot::Bot.new    
+    @bot = Chatterbot::Bot.new
+    @tmp_config_dest = "/tmp/bot.yml"
+    allow(@bot).to receive(:config_file).and_return(@tmp_config_dest)
+  end
+  after(:each) do
+    if File.exist?(@tmp_config_dest)
+      File.unlink(@tmp_config_dest)
+    end
   end
   
   describe "loading" do
@@ -24,12 +31,37 @@ describe "Chatterbot::Config" do
       expect(@bot).to receive(:global_config).and_return({:foo => :bar, :a => :b})
       expect(@bot).to receive(:bot_config).and_return({:foo => :baz, :custom => :value})
 
-      @bot.config = nil
-      
+      @bot.config = nil     
       
       expect(@bot.config[:foo]).to eq(:baz)
       expect(@bot.config[:a]).to eq(:b)
       expect(@bot.config[:custom]).to eq(:value)
+    end
+
+    context "environment variables" do
+      before(:each) do
+        ENV["chatterbot_consumer_key"] = "env_chatterbot_consumer_key"
+        ENV["chatterbot_consumer_secret"] = "env_chatterbot_consumer_secret"
+        ENV["chatterbot_token"] = "env_chatterbot_token"
+        ENV["chatterbot_secret"] = "env_chatterbot_secret"
+      end
+
+      after(:each) do
+        ENV.delete "chatterbot_consumer_key"
+        ENV.delete "chatterbot_consumer_secret"
+        ENV.delete "chatterbot_token"
+        ENV.delete "chatterbot_secret"
+      end
+
+      it "checks for environment variables" do
+        @bot.config = nil
+        @bot.load_config
+        
+        expect(@bot.config[:consumer_key]).to eq("env_chatterbot_consumer_key")
+        expect(@bot.config[:consumer_secret]).to eq("env_chatterbot_consumer_secret")
+        expect(@bot.config[:token]).to eq("env_chatterbot_token")
+        expect(@bot.config[:secret]).to eq("env_chatterbot_secret")
+      end
     end
 
     it "update_config? is true by default" do
