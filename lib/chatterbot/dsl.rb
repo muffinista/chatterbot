@@ -108,7 +108,6 @@ module Chatterbot
     # generate a Bot object. if the DSL is being called from a Bot object, just return it
     # otherwise create a bot and return that
     def bot
-      puts @bot.inspect
       return @bot unless @bot.nil?
 
       
