@@ -265,7 +265,7 @@ module Chatterbot
         :consumer_secret => ENV["chatterbot_consumer_secret"],
         :token => ENV["chatterbot_token"],
         :secret => ENV["chatterbot_secret"]
-      }.merge(slurp_file(config_file) || {})
+      }.delete_if { |k, v| v.nil? }.merge(slurp_file(config_file) || {})
     end
 
     #

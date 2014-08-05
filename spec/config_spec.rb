@@ -62,6 +62,14 @@ describe "Chatterbot::Config" do
         expect(@bot.config[:token]).to eq("env_chatterbot_token")
         expect(@bot.config[:secret]).to eq("env_chatterbot_secret")
       end
+
+      it "works if env var is nil" do
+        ENV["chatterbot_consumer_key"] = nil
+        @bot.config = nil
+        allow(@bot).to receive(:slurp_file).and_return({:chatterbot_consumer_key => "foo"})
+
+        expect(@bot.config[:chatterbot_consumer_key]).to eq("foo")
+      end
     end
 
     it "update_config? is true by default" do
