@@ -5,6 +5,7 @@ module Chatterbot
   class Bot
     include Utils
     include Blacklist
+    include Whitelist
     include Streaming
     include Config
     include Logging

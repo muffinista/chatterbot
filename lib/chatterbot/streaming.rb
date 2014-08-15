@@ -31,7 +31,7 @@ module Chatterbot
       case object
       when Twitter::Tweet
         if object.user == authenticated_user
-          puts "skipping #{object} because it's from me"
+          debug "skipping #{object} because it's from me"
         elsif streamer.tweet_handler && !on_blacklist?(object) && !skip_me?(object)
           @current_tweet = object
           streamer.tweet_handler.call object
@@ -49,7 +49,7 @@ module Chatterbot
         end
       when Twitter::Streaming::Event
         if object.respond_to?(:source) && object.source == authenticated_user
-          puts "skipping #{object} because it's from me"
+          debug "skipping #{object} because it's from me"
         elsif object.name == :follow && streamer.follow_handler
           streamer.follow_handler.call(object.source)
         elsif object.name == :favorite && streamer.favorite_handler

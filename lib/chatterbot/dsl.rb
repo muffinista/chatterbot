@@ -226,6 +226,29 @@ module Chatterbot
     end
 
     #
+    # specify a bot-specific whitelist of users.  accepts an array, or a
+    # comma-delimited string. when called, any subsequent calls to
+    # search or replies will only act upon these users.
+    #
+    # @param [Array, String] args list of usernames or Twitter::User objects
+    # @example
+    #   whitelist "mean_user, private_user"
+    #
+    def whitelist(*args)
+      list = flatten_list_of_strings(args)
+
+      if list.nil? || list.empty?
+        bot.whitelist = []
+      else
+        bot.whitelist += list
+      end
+    end
+
+    def only_interact_with_followers
+      whitelist followers
+    end
+    
+    #
     # return a list of users following the bot. This passes directly
     # to the underlying Twitter API call
     # @see http://rdoc.info/gems/twitter/Twitter/API/FriendsAndFollowers#followers-instance_method

@@ -10,7 +10,7 @@ describe "Chatterbot::Blacklist" do
   describe "skip_me?" do
     before(:each) do
       @bot = test_bot
-      allow(@bot).to receive(:exclude).and_return(["junk", "i hate bots", "foobar", "spam"])
+      @bot.exclude = ["junk", "i hate bots", "foobar", "spam"]
     end
 
     it "blocks tweets with phrases we don't want" do
@@ -34,7 +34,7 @@ describe "Chatterbot::Blacklist" do
   describe "on_blacklist?" do
     before(:each) do
       @bot = test_bot
-      allow(@bot).to receive(:blacklist).and_return(["skippy", "blippy", "dippy"])
+      @bot.blacklist = ["skippy", "blippy", "dippy"]
     end
 
     it "blocks users we don't want" do

@@ -32,6 +32,33 @@ describe "Chatterbot::DSL" do
       end
     end
 
+    describe "whitelist" do
+      it "#whitelist passes along to bot object" do
+        expect(@bot).to receive(:whitelist=).with(["foo"])
+        whitelist ["foo"]
+      end
+
+      it "#whitelist turns single-string arg into an array" do
+        expect(@bot).to receive(:whitelist=).with(["foo"])
+        whitelist "foo"
+      end
+
+      it "#whitelist turns comma-delimited string arg into an array" do
+        expect(@bot).to receive(:whitelist=).with(["foo", "bar"])
+        whitelist "foo, bar"
+      end
+    end
+
+    describe "only_interact_with_followers" do
+      it "sets whitelist to be the bot's followers" do
+        f = fake_follower
+        allow(@bot).to receive(:followers).and_return([f])
+        expect(@bot).to receive(:whitelist=).with([f])
+        only_interact_with_followers
+      end
+    end
+
+    
     [:no_update, :debug_mode, :verbose].each do |method|
       describe method.to_s do
         it "#{method.to_s} with nil passes along true to bot object" do

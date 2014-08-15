@@ -22,7 +22,9 @@ module Chatterbot
       @current_tweet = nil
       results.each { |s|
         update_since_id_reply(s)
-        unless ! block_given? || on_blacklist?(s) || skip_me?(s)
+        if has_whitelist? && !on_whitelist?(s)
+          debug "skipping because user not on whitelist"
+        elsif block_given? && !on_blacklist?(s) && !skip_me?(s)
           @current_tweet = s
           yield s         
         end
