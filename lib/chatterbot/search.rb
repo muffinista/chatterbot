@@ -8,7 +8,8 @@ module Chatterbot
     # modify a query string to exclude retweets from searches
     #
     def exclude_retweets(q)
-      q.include?("include:retweets") ? q : q += " -include:retweets"
+      q
+      #q.include?("include:retweets") ? q : q += " -include:retweets"
     end
     
     # internal search code
