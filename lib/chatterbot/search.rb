@@ -4,12 +4,21 @@ module Chatterbot
   # handle Twitter searches
   module Search
 
+    @skip_retweets = true
+    
     #
     # modify a query string to exclude retweets from searches
     #
-    def exclude_retweets(q)
-      q
-      #q.include?("include:retweets") ? q : q += " -include:retweets"
+    def exclude_retweets
+      @skip_retweets = true
+    end
+
+    def include_retweets
+      @skip_retweets = false
+    end
+
+    def skippable_retweet?(t)
+      @skip_retweets && t.retweeted_status?
     end
     
     # internal search code
@@ -26,10 +35,7 @@ module Chatterbot
       #
       queries.each { |query|
         debug "search: #{query} #{default_opts.merge(opts)}"
-        result = client.search(
-                                      exclude_retweets(query),
-                                      default_opts.merge(opts)
-                                      )
+        result = client.search( query, default_opts.merge(opts) )
         update_since_id(result)
 
         @current_tweet = nil
@@ -37,7 +43,7 @@ module Chatterbot
           debug s.text
           if has_whitelist? && !on_whitelist?(s)
             debug "skipping because user not on whitelist"
-          elsif block_given? && !on_blacklist?(s) && !skip_me?(s)
+          elsif block_given? && !on_blacklist?(s) && !skip_me?(s) && !skippable_retweet?(s)
             @current_tweet = s
             yield s
           end

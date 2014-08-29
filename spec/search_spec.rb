@@ -1,24 +1,6 @@
 require File.expand_path(File.dirname(__FILE__) + '/spec_helper')
 
 describe "Chatterbot::Search" do
-  describe "exclude_retweets" do
-    before(:each) do
-      @bot = Chatterbot::Bot.new
-    end
-
-    it "should tack onto query" do
-      expect(@bot.exclude_retweets("foo")).to eq("foo -include:retweets")
-    end
-
-    it "shouldn't tack onto query" do
-      expect(@bot.exclude_retweets("foo -include:retweets")).to eq("foo -include:retweets")
-    end
-
-    it "shouldn't tack onto query" do
-      expect(@bot.exclude_retweets("foo include:retweets")).to eq("foo include:retweets")
-    end
-  end
-
   it "calls search" do
     bot = Chatterbot::Bot.new
     expect(bot).to receive(:search)
@@ -40,8 +22,8 @@ describe "Chatterbot::Search" do
     bot = test_bot
     
     allow(bot).to receive(:client).and_return(fake_search(100, 1))
-    expect(bot.client).to receive(:search).once.ordered.with("foo -include:retweets", {:result_type=>"recent"})
-    expect(bot.client).to receive(:search).once.ordered.with("bar -include:retweets", {:result_type=>"recent"})
+    expect(bot.client).to receive(:search).once.ordered.with("foo", {:result_type=>"recent"})
+    expect(bot.client).to receive(:search).once.ordered.with("bar", {:result_type=>"recent"})
 
     bot.search(["foo", "bar"])
   end
@@ -50,7 +32,7 @@ describe "Chatterbot::Search" do
     bot = test_bot
 
     allow(bot).to receive(:client).and_return(fake_search(100, 1))
-    expect(bot.client).to receive(:search).with("foo -include:retweets", {:lang => "en", :result_type=>"recent"})
+    expect(bot.client).to receive(:search).with("foo", {:lang => "en", :result_type=>"recent"})
 
     bot.search("foo", :lang => "en")
   end
@@ -59,7 +41,7 @@ describe "Chatterbot::Search" do
     bot = test_bot
 
     allow(bot).to receive(:client).and_return(fake_search(100, 1))
-    expect(bot.client).to receive(:search).with("foo -include:retweets", {:result_type=>"recent"})
+    expect(bot.client).to receive(:search).with("foo", {:result_type=>"recent"})
 
     bot.search("foo")
   end
@@ -70,7 +52,7 @@ describe "Chatterbot::Search" do
     allow(bot).to receive(:since_id_reply).and_return(456)
     
     allow(bot).to receive(:client).and_return(fake_search(100, 1))
-    expect(bot.client).to receive(:search).with("foo -include:retweets", {:since_id => 123, :result_type => "recent", :since_id_reply => 456})
+    expect(bot.client).to receive(:search).with("foo", {:since_id => 123, :result_type => "recent", :since_id_reply => 456})
 
     bot.search("foo")
   end
