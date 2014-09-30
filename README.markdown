@@ -12,26 +12,17 @@ don't want to hear from your bot.
 
 Features
 --------
-* Works via Twitter's OAuth system.
 * Handles search queries and replies to your bot
 * Use a simple DSL, or extend a Bot class if you need it
 * Simple blacklistling system to limit your annoyance of users
 * Optionally log tweets to the database for metrics and tracking purposes
 
-Is Writing Bots a Good Use of My Time?
-======================================
-
-Quick answer: if you're planning on being spammish on Twitter, you
-should probably find something else to do. If you're planning on
-writing a bot that isn't too rude or annoying, or that expects a
-certain amount of opt-in from users, then you're probably good. I've
-written a blog post about bots on Twitter here:
-http://muffinlabs.com/2012/06/04/the-current-state-of-bots-on-twitter/
-
-
 
 Using Chatterbot
 ================
+
+**NEW!!** Chatterbot has a [documentation website](http://muffinista.github.io/chatterbot/). It's a work-in-progress.
+
 
 Make a Twitter account
 ----------------------
@@ -314,7 +305,7 @@ sense if requested.
 Copyright/License
 -----------------
 
-Copyright (c) 2013 Colin Mitchell. Chatterbot is distributed under a
+Copyright (c) 2014 Colin Mitchell. Chatterbot is distributed under a
 modified WTFPL licence -- it's the 'Do what the fuck you want to --
 but don't be an asshole' public license.  Please see LICENSE.txt for
 further details. Basically, do whatever you want with this code, but
