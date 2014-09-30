@@ -5,17 +5,28 @@ module Chatterbot
   #
   module UI
 
+    API_SIGNUP_URL = "https://twitter.com/apps/new"
+
+    
+    def red(str)
+      puts str.colorize(:red)
+    end
+
+    def green(str)
+      puts str.colorize(:green)
+    end
+    
     #
     # print out a message about getting a PIN from twitter, then output
     # the URL the user needs to visit to authorize
     #
     #:nocov:
     def get_oauth_verifier
-      puts "****************************************"
-      puts "****************************************"
-      puts "****        BOT AUTH TIME!          ****"
-      puts "****************************************"
-      puts "****************************************"      
+      green "****************************************"
+      green "****************************************"
+      green "****        BOT AUTH TIME!          ****"
+      green "****************************************"
+      green "****************************************"      
 
       puts "You need to authorize your bot with Twitter.\n\nPlease login to Twitter under the bot's account. When you're ready, hit Enter.\n\nYour browser will open with the following URL, where you can authorize the bot.\n\n"
 
@@ -47,33 +58,32 @@ module Chatterbot
     #
     # Ask the user to get an API key from Twitter.
     def get_api_key
-      puts "****************************************"
-      puts "****************************************"
-      puts "****        API SETUP TIME!         ****"
-      puts "****************************************"
-      puts "****************************************"      
+      green "****************************************"
+      green "****************************************"
+      green "****        API SETUP TIME!         ****"
+      green "****************************************"
+      green "****************************************"      
 
-      api_url = "https://dev.twitter.com/apps/new"
       
       puts "Hey, looks like you need to get an API key from Twitter before you can get started."
-      puts "Please hit enter, and I will send you to #{api_url} to start the process."
+      puts "Please hit enter, and I will send you to #{API_SIGNUP_URL} to start the process."
       puts "(If it doesn't work, you can open a browser and paste the URL in manually)"
 
       puts "\nHit Enter to continue."
       
       STDIN.readline
 
-      Launchy.open(api_url)
+      Launchy.open(API_SIGNUP_URL)
       # pause to allow any launchy output
       sleep(1)
 
       puts "\n\n"
       
-      print "\n\nPaste the 'Consumer Key' here: "
+      print "\n\nPaste the 'API Key' here: "
       STDOUT.flush
       config[:consumer_key] = STDIN.readline.chomp
 
-      print "Paste the 'Consumer Secret' here: "
+      print "Paste the 'API Secret' here: "
       STDOUT.flush
       config[:consumer_secret] = STDIN.readline.chomp
 

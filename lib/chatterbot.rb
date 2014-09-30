@@ -2,6 +2,7 @@ require 'yaml'
 require 'oauth'
 require 'twitter'
 require 'launchy'
+require 'colorize'
 
 #
 # Try and load Sequel, but don't freak out if it's not there
