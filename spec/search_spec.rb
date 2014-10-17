@@ -13,7 +13,7 @@ describe "Chatterbot::Search" do
     
     data = fake_search(100, 1)
     allow(bot).to receive(:client).and_return(data)
-    expect(bot).to receive(:update_since_id).with(data.search)
+    expect(bot).to receive(:update_since_id).with(data.search[0])
     
     bot.search("foo")
   end
@@ -62,7 +62,7 @@ describe "Chatterbot::Search" do
     results = fake_search(1000, 1)
     allow(bot).to receive(:client).and_return(results)
     
-    expect(bot).to receive(:update_since_id).with(results.search)
+    expect(bot).to receive(:update_since_id).with(results.search[0])
     bot.search("foo")
   end
   

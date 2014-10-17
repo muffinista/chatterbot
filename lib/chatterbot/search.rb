@@ -35,11 +35,9 @@ module Chatterbot
       #
       queries.each { |query|
         debug "search: #{query} #{default_opts.merge(opts)}"
-        result = client.search( query, default_opts.merge(opts) )
-        update_since_id(result)
-
         @current_tweet = nil
-        result.each { |s|
+        client.search( query, default_opts.merge(opts) ).each { |s|
+          update_since_id(s)
           debug s.text
           if has_whitelist? && !on_whitelist?(s)
             debug "skipping because user not on whitelist"
