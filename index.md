@@ -6,7 +6,7 @@ title: "Chatterbot - ruby for Twitter bots"
 Chatterbot
 ===========
 
-Chatterbot is a Ruby library for making bots on Twitter.  It's
+[Chatterbot](https://github.com/muffinista/chatterbot) is a Ruby library for making bots on Twitter.  It's
 great for rapid development of bot ideas. It handles all of the basic
 Twitter API features -- searches, replies, tweets, retweets, etc. and has
 a simple blacklist/whitelist system to help minimize spam and unwanted
@@ -62,12 +62,8 @@ calls. Any calls to the search/reply methods will return
 Copyright/License
 -----------------
 
-Copyright (c) 2014 Colin Mitchell. Chatterbot is distributed under a
-modified WTFPL licence -- it's the 'Do what the fuck you want to --
-but don't be an asshole' public license.  Please see LICENSE.txt for
-further details. Basically, do whatever you want with this code, but
-don't be an asshole about it.  If you spam users inappropriately,
-expect your karma to suffer.
+Copyright (c) 2014 Colin Mitchell. Chatterbot is distributed under the
+WTFPL license.
 
 
 http://muffinlabs.com
