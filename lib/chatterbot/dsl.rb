@@ -100,6 +100,10 @@ module Chatterbot
       bot.reply(txt, source)
     end
 
+    #
+    # handle getting/setting the profile text.
+    # @param [p] p The new value for the profile. If this isn't passed in, the method will simply return the current value
+    # @return profile text
     def profile_text(p=nil)
       if p.nil?
         bot.profile_text
@@ -108,6 +112,10 @@ module Chatterbot
       end
     end
 
+    #
+    # handle getting/setting the profile website
+    # @param [p] p The new value for the website. If this isn't passed in, the method will simply return the current value
+    # @return profile website
     def profile_website(w=nil)
       if w.nil?
         bot.profile_website
