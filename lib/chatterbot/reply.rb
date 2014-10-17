@@ -1,7 +1,7 @@
 module Chatterbot
 
   #
-  # reply method for responding to tweets
+  # handle checking for mentions of the bot
   module Reply
 
     # handle replies for the bot

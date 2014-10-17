@@ -24,6 +24,19 @@ module Chatterbot
     end
 
     #
+    # handle tweets that are on the bot's home timeline. this includes
+    # tweets from accounts the bot is following, as well as its own tweets
+    #
+    # @example
+    #   home_timeline do |tweet|
+    #     puts tweet.text # this is the actual tweeted text
+    #     favorite tweet # i like to fave tweets
+    #   end
+    def home_timeline(opts = {}, &block)
+      bot.home_timeline(opts, &block)
+    end
+
+    #
     # handle replies to the bot. Each time this is called, chatterbot
     # will pass any replies since the last call to the specified block
     #

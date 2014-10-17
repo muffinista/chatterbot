@@ -133,6 +133,11 @@ describe "Chatterbot::DSL" do
       expect(@bot).to receive(:replies)
       replies
     end
+    
+    it "#home_timeline passes along to bot object" do
+      expect(@bot).to receive(:home_timeline)
+      home_timeline
+    end
 
     it "#streaming_tweets passes along to bot object" do
       expect(@bot).to receive(:streaming_tweets)

@@ -1,20 +1,23 @@
 Chatterbot
 ===========
 
-Chatterbot is a Ruby library for making bots on Twitter.  It is basic
-enough that you can put it into use quickly, but can be used to make
-pretty involved bots. It handles searches, replies and tweets, and has
-a simple blacklist system to help keep you from spamming people who
-don't want to hear from your bot.
+Chatterbot is a Ruby library for making bots on Twitter.  It's
+great for rapid development of bot ideas. It handles all of the basic
+Twitter API features -- searches, replies, tweets, retweets, etc. and has
+a simple blacklist/whitelist system to help minimize spam and unwanted
+data.
 
 [![Build Status](https://secure.travis-ci.org/muffinista/chatterbot.png?branch=master)](http://travis-ci.org/muffinista/chatterbot)
-
 
 Features
 --------
 * Handles search queries and replies to your bot
-* Use a simple DSL, or extend a Bot class if you need it
+* Use a simple scripting language, or extend a Bot class if you need it
+* Wraps the Twitter gem so you have access to the entire Twitter API
 * Simple blacklistling system to limit your annoyance of users
+* Avoid your bot making a fool of itself by ignoring tweets with
+  certain bad words
+* Basic Streaming API support
 * Optionally log tweets to the database for metrics and tracking purposes
 
 
@@ -41,22 +44,38 @@ actual bot.
 Write your bot
 --------------
 
-Chatterbot has a very simple DSL inspired by Sinatra and Twibot, an
-earlier Twitter bot framework.  Here's an example, based on
-[@dr_rumack](http://twitter.com/#!/Dr_Rumack), an actual bot running
-on Twitter:
+A bot using chatterbot can be as simple as this:
 
-    require 'chatterbot/dsl'
-    search("'surely you must be joking'") do |tweet|
-      reply "@#{tweet_user(tweet)} I am serious, and don't call me Shirley!", tweet
-    end
+```
+exclude "http://"
+blacklist "mean_user, private_user"
 
-Or, you can create a bot object yourself, extend it if needed, and use it like so:
+puts "checking my timeline"
+home_timeline do |tweet|
+    # i like to favorite things
+    favorite tweet
+end
+
+puts "checking for replies to my tweets and mentions of me"
+replies do |tweet|
+  text = tweet.text
+  puts "message received: #{text}"
+  src = text.gsub(/@echoes_bot/, "#USER#")  
+
+  # send it back!
+  reply src, tweet
+end
+```
+
+Or you can write a bot using more traditional ruby classes, extend it if needed, and use it like so:
 
     bot = Chatterbot::Bot.new
     bot.search("'surely you must be joking'") do |tweet|
      bot.reply "@#{tweet_user(tweet)} I am serious, and don't call me Shirley!", tweet
     end
+
+Chatterbot can actually generate a template bot file for you, and will
+walk you through process of getting a bot authorized with Twitter.
 
 That's it!
 
@@ -305,13 +324,8 @@ sense if requested.
 Copyright/License
 -----------------
 
-Copyright (c) 2014 Colin Mitchell. Chatterbot is distributed under a
-modified WTFPL licence -- it's the 'Do what the fuck you want to --
-but don't be an asshole' public license.  Please see LICENSE.txt for
-further details. Basically, do whatever you want with this code, but
-don't be an asshole about it.  If you spam users inappropriately,
-expect your karma to suffer.
-
+Copyright (c) 2014 Colin Mitchell. Chatterbot is distributed under the
+WTFPL licence -- Please see LICENSE.txt for further details.
 
 http://muffinlabs.com
 

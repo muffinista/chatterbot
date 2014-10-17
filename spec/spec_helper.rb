@@ -54,6 +54,12 @@ def fake_replies(result_count = 0, id_base = 0)
   c
 end
 
+def fake_home_timeline(result_count = 0, id_base = 0)
+  c = stubbable_client
+  allow(c).to receive_messages(:home_timeline => 1.upto(result_count).collect { |i| fake_tweet(i, id_base)})
+  c
+end
+
 def fake_followers(count)
   c = stubbable_client
   allow(c).to receive_messages(:followers => 1.upto(count).collect { |i| fake_follower(i) })
