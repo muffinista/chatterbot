@@ -103,6 +103,12 @@ Here's a list of the important methods in the Chatterbot DSL:
 
 Note that the string #USER# will be replaced with the username of the person who sent the original tweet.
 
+**home_timeline** -- This call will return tweets from the bot's home timeline -- this will include tweets from accounts the bot follows, as well as the bot's own tweets:
+    home_timeline do |tweet|
+      puts tweet.text # this is the actual tweeted text
+      favorite tweet # i like to fave tweets
+    end
+
 **tweet** -- send a Tweet out for this bot:
 
     tweet "I AM A BOT!!!"
