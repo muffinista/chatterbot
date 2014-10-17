@@ -15,12 +15,12 @@ username/password.
 
 * Fill out the form. You need to put a name, description, and Website
   URL, although the URL doesn't need to exist. <img
-  src="/images/01-create-application.png" />
+  src="./images/01-create-application.png" />
   
 
 * Save the form, and then click on the Permissions tab. You will need
   to specify what level of access is needed for your bot. <img
-  src="/images/02-application-permissions.png" /> You have three
+  src="./images/02-application-permissions.png" /> You have three
   choices here: Read only, Read and Write, and Read and Write and
   access DMs. If your bot isn't actually ever going to post to Twitter
   (for example, if you're just running a search to find interesting
@@ -31,7 +31,7 @@ username/password.
 
 * *NOTE:* When you try and save this form, there's a good chance that
   you will get an error that tells you to add a mobile phone to your Twitter
-  profile. It will look a lot like this: <img src="/images/03-mobile-number.png" />
+  profile. It will look a lot like this: <img src="./images/03-mobile-number.png" />
 
   You can add your number here: https://twitter.com/settings/devices
 
@@ -46,7 +46,7 @@ create access tokens for your bot via Twitter, or you can run the
 creating a template file for your bot, but if you don't want to do
 that, here are the steps for doing this manually:
   
-*  click the 'Keys and Access Tokens' link. You should see this: <img src="/images/04-access-token.png" />
+*  click the 'Keys and Access Tokens' link. You should see this: <img src="./images/04-access-token.png" />
 * click the 'Create my access token' link. 
 * It might take a few minutes for Twitter to actually generate the
   token. You can refresh the page a couple times until they are there,
