@@ -4,6 +4,8 @@ module Chatterbot
   # handle Twitter searches
   module Search
 
+    MAX_SEARCH_TWEETS = 1000
+    
     @skip_retweets = true
     
     #
@@ -29,14 +31,13 @@ module Chatterbot
         queries = [queries]
       end
 
-      
       #
       # search twitter
       #
       queries.each { |query|
         debug "search: #{query} #{default_opts.merge(opts)}"
         @current_tweet = nil
-        client.search( query, default_opts.merge(opts) ).each { |s|
+        client.search( query, default_opts.merge(opts) ).take(MAX_SEARCH_TWEETS).each { |s|
           update_since_id(s)
           debug s.text
           if has_whitelist? && !on_whitelist?(s)
