@@ -6,6 +6,7 @@ module Chatterbot
     attr_accessor :config
 
     MAX_TWEET_ID = 9223372036854775807
+    COMMAND_LINE_VARIABLES = [:debug_mode, :no_update, :verbose, :reset_since_id]
 
     #
     # the entire config for the bot, loaded from YAML files and the DB if applicable
@@ -273,7 +274,7 @@ module Chatterbot
       return {} if db.nil?
       db[:config][:id => botname]
     end
-
+    
     #
     # figure out what we should save to the local config file.  we don't
     # save anything that exists in the global config, unless it's been modified
@@ -283,10 +284,9 @@ module Chatterbot
       tmp = config.delete_if { |k, v| global_config.has_key?(k) && global_config[k] == config[k] }
 
       # let's not store these, they're just command-line options
-      tmp.delete(:debug_mode)
-      tmp.delete(:no_update)
-      tmp.delete(:verbose)      
-
+      COMMAND_LINE_VARIABLES.each { |k|
+        tmp.delete(k)
+      }
       
       # update the since_id now
       tmp[:since_id] = tmp.delete(:tmp_since_id) unless ! tmp.has_key?(:tmp_since_id)
