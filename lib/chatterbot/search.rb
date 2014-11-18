@@ -27,6 +27,8 @@ module Chatterbot
     def search(queries, opts = {}, &block)
       debug "check for tweets since #{since_id}"
 
+      max_tweets = opts.delete(:limit) || MAX_SEARCH_TWEETS
+      
       if queries.is_a?(String)
         queries = [queries]
       end
@@ -37,7 +39,7 @@ module Chatterbot
       queries.each { |query|
         debug "search: #{query} #{default_opts.merge(opts)}"
         @current_tweet = nil
-        client.search( query, default_opts.merge(opts) ).take(MAX_SEARCH_TWEETS).each { |s|
+        client.search( query, default_opts.merge(opts) ).take(max_tweets).each { |s|
           update_since_id(s)
           debug s.text
           if has_whitelist? && !on_whitelist?(s)

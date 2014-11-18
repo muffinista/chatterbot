@@ -14,6 +14,13 @@ module Chatterbot
     #
     # search twitter for the specified terms, then pass any matches to
     # the block.
+    # @param opts [Hash] options. these will be passed directly to
+    # Twitter via the twitter gem. You can see the possible arguments
+    # at http://www.rubydoc.info/gems/twitter/Twitter/REST/Search#search-instance_method
+    # There is one extra argument:
+    # @option options [Integer] :limit limit the number of tweets to
+    # return per search
+
     # @example
     #   search("chatterbot is cool!") do |tweet|
     #     puts tweet.text # this is the actual tweeted text
