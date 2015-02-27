@@ -95,7 +95,7 @@ module Chatterbot
     #
     # return the ID of the most recent tweet pulled up in searches
     def since_id
-      config[:since_id] || 0
+      config[:since_id] || 1
     end
 
     #
