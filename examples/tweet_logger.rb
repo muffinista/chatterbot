@@ -56,12 +56,12 @@ search("foo", :lang => "en") do |tweet|
   # reject anything from the incoming tweet that doesn't have a
   # matching column
   #
-  data = tweet.delete_if { |k, v|
+  data = tweet.to_h.delete_if { |k, v|
     ! cols.include?(k)
   }
 
   # update timestamp manually -- sequel isn't doing it right
-  data[:created_at] ||= Sequel.string_to_datetime(data[:created_at])
+  data[:created_at] = Sequel.string_to_datetime(data[:created_at])
 
   # store to the db!
   db[:searches].insert(data)
