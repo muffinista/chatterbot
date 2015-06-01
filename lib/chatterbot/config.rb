@@ -104,8 +104,6 @@ module Chatterbot
     end
 
     def max_id_from(s)
-      # don't use max_id if it's this ridiculous number
-      # @see https://dev.twitter.com/issues/1300
       sorted = s.max { |a, b| a.id <=> b.id }
       sorted && sorted.id
     end
