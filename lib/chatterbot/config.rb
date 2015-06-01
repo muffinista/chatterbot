@@ -5,7 +5,6 @@ module Chatterbot
   module Config  
     attr_accessor :config
 
-    MAX_TWEET_ID = 9223372036854775807
     COMMAND_LINE_VARIABLES = [:debug_mode, :no_update, :verbose, :reset_since_id]
 
     #
@@ -132,7 +131,7 @@ module Chatterbot
     def max_id_from(s)
       # don't use max_id if it's this ridiculous number
       # @see https://dev.twitter.com/issues/1300
-      sorted = s.reject { |t| !t || t.id == MAX_TWEET_ID }.max { |a, b| a.id <=> b.id }
+      sorted = s.max { |a, b| a.id <=> b.id }
       sorted && sorted.id
     end
 
@@ -141,7 +140,7 @@ module Chatterbot
     # unless it is lower thant what we have already
     #
     def update_since_id_reply(tweet)
-      return if tweet.nil? or tweet.class != Twitter::Tweet || tweet.id == MAX_TWEET_ID
+      return if tweet.nil? or tweet.class != Twitter::Tweet
 
       tmp_id = tweet.id
 
