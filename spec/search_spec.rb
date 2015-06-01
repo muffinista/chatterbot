@@ -78,11 +78,11 @@ describe "Chatterbot::Search" do
     expect(indexes).to eq([100, 99, 98])
   end
 
-  it "checks blacklist" do
+  it "checks blocklist" do
     bot = test_bot
     allow(bot).to receive(:client).and_return(fake_search(100, 3))
     
-    allow(bot).to receive(:on_blacklist?).and_return(true, false)
+    allow(bot).to receive(:on_blocklist?).and_return(true, false)
     
     indexes = []
     bot.search("foo") do |x|

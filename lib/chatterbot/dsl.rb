@@ -235,45 +235,45 @@ module Chatterbot
     end
 
     #
-    # specify a bot-specific blacklist of users.  accepts an array, or a
+    # specify a bot-specific blocklist of users.  accepts an array, or a
     # comma-delimited string. when called, any subsequent calls to
     # search or replies will filter out these users.
     #
     # @param [Array, String] args list of usernames
     # @example
-    #   blacklist "mean_user, private_user"
+    #   blocklist "mean_user, private_user"
     #
-    def blacklist(*args)
+    def blocklist(*args)
       list = flatten_list_of_strings(args)
 
       if list.nil? || list.empty?
-        bot.blacklist = []
+        bot.blocklist = []
       else
-        bot.blacklist += list
+        bot.blocklist += list
       end
     end
 
     #
-    # specify a bot-specific whitelist of users.  accepts an array, or a
+    # specify a bot-specific safelist of users.  accepts an array, or a
     # comma-delimited string. when called, any subsequent calls to
     # search or replies will only act upon these users.
     #
     # @param [Array, String] args list of usernames or Twitter::User objects
     # @example
-    #   whitelist "mean_user, private_user"
+    #   safelist "mean_user, private_user"
     #
-    def whitelist(*args)
+    def safelist(*args)
       list = flatten_list_of_strings(args)
 
       if list.nil? || list.empty?
-        bot.whitelist = []
+        bot.safelist = []
       else
-        bot.whitelist += list
+        bot.safelist += list
       end
     end
 
     def only_interact_with_followers
-      whitelist followers
+      safelist followers
     end
     
     #

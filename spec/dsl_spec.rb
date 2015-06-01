@@ -15,45 +15,45 @@ describe "Chatterbot::DSL" do
       end
     end
 
-    describe "blacklist" do
-      it "#blacklist passes along to bot object" do
-        expect(@bot).to receive(:blacklist=).with(["foo"])
-        blacklist ["foo"]
+    describe "blocklist" do
+      it "#blocklist passes along to bot object" do
+        expect(@bot).to receive(:blocklist=).with(["foo"])
+        blocklist ["foo"]
       end
 
-      it "#blacklist turns single-string arg into an array" do
-        expect(@bot).to receive(:blacklist=).with(["foo"])
-        blacklist "foo"
+      it "#blocklist turns single-string arg into an array" do
+        expect(@bot).to receive(:blocklist=).with(["foo"])
+        blocklist "foo"
       end
 
-      it "#blacklist turns comma-delimited string arg into an array" do
-        expect(@bot).to receive(:blacklist=).with(["foo", "bar"])
-        blacklist "foo, bar"
+      it "#blocklist turns comma-delimited string arg into an array" do
+        expect(@bot).to receive(:blocklist=).with(["foo", "bar"])
+        blocklist "foo, bar"
       end
     end
 
-    describe "whitelist" do
-      it "#whitelist passes along to bot object" do
-        expect(@bot).to receive(:whitelist=).with(["foo"])
-        whitelist ["foo"]
+    describe "safelist" do
+      it "#safelist passes along to bot object" do
+        expect(@bot).to receive(:safelist=).with(["foo"])
+        safelist ["foo"]
       end
 
-      it "#whitelist turns single-string arg into an array" do
-        expect(@bot).to receive(:whitelist=).with(["foo"])
-        whitelist "foo"
+      it "#safelist turns single-string arg into an array" do
+        expect(@bot).to receive(:safelist=).with(["foo"])
+        safelist "foo"
       end
 
-      it "#whitelist turns comma-delimited string arg into an array" do
-        expect(@bot).to receive(:whitelist=).with(["foo", "bar"])
-        whitelist "foo, bar"
+      it "#safelist turns comma-delimited string arg into an array" do
+        expect(@bot).to receive(:safelist=).with(["foo", "bar"])
+        safelist "foo, bar"
       end
     end
 
     describe "only_interact_with_followers" do
-      it "sets whitelist to be the bot's followers" do
+      it "sets safelist to be the bot's followers" do
         f = fake_follower
         allow(@bot).to receive(:followers).and_return([f])
-        expect(@bot).to receive(:whitelist=).with([f])
+        expect(@bot).to receive(:safelist=).with([f])
         only_interact_with_followers
       end
     end

@@ -35,12 +35,12 @@ describe "Chatterbot::HomeTimeline" do
     expect(indexes).to eq([1,2,3])
   end
 
-  it "checks blacklist" do
+  it "checks blocklist" do
     bot = test_bot
     expect(bot).to receive(:require_login).and_return(true)
     allow(bot).to receive(:client).and_return(fake_home_timeline(3))
     
-    allow(bot).to receive(:on_blacklist?).and_return(true, false, false)
+    allow(bot).to receive(:on_blocklist?).and_return(true, false, false)
 
 
     indexes = []

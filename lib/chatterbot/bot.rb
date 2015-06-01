@@ -4,8 +4,8 @@ module Chatterbot
   # primary Bot object, includes all the other modules
   class Bot
     include Utils
-    include Blacklist
-    include Whitelist
+    include Blocklist
+    include Safelist
     include Streaming
     include Config
     include Logging

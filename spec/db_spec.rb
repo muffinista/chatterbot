@@ -32,7 +32,7 @@ describe "Chatterbot::DB" do
     end
   
     describe "table creation" do
-      [:blacklist, :tweets, :config].each do |table|
+      [:blocklist, :tweets, :config].each do |table|
         it "should create table #{table}" do
           @tmp_conn = @bot.db
           expect(@tmp_conn.tables.include?(table)).to eq(true)

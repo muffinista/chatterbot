@@ -51,8 +51,8 @@ describe "Chatterbot::Streaming" do
           expect(handler.last_object).to eql(tweet)
         end
 
-        it "ignores tweets from blacklist" do
-          bot.blacklist = ['chatterbot']
+        it "ignores tweets from blocklist" do
+          bot.blocklist = ['chatterbot']
           bot.handle_streaming_object(tweet, handler)
           expect(handler.last_object).to be_nil
         end

@@ -19,7 +19,7 @@ puts "Loading echoes_bot.rb using the streaming API"
 
 exclude "http://", "https://"
 
-blacklist "mean_user, private_user"
+blocklist "mean_user, private_user"
 
 streaming do
   favorited do |user, tweet|

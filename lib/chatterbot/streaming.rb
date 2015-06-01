@@ -32,7 +32,7 @@ module Chatterbot
       when Twitter::Tweet
         if object.user == authenticated_user
           debug "skipping #{object} because it's from me"
-        elsif streamer.tweet_handler && !on_blacklist?(object) && !skip_me?(object)
+        elsif streamer.tweet_handler && !on_blocklist?(object) && !skip_me?(object)
           @current_tweet = object
           streamer.tweet_handler.call object
           @current_tweet = nil
@@ -42,7 +42,7 @@ module Chatterbot
           streamer.delete_handler.call(object)
         end
       when Twitter::DirectMessage
-        if streamer.dm_handler # && !on_blacklist?(object) && !skip_me?(object)
+        if streamer.dm_handler # && !on_blocklist?(object) && !skip_me?(object)
           @current_tweet = object
           streamer.dm_handler.call object
           @current_tweet = nil

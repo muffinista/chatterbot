@@ -35,8 +35,8 @@ module Chatterbot
       conn = get_connection
       return if conn.nil?
 
-      if ! conn.tables.include?(:blacklist)
-        conn.create_table :blacklist do
+      if ! conn.tables.include?(:blocklist)
+        conn.create_table :blocklist do
           String :user, :primary_key => true
           DateTime :created_at
         end

@@ -22,7 +22,7 @@ puts "Loading echoes_bot.rb"
 ##
 exclude "http://"
 
-blacklist "mean_user, private_user"
+blocklist "mean_user, private_user"
 
 loop do
 

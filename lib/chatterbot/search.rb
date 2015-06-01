@@ -42,9 +42,9 @@ module Chatterbot
         client.search( query, default_opts.merge(opts) ).take(max_tweets).each { |s|
           update_since_id(s)
           debug s.text
-          if has_whitelist? && !on_whitelist?(s)
-            debug "skipping because user not on whitelist"
-          elsif block_given? && !on_blacklist?(s) && !skip_me?(s) && !skippable_retweet?(s)
+          if has_safelist? && !on_safelist?(s)
+            debug "skipping because user not on safelist"
+          elsif block_given? && !on_blocklist?(s) && !skip_me?(s) && !skippable_retweet?(s)
             @current_tweet = s
             yield s
           end

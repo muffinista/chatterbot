@@ -14,7 +14,7 @@ puts "Loading search_bot.rb"
 ##
 exclude "http://"
 
-blacklist "mean_user, private_user"
+blocklist "mean_user, private_user"
 
 search("twitter", :lang => "en") do |tweet|
   puts tweet[:text]

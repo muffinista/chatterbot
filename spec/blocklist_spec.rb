@@ -1,6 +1,6 @@
 require File.expand_path(File.dirname(__FILE__) + '/spec_helper')
 
-describe "Chatterbot::Blacklist" do
+describe "Chatterbot::Blocklist" do
   it "has a list of excluded phrases" do
     @bot = test_bot
     @bot.exclude = ["junk", "i hate bots", "foobar", "spam"]
@@ -31,69 +31,69 @@ describe "Chatterbot::Blacklist" do
     end
   end
 
-  describe "on_blacklist?" do
+  describe "on_blocklist?" do
     before(:each) do
       @bot = test_bot
-      @bot.blacklist = ["skippy", "blippy", "dippy"]
+      @bot.blocklist = ["skippy", "blippy", "dippy"]
     end
 
     it "blocks users we don't want" do
-      expect(@bot.on_blacklist?("skippy")).to eq(true)
+      expect(@bot.on_blocklist?("skippy")).to eq(true)
     end
 
     it "allows users we do want" do
-      expect(@bot.on_blacklist?("flippy")).to eq(false)
+      expect(@bot.on_blocklist?("flippy")).to eq(false)
     end
 
     it "isn't case-specific" do
-      expect(@bot.on_blacklist?("FLIPPY")).to eq(false)
-      expect(@bot.on_blacklist?("SKIPPY")).to eq(true)
+      expect(@bot.on_blocklist?("FLIPPY")).to eq(false)
+      expect(@bot.on_blocklist?("SKIPPY")).to eq(true)
     end
 
     it "works with result hashes" do
-      expect(@bot.on_blacklist?(Twitter::Tweet.new(:id => 1,
+      expect(@bot.on_blocklist?(Twitter::Tweet.new(:id => 1,
                                             :user => {:id => 1, :screen_name => "skippy"}))).to eq(true)
-      expect(@bot.on_blacklist?(Twitter::Tweet.new(:id => 1,
+      expect(@bot.on_blocklist?(Twitter::Tweet.new(:id => 1,
                                             :user => {:id => 1, :screen_name => "flippy"}))).to eq(false)
     end   
   end
 
-  describe "on_global_blacklist?" do
+  describe "on_global_blocklist?" do
     before(:each) do
       @bot = test_bot
     end
 
     it "doesn't freak out if no db" do
       expect(@bot).to receive(:has_db?).and_return(false)
-      expect(@bot.on_global_blacklist?("foobar")).to eq(false)
+      expect(@bot.on_global_blocklist?("foobar")).to eq(false)
     end
 
     it "collects name from the db if it exists" do
       allow(@bot).to receive(:has_db?).and_return(true)
-      blacklist_table = double(Object)
+      blocklist_table = double(Object)
       double_dataset = double(Object, {:count => 1})
-      expect(blacklist_table).to receive(:where).
+      expect(blocklist_table).to receive(:where).
         with({ :user => "a"}).
         and_return( double_dataset )
 
       
       missing_dataset = double(Object, {:count => 0})
-      expect(blacklist_table).to receive(:where).
+      expect(blocklist_table).to receive(:where).
         with({ :user => "b"}).
         and_return( missing_dataset )
       
       allow(@bot).to receive(:db).and_return({ 
-                                   :blacklist => blacklist_table
+                                   :blocklist => blocklist_table
                                  })
-      expect(@bot.on_global_blacklist?("a")).to eq(true)
-      expect(@bot.on_global_blacklist?("b")).to eq(false)
+      expect(@bot.on_global_blocklist?("a")).to eq(true)
+      expect(@bot.on_global_blocklist?("b")).to eq(false)
     end
   end
 
 
   describe "db interaction" do
     before(:each) do
-#      @db_tmp = Tempfile.new("blacklist.db")
+#      @db_tmp = Tempfile.new("blocklist.db")
       @db_uri = "sqlite:/"
 
       @bot = Chatterbot::Bot.new    
@@ -101,14 +101,14 @@ describe "Chatterbot::Blacklist" do
       @bot.db
     end
 
-    describe "add_to_blacklist" do
-      it "adds to the blacklist table" do      
-        @bot.add_to_blacklist("tester")
+    describe "add_to_blocklist" do
+      it "adds to the blocklist table" do      
+        @bot.add_to_blocklist("tester")
       end
 
       it "doesn't add a double entry" do
-        @bot.add_to_blacklist("tester")
-        @bot.add_to_blacklist("tester")      
+        @bot.add_to_blocklist("tester")
+        @bot.add_to_blocklist("tester")      
       end
     end
     
