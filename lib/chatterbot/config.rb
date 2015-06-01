@@ -19,24 +19,6 @@ module Chatterbot
       ! @config.nil?
     end   
 
-    #
-    # should we log tweets to the database?
-    def log_tweets?
-      config.has_key?(:db_uri)
-    end
-
-    #
-    # Check to see if Sequel was loaded successfully.  If not, we won't make any DB calls
-    def has_sequel?
-      ! defined?(Sequel).nil?
-    end
-    
-    #
-    # do we have a DB connection string?
-    def has_db?
-      has_sequel? && config.has_key?(:db_uri)
-    end
-
     def debug_mode=(d)
       config[:debug_mode] = d
     end
@@ -114,14 +96,7 @@ module Chatterbot
     # write out our config file
     def update_config
       return if ! update_config?
-
-      # don't update flat file if we can store to the DB instead
-      if has_db?
-        debug "storing config to database -- you don't need local file anymore"
-        store_database_config
-      else
-        store_local_config
-      end
+      store_local_config
     end
 
     def update_config_at_exit
@@ -266,13 +241,6 @@ module Chatterbot
         :secret => ENV["chatterbot_secret"]
       }.delete_if { |k, v| v.nil? }.merge(slurp_file(config_file) || {})
     end
-
-    #
-    # load the config settings from the db, if possible
-    def db_config
-      return {} if db.nil?
-      db[:config][:id => botname]
-    end
     
     #
     # figure out what we should save to the local config file.  we don't
@@ -298,50 +266,13 @@ module Chatterbot
     # load in the config from the assortment of places it can be specified.
     def load_config(params={})
       # load the flat-files first
-      @config  = global_config.merge(bot_config)
-      @config[:db_uri] ||= ENV["chatterbot_db"] unless ENV["chatterbot_db"].nil?
-
-      # if we have a key to load from the DB, do that now
-      if @config.has_key?(:db_uri) && @config[:db_uri]
-        tmp = db_config
-        @config = @config.merge(tmp) unless tmp.nil?
-      end
-      @config.merge(params)
+      @config  = global_config.merge(bot_config).merge(params)
     end
 
     #
     # write out the config file for this bot
     def store_local_config
       File.open(config_file, 'w') { |f| YAML.dump(config_to_save, f) }
-    end
-
-    #
-    # store config settings in the database, if possible
-    def store_database_config
-      return false if db.nil?
-
-      configs = db[:config]
-      data = {
-        :since_id => config.has_key?(:tmp_since_id) ? config[:tmp_since_id] : config[:since_id],
-        :since_id_reply => config.has_key?(:tmp_since_id_reply) ? config[:tmp_since_id_reply] : config[:since_id_reply],
-        :token => config[:token],
-        :secret => config[:secret],
-        :consumer_secret => config[:consumer_secret],
-        :consumer_key => config[:consumer_key],
-        :updated_at => Time.now #:NOW.sql_function
-      }
-
-      row = configs.filter('id = ?', botname)
-
-      if row.count > 0
-        row.update(data)
-      else
-        data[:id] = botname
-        data[:created_at] = Time.now #:NOW.sql_function
-        configs.insert data
-      end
-      
-      true
     end
 
   end

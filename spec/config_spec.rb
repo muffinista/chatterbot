@@ -359,15 +359,8 @@ describe "Chatterbot::Config" do
       expect(@bot.slurp_file(src.path)).to eq({ :since_id => 0 })
     end
   
-    it "doesn't store local file if we can store to db instead" do
-      expect(@bot).to receive(:has_db?).and_return(true)
-      expect(@bot).to receive(:store_database_config)
-      @bot.update_config     
-    end
   
     it "stores local file if no db" do
-      expect(@bot).to receive(:has_db?).and_return(false)
-      expect(@bot).not_to receive(:store_database_config)
       expect(@bot).to receive(:store_local_config)      
       @bot.update_config     
     end
@@ -387,6 +380,5 @@ describe "Chatterbot::Config" do
       @bot.store_local_config
       expect(@bot.slurp_file(@src.path)).to eq({ :x => 123, :foo => :bar })
     end
-  end
-  
+  end 
 end

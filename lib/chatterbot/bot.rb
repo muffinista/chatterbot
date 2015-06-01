@@ -19,7 +19,6 @@ module Chatterbot
     include Followers
     include UI
     include Client
-    include DB
     include Helpers
 
     #

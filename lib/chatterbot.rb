@@ -4,13 +4,6 @@ require 'twitter'
 require 'launchy'
 require 'colorize'
 
-#
-# Try and load Sequel, but don't freak out if it's not there
-begin
-  require 'sequel'
-rescue Exception
-end
-
 
 #
 # extend Hash class to turn keys into symbols
@@ -35,7 +28,6 @@ module Chatterbot
   # load in our assorted modules
   def self.load
     require "chatterbot/config"
-    require "chatterbot/db"
     require "chatterbot/logging"
     require "chatterbot/blocklist"
     require "chatterbot/safelist"

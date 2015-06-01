@@ -13,7 +13,6 @@ module Chatterbot
         debug "I'm in debug mode, otherwise I would tweet: #{txt}"
       else
         debug txt
-        log txt, original
         client.update txt, params
       end
     rescue Twitter::Error::Forbidden => e

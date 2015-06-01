@@ -21,23 +21,6 @@ module Chatterbot
       debug s
     end
     
-    #
-    # log a tweet to the database
-    def log(txt, source=nil)
-      return unless log_tweets?
-
-      data = {:txt => txt, :bot => botname, :created_at => Time.now}
-
-      if source != nil
-        data = data.merge(:user => source.user.screen_name,
-                          :source_id => source.id,
-                          :source_tweet => source.text)
-      end
-
-      # populate the table
-      db[:tweets].insert(data)
-    end
-
 protected
     #
     # initialize a Logger object, writing to log_dest
