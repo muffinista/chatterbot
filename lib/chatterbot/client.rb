@@ -40,7 +40,7 @@ module Chatterbot
     # the max_id   
     #
     def reset_since_id
-      config[:tmp_since_id] = 0
+      config[:since_id] = 1
       result = client.search("a")
       update_since_id(result)
     end
@@ -49,7 +49,7 @@ module Chatterbot
     # resets the since_id_reply for this bot to the last mention received
     #
     def reset_since_id_reply
-      config[:tmp_since_id_reply] = 0
+      config[:since_id_reply] = 0
       result = client.mentions_timeline.max_by(&:id)
       update_since_id_reply(result)
     end

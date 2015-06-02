@@ -22,8 +22,12 @@ describe "Chatterbot::Search" do
     bot = test_bot
     
     allow(bot).to receive(:client).and_return(fake_search(100, 1))
-    expect(bot.client).to receive(:search).once.ordered.with("foo", {:result_type=>"recent"})
-    expect(bot.client).to receive(:search).once.ordered.with("bar", {:result_type=>"recent"})
+    expect(bot.client).to receive(:search).once.ordered.
+                           with("foo OR bar", {
+                                  :result_type=>"recent",
+                                  :since_id => 1,
+                                  :since_id_reply => 1
+                                })
 
     bot.search(["foo", "bar"])
   end
@@ -32,7 +36,13 @@ describe "Chatterbot::Search" do
     bot = test_bot
 
     allow(bot).to receive(:client).and_return(fake_search(100, 1))
-    expect(bot.client).to receive(:search).with("foo", {:lang => "en", :result_type=>"recent"})
+    expect(bot.client).to receive(:search).
+                           with("foo", {
+                                  :lang => "en",
+                                  :result_type=>"recent",
+                                  :since_id => 1,
+                                  :since_id_reply => 1
+                                })
 
     bot.search("foo", :lang => "en")
   end
@@ -41,7 +51,12 @@ describe "Chatterbot::Search" do
     bot = test_bot
 
     allow(bot).to receive(:client).and_return(fake_search(100, 1))
-    expect(bot.client).to receive(:search).with("foo", {:result_type=>"recent"})
+    expect(bot.client).to receive(:search).
+                           with("foo", {
+                                  :result_type=>"recent",
+                                  :since_id => 1,
+                                  :since_id_reply => 1
+                                })
 
     bot.search("foo")
   end

@@ -20,7 +20,7 @@ describe "Chatterbot::Client" do
 
       bot.reset_since_id_reply
 
-      expect(bot.config[:tmp_since_id_reply]).to eq(1000)
+      expect(bot.config[:since_id_reply]).to eq(1000)
     end
   end
 
@@ -32,7 +32,7 @@ describe "Chatterbot::Client" do
       expect(bot.client).to receive(:search).with("a")
       bot.reset_since_id
 
-      expect(bot.config[:tmp_since_id]).to eq(100)
+      expect(bot.config[:since_id]).to eq(100)
     end
   end
   

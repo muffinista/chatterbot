@@ -61,7 +61,7 @@ describe "Chatterbot::Helpers" do
     end
 
     it "calls botname for non-inherited bots" do
-      expect(File).to receive(:basename).and_return("bot")
+      allow(File).to receive(:basename).and_return("bot")
       expect(@bot.botname).to eq("bot")
     end
 

@@ -17,7 +17,7 @@ describe "Chatterbot::Reply" do
     bot.replies do
     end
 
-    expect(bot.config[:tmp_since_id_reply]).to eq(1000)
+    expect(bot.config[:since_id_reply]).to eq(1000)
   end
 
   it "iterates results" do
@@ -70,7 +70,8 @@ describe "Chatterbot::Reply" do
     allow(bot).to receive(:client).and_return(fake_replies(100, 3))    
     allow(bot).to receive(:since_id_reply).and_return(0)
     
-    expect(bot.client).to receive(:mentions_timeline).with({:count => 200})
+    expect(bot.client).to receive(:mentions_timeline).
+                           with({:count => 200, :since_id => 1})
 
     bot.replies
   end

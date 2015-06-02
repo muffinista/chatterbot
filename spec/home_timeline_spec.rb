@@ -17,7 +17,7 @@ describe "Chatterbot::HomeTimeline" do
     bot.home_timeline do
     end
 
-    expect(bot.config[:tmp_since_id]).to eq(1000)
+    expect(bot.config[:since_id_home_timeline]).to eq(1000)
   end
 
   it "iterates results" do
@@ -25,7 +25,7 @@ describe "Chatterbot::HomeTimeline" do
     expect(bot).to receive(:require_login).and_return(true)
     allow(bot).to receive(:client).and_return(fake_home_timeline(3))
     
-    expect(bot).to receive(:update_since_id).exactly(3).times
+    expect(bot).to receive(:update_since_id_home_timeline).exactly(3).times
 
     indexes = []
     bot.home_timeline do |x|
@@ -39,7 +39,7 @@ describe "Chatterbot::HomeTimeline" do
     bot = test_bot
     expect(bot).to receive(:require_login).and_return(true)
     allow(bot).to receive(:client).and_return(fake_home_timeline(3))
-    
+
     allow(bot).to receive(:on_blocklist?).and_return(true, false, false)
 
 

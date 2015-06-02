@@ -1,63 +1,101 @@
 module Chatterbot
+  require 'yaml/store'
+  class ConfigManager
+    READ_ONLY_VARIABLES = [:consumer_key, :consumer_secret, :access_token, :access_token_secret, :log_dest]
+    attr_accessor :no_update
 
+    def initialize(dest, read_only={}, no_update=false)
+      @read_only = read_only
+      @store = YAML::Store.new(dest)
+      @no_update = no_update
+    end
+   
+    def []=(key, value)
+      return if @no_update == true
+      @store.transaction do
+        @store[key] = value
+      end
+    end
+
+    def [](key)
+      if READ_ONLY_VARIABLES.include?(key)
+        return @read_only[key]
+      end
+      @store.transaction do
+        @store[key]
+      end
+    end
+  end
+  
   #
   # routines for storing config information for the bot
   module Config  
     attr_accessor :config
-
-    COMMAND_LINE_VARIABLES = [:debug_mode, :no_update, :verbose, :reset_since_id]
-
+    
+    COMMAND_LINE_VARIABLES = [:debug_mode, :no_update, :verbose]
+      
     #
     # the entire config for the bot, loaded from YAML files and the DB if applicable
     def config
       @config ||= load_config
     end   
 
-    #
-    # has the config been loaded yet?
-    def has_config?
-      ! @config.nil?
-    end   
+    class << self
+      def attr_boolean(key, default=false)
+			  class_eval <<-EVAL
+          attr_writer :#{key.to_s}
 
-    def debug_mode=(d)
-      config[:debug_mode] = d
+          def #{key.to_s}?
+            (@#{key.to_s} == true) || #{default}
+          end
+        EVAL
+      end
     end
+    
+    attr_boolean :debug_mode, false
+    attr_boolean :verbose, false
 
-    def no_update=(d)
-      config[:no_update] = d
+    def no_update=(val)
+      config.no_update = val
     end
-
-    #
-    # should we reset the since_id for this bot?
-    # 
-    def reset_bot?
-      config[:reset_since_id] || false
+    def no_update?
+      config.no_update || false
     end
     
     #
-    # are we in debug mode?
-    def debug_mode?
-      config[:debug_mode] || false
+    # return a hash of the params we need to connect to the Twitter API
+    def client_params
+      { 
+        :consumer_key => config[:consumer_key],
+        :consumer_secret => config[:consumer_secret],
+        :access_token => config[:access_token],
+        :access_token_secret => config[:access_token_secret]
+      }
     end
 
     #
+    # do we have an API key specified?
+    def needs_api_key?
+      config[:consumer_key].nil? || config[:consumer_secret].nil?
+    end
+
+    #
+    # has this script validated with Twitter OAuth?
+    def needs_auth_token?
+      config[:access_token].nil?
+    end
+
+    
+    #
     # Should we run any config updates?
     def update_config?
-      config.has_key?(:no_update) ? ! config[:no_update] : true
+      !no_update?
     end
 
     #
     # should we write to a log file?
     def logging?
-      has_config? && config.has_key?(:log_dest)
-    end
-
-    def verbose=(v)
-      config[:verbose] = v
-    end
-   
-    def verbose?
-      config[:verbose] || false
+      config[:log_dest] != nil
     end
    
     #
@@ -70,7 +108,7 @@ module Chatterbot
     # store since_id to a different key so that it doesn't actually
     # get updated until the bot is done running
     def since_id=(x)
-      config[:tmp_since_id] = x
+      config[:since_id] = x
     end
 
     #
@@ -83,24 +121,13 @@ module Chatterbot
     # store since_id_reply to a different key so that it doesn't actually
     # get updated until the bot is done running
     def since_id_reply=(x)
-      config[:tmp_since_id_reply] = x
+      config[:since_id_reply] = x
     end
 
     #
     # return the ID of the most recent tweet pulled up in mentions or since_id if since_id_reply is nil
     def since_id_reply
       config[:since_id_reply] || since_id
-    end
-
-    #
-    # write out our config file
-    def update_config
-      return if ! update_config?
-      store_local_config
-    end
-
-    def update_config_at_exit
-      update_config
     end
 
     def max_id_from(s)
@@ -117,7 +144,15 @@ module Chatterbot
 
       tmp_id = tweet.id
 
-      config[:tmp_since_id_reply] = [config[:tmp_since_id_reply].to_i, tmp_id].max
+      config[:since_id_reply] = [config[:since_id_reply].to_i, tmp_id].max
+    end
+
+    def update_since_id_home_timeline(tweet)
+      return if tweet.nil? or tweet.class != Twitter::Tweet
+
+      tmp_id = tweet.id
+
+      config[:since_id_home_timeline] = [config[:since_id_home_timeline].to_i, tmp_id].max
     end
     
     #
@@ -136,31 +171,9 @@ module Chatterbot
                  search
                end.to_i
       
-      config[:tmp_since_id] = [config[:tmp_since_id].to_i, tmp_id].max
+      config[:since_id] = [config[:since_id].to_i, tmp_id].max
     end
 
-    #
-    # return a hash of the params we need to connect to the Twitter API
-    def client_params
-      { 
-        :consumer_key => config[:consumer_key],
-        :consumer_secret => config[:consumer_secret],
-        :token => config[:token].nil? ? nil : config[:token],
-        :secret => config[:secret].nil? ? nil : config[:secret]
-      }
-    end
-
-    #
-    # do we have an API key specified?
-    def needs_api_key?
-      config[:consumer_key].nil? || config[:consumer_secret].nil?
-    end
-
-    #
-    # has this script validated with Twitter OAuth?
-    def needs_auth_token?
-      config[:token].nil?
-    end
 
     #
     # determine if we're being called by one of our internal scripts
@@ -235,43 +248,17 @@ module Chatterbot
       {
         :consumer_key => ENV["chatterbot_consumer_key"],
         :consumer_secret => ENV["chatterbot_consumer_secret"],
-        :token => ENV["chatterbot_token"],
-        :secret => ENV["chatterbot_secret"]
+        :access_token => ENV["chatterbot_access_token"],
+        :access_token_secret => ENV["chatterbot_access_secret"]
       }.delete_if { |k, v| v.nil? }.merge(slurp_file(config_file) || {})
     end
     
-    #
-    # figure out what we should save to the local config file.  we don't
-    # save anything that exists in the global config, unless it's been modified
-    # for this particular bot.
-    def config_to_save
-      # remove keys that are duped in the global config
-      tmp = config.delete_if { |k, v| global_config.has_key?(k) && global_config[k] == config[k] }
-
-      # let's not store these, they're just command-line options
-      COMMAND_LINE_VARIABLES.each { |k|
-        tmp.delete(k)
-      }
-      
-      # update the since_id now
-      tmp[:since_id] = tmp.delete(:tmp_since_id) unless ! tmp.has_key?(:tmp_since_id)
-      tmp[:since_id_reply] = tmp.delete(:tmp_since_id_reply) unless ! tmp.has_key?(:tmp_since_id_reply)
-
-      tmp
-    end
     
     #
     # load in the config from the assortment of places it can be specified.
     def load_config(params={})
-      # load the flat-files first
-      @config  = global_config.merge(bot_config).merge(params)
+      read_only_data  = global_config.merge(bot_config).merge(params)
+      @config = Chatterbot::ConfigManager.new(config_file, read_only_data)
     end
-
-    #
-    # write out the config file for this bot
-    def store_local_config
-      File.open(config_file, 'w') { |f| YAML.dump(config_to_save, f) }
-    end
-
   end
 end

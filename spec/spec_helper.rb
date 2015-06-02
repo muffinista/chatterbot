@@ -19,14 +19,19 @@ RSpec.configure do |config|
     # cause any verifying double instantiation for a class that does not
     # exist to raise, protecting against incorrectly spelt names.
     mocks.verify_doubled_constant_names = true
+  end
 
+  config.after(:each) do
+    config_file = File.join(File.dirname($0), "#{File.basename($0, ".*")}.yml")
+    if File.exist?(config_file)
+      File.delete(config_file) rescue nil
+    end
   end
 end
 
 def test_bot
   bot = Chatterbot::Bot.new
   allow(bot).to receive(:load_config).and_return({})
-  allow(bot).to receive(:update_config_at_exit)
   bot.reset!
   bot
 end

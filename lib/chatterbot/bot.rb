@@ -30,18 +30,34 @@ module Chatterbot
 
       @config = load_config(params)
 
-      if reset_bot?
-        reset_since_id
-        update_config
-        puts "Reset to #{@config[:since_id]}"
-        exit
-      else
-        # update config when we exit
-        at_exit do
-          raise $! if $!
-          update_config_at_exit
-        end  
-      end
+      # if reset_bot?
+      #   reset_since_id
+      #   update_config
+      #   puts "Reset to #{@config[:since_id]}"
+      #   exit
+      # else
+      # update config when we exit
+#      at_exit do
+#        raise $! if $!
+#        update_config_at_exit
+#      end  
+      #      end
     end
+
+    def reset!
+
+    end
+
+    def run!
+
+    end
+
+    def before_run
+    end
+
+    def after_run
+    end
+  
+    
   end
 end

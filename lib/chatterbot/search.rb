@@ -33,24 +33,26 @@ module Chatterbot
         queries = [queries]
       end
 
+      query = queries.join(" OR ")
+      
       #
       # search twitter
       #
-      queries.each { |query|
-        debug "search: #{query} #{default_opts.merge(opts)}"
-        @current_tweet = nil
-        client.search( query, default_opts.merge(opts) ).take(max_tweets).each { |s|
-          update_since_id(s)
-          debug s.text
-          if has_safelist? && !on_safelist?(s)
-            debug "skipping because user not on safelist"
-          elsif block_given? && !on_blocklist?(s) && !skip_me?(s) && !skippable_retweet?(s)
-            @current_tweet = s
-            yield s
-          end
-        }
-        @current_tweet = nil
+
+      debug "search: #{query} #{default_opts.merge(opts)}"
+      @current_tweet = nil
+      client.search( query, default_opts.merge(opts) ).take(max_tweets).each { |s|
+        update_since_id(s)
+        debug s.text
+        if has_safelist? && !on_safelist?(s)
+          debug "skipping because user not on safelist"
+        elsif block_given? && !on_blocklist?(s) && !skip_me?(s) && !skippable_retweet?(s)
+          @current_tweet = s
+          yield s
+        end
       }
+      @current_tweet = nil
+
     end
   
   end
