@@ -46,9 +46,6 @@ module Chatterbot
         debug s.text
 
         if block_given? && valid_tweet?(s)
-        # if has_safelist? && !on_safelist?(s)
-        #   debug "skipping because user not on safelist"
-        # elsif block_given? && !on_blocklist?(s) && !skip_me?(s) && !skippable_retweet?(s)
           @current_tweet = s
           yield s
         end
