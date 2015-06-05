@@ -151,14 +151,6 @@ describe "Chatterbot::Config" do
       expect(@bot.config[:since_id_reply]).to eq(1000)
     end
 
-    it "doesn't work with searches" do
-      data = fake_search(1000, 1).search
-
-      @bot.config[:since_id_reply] = 100
-      @bot.update_since_id_reply(data)
-      expect(@bot.config[:since_id_reply]).to eq(100)
-    end
-
     it "never rolls back" do
       @bot.config[:since_id_reply] = 100
       data = fake_tweet(50, 50)
@@ -180,17 +172,6 @@ describe "Chatterbot::Config" do
 
       @bot.config[:since_id] = 100
       @bot.update_since_id(data)
-      expect(@bot.config[:since_id]).to eq(1000)
-    end
-
-    it "works with SearchResults" do
-      s = Twitter::SearchResults.new(
-                                     {:search_metadata => {:max_id => 1000}},
-                                     double(Twitter::Request, :client => nil, :verb => nil, :path => nil, :options => nil)
-                                     )
-
-      @bot.config[:since_id] = 100
-      @bot.update_since_id(s)
       expect(@bot.config[:since_id]).to eq(1000)
     end
     

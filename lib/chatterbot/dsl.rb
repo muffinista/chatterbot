@@ -20,14 +20,14 @@ module Chatterbot
     # There is one extra argument:
     # @option options [Integer] :limit limit the number of tweets to
     # return per search
-
+    #
     # @example
     #   search("chatterbot is cool!") do |tweet|
     #     puts tweet.text # this is the actual tweeted text
     #     reply "I agree!", tweet
     #   end
-    def search(query, opts = {}, &block)
-      bot.search(query, opts, &block)
+    def search(*args, &block)
+      bot.register_handler(:search, args, &block)
     end
 
     #
@@ -39,8 +39,8 @@ module Chatterbot
     #     puts tweet.text # this is the actual tweeted text
     #     favorite tweet # i like to fave tweets
     #   end
-    def home_timeline(opts = {}, &block)
-      bot.home_timeline(opts, &block)
+    def home_timeline(&block)
+      bot.register_handler(:home_timeline, block)
     end
 
     #
@@ -53,23 +53,30 @@ module Chatterbot
     #     reply "Thanks for the mention!", tweet
     #   end
     def replies(&block)
-      bot.replies(&block)
+      bot.register_handler(:replies, block)
     end
 
-    def streaming(opts = {}, &block)
-      params = {
-        :endpoint => :user
-      }.merge(opts)
-
-      h = StreamingHandler.new(bot, params)
-      h.apply block
-
-      bot.do_streaming(h)
+    def direct_messages(&block)
+      bot.register_handler(:direct_messages, block)
     end
     
-    def streaming_tweets(opts={}, &block)
-      bot.streaming_tweets(opts, &block)
+    def favorited(&block)
+      bot.register_handler(:favorited, block)
     end
+  
+    def followed(&block)
+      bot.register_handler(:followed, block)
+    end
+  
+    def deleted(&block)
+      bot.register_handler(:deleted, block)
+    end
+
+    def streaming(s=nil)
+      s = true if s.nil?
+      bot.streaming = s
+    end
+    
     
     #
     # send a tweet
@@ -138,6 +145,7 @@ module Chatterbot
     def bot
       return @bot unless @bot.nil?
 
+      @bot_command = nil
       
       #
       # parse any command-line options and use them to initialize the bot
@@ -158,21 +166,22 @@ module Chatterbot
       opts.on('-t', '--test', "Run the bot without actually sending any tweets") { params[:debug_mode] = true }
       opts.on('-v', '--verbose', "verbose output to stdout")    { params[:verbose] = true }
       opts.on('--dry-run', "Run the bot in test mode, and also don't update the database")    { params[:debug_mode] = true ; params[:no_update] = true }
-      opts.on('-s', '--since_id [ARG]', "Check for tweets since tweet id #[ARG]")    { |s| params[:since_id] = s.to_i }
-      opts.on('-m', '--since_id_reply [ARG]', "Check for mentions since tweet id #[ARG]")    { |s| params[:since_id_reply] = s.to_i }
+      # opts.on('-s', '--since_id [ARG]', "Check for tweets since tweet id #[ARG]")    { |s| params[:since_id] = s.to_i }
+      # opts.on('-m', '--since_id_reply [ARG]', "Check for mentions since tweet id #[ARG]")    { |s| params[:since_id_reply] = s.to_i }
+
       opts.on('-r', '--reset', "Reset your bot to ignore old tweets") {
-        params[:debug_mode] = true
-        params[:reset_since_id] = true
-      }
-      opts.on('--profile [ARG]', "get/set your bot's profile text") { |p| 
-        @handle_profile_text = true
-        @profile_text = p
-      }
-      opts.on('--website [ARG]', "get/set your bot's profile URL") { |u| 
-        @handle_profile_website = true
-        @profile_website = u
+        @bot_command = :reset_since_id_counters
       }
 
+      opts.on('--profile [ARG]', "get/set your bot's profile text") { |p| 
+        @bot_command = :profile_text
+        @bot_command_args = [ p ]
+      }
+
+      opts.on('--website [ARG]', "get/set your bot's profile URL") { |u| 
+        @bot_command = :profile_website
+        @bot_command_args = [ u ]
+      }
       
       opts.on_tail("-h", "--help", "Show this message") do
         puts opts
@@ -183,25 +192,9 @@ module Chatterbot
       #:nocov:
 
       @bot = Chatterbot::Bot.new(params)
-
-      if @handle_profile_text == true
-        if !@profile_text.nil?
-          @bot.profile_text @profile_text
-        else
-          puts @bot.profile_text
-        end
-      end
-
-      if @handle_profile_website == true
-        if !@profile_website.nil?
-          @bot.profile_website @profile_website
-        else
-          puts @bot.profile_website
-        end
-      end
-
-      if @handle_profile_website == true || @handle_profile_text == true
-        exit
+      if @bot_command != nil
+        @bot.skip_run = true
+        @bot.send(@bot_command, @bot_command_args)
       end
 
       @bot
@@ -273,7 +266,7 @@ module Chatterbot
     end
 
     def only_interact_with_followers
-      safelist followers
+      bot.config[:only_interact_with_followers] = true
     end
     
     #
@@ -377,15 +370,6 @@ module Chatterbot
       bot.update_config
     end
 
-    #
-    # return the bot's current database connection, if available.
-    # handy if you need to manage data with your bot
-    #
-    def db
-      bot.db
-    end
-
-    
     protected
     
     #

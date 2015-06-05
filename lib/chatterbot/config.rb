@@ -50,11 +50,38 @@ module Chatterbot
           end
         EVAL
       end
+
+
+      def attr_since_id(key = nil)
+        attr_name = key.nil? ? "since_id" : ["since_id", key.to_s].join("_")
+			  class_eval <<-EVAL
+          def #{attr_name}=(x)
+            config[:#{attr_name}] = x
+          end
+          def #{attr_name}
+            config[:#{attr_name}] || 1
+          end
+
+          def update_#{attr_name}(input)
+            max = max_id_from(input)
+            config[:#{attr_name}] = [config[:#{attr_name}].to_i, max].max
+          end
+        EVAL
+      end  
     end
+
     
     attr_boolean :debug_mode, false
     attr_boolean :verbose, false
+    attr_boolean :streaming, false
+    attr_boolean :skip_run, false
+    attr_boolean :only_interact_with_followers, false    
 
+    attr_since_id
+    attr_since_id :home_timeline
+    attr_since_id :reply
+    attr_since_id :dm
+    
     def no_update=(val)
       config.no_update = val
     end
@@ -103,75 +130,19 @@ module Chatterbot
     def log_dest
       config[:log_dest]
     end
-
-    #
-    # store since_id to a different key so that it doesn't actually
-    # get updated until the bot is done running
-    def since_id=(x)
-      config[:since_id] = x
-    end
-
-    #
-    # return the ID of the most recent tweet pulled up in searches
-    def since_id
-      config[:since_id] || 1
-    end
-
-    #
-    # store since_id_reply to a different key so that it doesn't actually
-    # get updated until the bot is done running
-    def since_id_reply=(x)
-      config[:since_id_reply] = x
-    end
-
-    #
-    # return the ID of the most recent tweet pulled up in mentions or since_id if since_id_reply is nil
-    def since_id_reply
-      config[:since_id_reply] || since_id
-    end
-
-    def max_id_from(s)
-      sorted = s.max { |a, b| a.id <=> b.id }
-      sorted && sorted.id
-    end
-
-    #
-    # update the since_id_reply with the id of the given tweet,
-    # unless it is lower thant what we have already
-    #
-    def update_since_id_reply(tweet)
-      return if tweet.nil? or tweet.class != Twitter::Tweet
-
-      tmp_id = tweet.id
-
-      config[:since_id_reply] = [config[:since_id_reply].to_i, tmp_id].max
-    end
-
-    def update_since_id_home_timeline(tweet)
-      return if tweet.nil? or tweet.class != Twitter::Tweet
-
-      tmp_id = tweet.id
-
-      config[:since_id_home_timeline] = [config[:since_id_home_timeline].to_i, tmp_id].max
-    end
     
-    #
-    # update the since_id with either the highest ID of the specified
-    # tweets, unless it is lower than what we have already
-    def update_since_id(search)
-      return if search.nil?
+    def max_id_from(s)
+      if ! s.respond_to?(:max)
+        if s.respond_to?(:id)
+          return s.id
+        else
+          return s
+        end       
+      end
      
-      tmp_id = if search.is_a?(Twitter::SearchResults)
-                 search.attrs[:search_metadata][:max_id]
-               elsif search.respond_to?(:max)
-                 max_id_from(search)
-               elsif search.is_a?(Twitter::Tweet)
-                 search.id
-               else
-                 search
-               end.to_i
       
-      config[:since_id] = [config[:since_id].to_i, tmp_id].max
+      sorted = s.max { |a, b| a.id.to_i <=> b.id.to_i }
+      sorted && sorted.id
     end
 
 

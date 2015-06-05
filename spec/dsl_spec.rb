@@ -3,7 +3,7 @@ require File.expand_path(File.dirname(__FILE__) + '/spec_helper')
 describe "Chatterbot::DSL" do
   describe "client routines" do
     before(:each) do
-      @bot = double(Chatterbot::Bot, :config => {})
+      @bot = instance_double(Chatterbot::Bot, :config => {})
       @bot.send :require, 'chatterbot/dsl'
 
       allow(Chatterbot::DSL).to receive(:bot).and_return(@bot)
@@ -50,11 +50,9 @@ describe "Chatterbot::DSL" do
     end
 
     describe "only_interact_with_followers" do
-      it "sets safelist to be the bot's followers" do
-        f = fake_follower
-        allow(@bot).to receive(:followers).and_return([f])
-        expect(@bot).to receive(:safelist=).with([f])
+      it "sets flag" do
         only_interact_with_followers
+        expect(@bot.config[:only_interact_with_followers]).to eq(true)
       end
     end
 
@@ -101,20 +99,22 @@ describe "Chatterbot::DSL" do
 
     describe "search" do
       it "passes along to bot object" do
-        expect(@bot).to receive(:search).with("foo", { })
-        search("foo")
+        expect(@bot).to receive(:register_handler).with(:search, ["foo"])
+
+        search("foo") {}
       end
 
       it "passes multiple queries along to bot object" do
-        expect(@bot).to receive(:search).with(["foo","bar"], { })
-        search(["foo","bar"])
+        expect(@bot).to receive(:register_handler).with(:search, [["foo", "bar"]])
+        search(["foo","bar"]) {}
       end
     end
 
+   
     describe "streaming" do
       it "passes along to bot object" do
-        expect(@bot).to receive(:do_streaming)
-        streaming {}
+        expect(@bot).to receive(:streaming=).with(true)
+        streaming
       end
     end
 
@@ -130,18 +130,13 @@ describe "Chatterbot::DSL" do
     end
     
     it "#replies passes along to bot object" do
-      expect(@bot).to receive(:replies)
-      replies
+      expect(@bot).to receive(:register_handler).with(:replies, instance_of(Proc))
+      replies {}
     end
     
     it "#home_timeline passes along to bot object" do
-      expect(@bot).to receive(:home_timeline)
-      home_timeline
-    end
-
-    it "#streaming_tweets passes along to bot object" do
-      expect(@bot).to receive(:streaming_tweets)
-      streaming_tweets
+      expect(@bot).to receive(:register_handler).with(:home_timeline, instance_of(Proc))
+      home_timeline { |x| "foo" }
     end
     
     it "#followers passes along to bot object" do
@@ -216,15 +211,6 @@ describe "Chatterbot::DSL" do
       it "should pass to bot object" do
         expect(@bot).to receive(:config).and_return({:since_id_reply => 1234})
         expect(since_id_reply).to eq(1234)
-      end
-    end
-
-    describe "db" do
-      it "should pass to bot object" do
-        bot_db = double(Object)
-        expect(@bot).to receive(:db).and_return(bot_db)
-
-        expect(db).to eql(bot_db)
       end
     end
 

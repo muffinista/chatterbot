@@ -62,29 +62,4 @@ describe "Chatterbot::Reply" do
 
     bot.replies
   end
-  
-
-  it "doesn't pass along invalid since_id_reply" do
-    bot = test_bot
-    expect(bot).to receive(:require_login).and_return(true)
-    allow(bot).to receive(:client).and_return(fake_replies(100, 3))    
-    allow(bot).to receive(:since_id_reply).and_return(0)
-    
-    expect(bot.client).to receive(:mentions_timeline).
-                           with({:count => 200, :since_id => 1})
-
-    bot.replies
-  end
-
-  it "pass along since_id if since_id_reply is nil or zero" do
-    bot = test_bot
-    expect(bot).to receive(:require_login).and_return(true)
-    allow(bot).to receive(:client).and_return(fake_replies(100, 3))
-    allow(bot).to receive(:since_id).and_return(12345)
-
-    expect(bot.client).to receive(:mentions_timeline).with({:count => 200, :since_id => 12345})
-
-    bot.replies
-
-  end
 end

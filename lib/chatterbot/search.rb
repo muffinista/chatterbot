@@ -26,7 +26,7 @@ module Chatterbot
     # internal search code
     def search(queries, opts = {}, &block)
       debug "check for tweets since #{since_id}"
-
+      
       max_tweets = opts.delete(:limit) || MAX_SEARCH_TWEETS
       
       if queries.is_a?(String)
@@ -44,9 +44,11 @@ module Chatterbot
       client.search( query, default_opts.merge(opts) ).take(max_tweets).each { |s|
         update_since_id(s)
         debug s.text
-        if has_safelist? && !on_safelist?(s)
-          debug "skipping because user not on safelist"
-        elsif block_given? && !on_blocklist?(s) && !skip_me?(s) && !skippable_retweet?(s)
+
+        if block_given? && valid_tweet?(s)
+        # if has_safelist? && !on_safelist?(s)
+        #   debug "skipping because user not on safelist"
+        # elsif block_given? && !on_blocklist?(s) && !skip_me?(s) && !skippable_retweet?(s)
           @current_tweet = s
           yield s
         end

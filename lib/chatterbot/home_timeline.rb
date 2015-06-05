@@ -5,16 +5,15 @@ module Chatterbot
   module HomeTimeline
 
     # handle the bots timeline
-    def home_timeline(opts={}, &block)
+    def home_timeline(*args, &block)
       return unless require_login
 
       debug "check for home_timeline tweets since #{since_id}"
 
       opts = {
-        :since_id => since_id,
+        :since_id => since_id_home_timeline,
         :count => 200
-      }.merge(opts)
-
+      }
       results = client.home_timeline(opts)
 
       @current_tweet = nil

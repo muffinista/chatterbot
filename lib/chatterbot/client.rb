@@ -19,9 +19,19 @@ module Chatterbot
       @streaming_client ||= Twitter::Streaming::Client.new(client_params)
     end
 
+    def authenticated_user
+      @user ||= client.user
+    end
+
     def reset!
       config[:since_id] = 0
       config[:since_id_reply] = 0
+    end
+
+    def reset_since_id_counters
+      reset!
+      reset_since_id
+      reset_since_id_reply
     end
     
     #
