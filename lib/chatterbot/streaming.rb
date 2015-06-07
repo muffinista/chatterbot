@@ -3,10 +3,6 @@ module Chatterbot
   #
   # simple twitter stream handler
   module Streaming
-    #
-    # handle searches
-    # handle 
-    #
     def handle_streaming_object(object)
       debug object
 
