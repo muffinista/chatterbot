@@ -20,4 +20,23 @@ describe "Chatterbot::Bot" do
       @bot.run!
     end
   end
+
+  describe "run_or_stream" do
+    it "should use streaming if specified" do
+      expect(@bot).to receive(:stream!)
+      @bot.streaming = true
+      @bot.run_or_stream
+    end
+
+    it "should use streaming if required by handler" do
+      expect(@bot).to receive(:stream!)
+      @bot.register_handler(:deleted) {}
+      @bot.run_or_stream
+    end
+
+    it "should use REST if specified" do
+      expect(@bot).to receive(:run!)
+      @bot.run_or_stream
+    end
+  end
 end

@@ -43,13 +43,22 @@ module Chatterbot
 
       at_exit do
         if @run_count <= 0 && skip_run? != true
-          run!
+          run_or_stream
         end
         
         raise $! if $!
       end  
 
       @handlers = {}
+    end
+
+    def run_or_stream
+      @run_count += 1
+      if streaming?
+        stream!
+      else
+        run!
+      end
     end
     
     def stream!
@@ -84,7 +93,14 @@ module Chatterbot
     end
     
     def register_handler(method, opts = nil, &block)
+      if STREAMING_ONLY_HANDLERS.include?(method)
+        puts "Forcing usage of Streaming API to support #{method} usage"
+        self.streaming = true
+      end
+
+      # @todo raise error if method already defined
       @handlers[method] = Handler.new(opts, &block)
+
     end
   end
 end
