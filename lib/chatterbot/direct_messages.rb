@@ -5,9 +5,7 @@ module Chatterbot
   module DirectMessages
     # internal search code
     def direct_messages(opts = {}, &block)
-      puts opts.inspect
-      puts block.inspect
-
+      return unless require_login
       debug "check for DMs since #{since_id_dm}"
             
       #
