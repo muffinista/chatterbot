@@ -27,11 +27,9 @@ module Chatterbot
       when Twitter::Tweet
         s.user.screen_name
       when Twitter::User
-        s.screen_name
+        s.name
       when String
         s
-      else
-        s.has_key?(:from_user) ? s[:from_user] : s[:user][:screen_name]
       end
     end
 

@@ -110,6 +110,38 @@ describe "Chatterbot::DSL" do
       end
     end
 
+    describe "direct_messages" do
+      it "passes along to bot object" do
+        expect(@bot).to receive(:register_handler).with(:direct_messages, instance_of(Proc))
+
+        direct_messages {}
+      end
+    end
+
+    describe "favorited" do
+      it "passes along to bot object" do
+        expect(@bot).to receive(:register_handler).with(:favorited, instance_of(Proc))
+
+        favorited {}
+      end
+    end
+
+    describe "followed" do
+      it "passes along to bot object" do
+        expect(@bot).to receive(:register_handler).with(:followed, instance_of(Proc))
+
+        followed {}
+      end
+    end
+
+    describe "deleted" do
+      it "passes along to bot object" do
+        expect(@bot).to receive(:register_handler).with(:deleted, instance_of(Proc))
+
+        deleted {}
+      end
+    end
+
    
     describe "streaming" do
       it "passes along to bot object" do

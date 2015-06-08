@@ -107,4 +107,48 @@ describe "Chatterbot::Search" do
     expect(indexes).to eq([99, 98])
   end
 
+
+  it "checks safelist" do
+    bot = test_bot
+    allow(bot).to receive(:client).and_return(fake_search(100, 3))
+    allow(bot).to receive(:has_safelist?).and_return(true)
+    allow(bot).to receive(:on_safelist?).and_return(true, false, false)
+
+    indexes = []
+    bot.search("foo") do |x|
+      indexes << x.attrs[:index]
+    end
+
+    expect(indexes).to eq([100])
+  end
+
+  
+  it "skips retweets" do
+    bot = test_bot
+    bot.exclude_retweets
+    allow(bot).to receive(:client).and_return(fake_search(100, 3))
+    allow_any_instance_of(Twitter::Tweet).to receive(:retweeted_status?) do |t|
+      (t.id % 2) == 0
+    end
+    
+    indexes = []
+    bot.search("foo") do |x|
+      indexes << x.attrs[:index]
+    end
+
+    expect(indexes).to eq([99])
+  end
+
+  it "includes retweets" do
+    bot = test_bot
+    bot.include_retweets
+    allow(bot).to receive(:client).and_return(fake_search(100, 3))
+    indexes = []
+    bot.search("foo") do |x|
+      indexes << x.attrs[:index]
+    end
+
+    expect(indexes).to eq([100, 99, 98])
+  end
+  
 end

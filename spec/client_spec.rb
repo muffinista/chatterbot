@@ -11,7 +11,43 @@ describe "Chatterbot::Client" do
   it "should initialize streaming client" do
     expect(@bot.streaming_client).to be_a(Twitter::Streaming::Client)
   end
+
+  describe "reset!" do
+    it "should reset a bunch of stuff" do
+      @bot.config[:since_id] = 1234
+      @bot.config[:since_id_reply] = 1234
+
+      @bot.reset!
+
+      expect(@bot.config[:since_id]).to eql(1)
+      expect(@bot.config[:since_id_reply]).to eql(1)
+    end
+  end
   
+  describe "reset_since_id_counters" do
+    it "should reset a bunch of stuff" do
+      expect(@bot).to receive(:reset!)
+      expect(@bot).to receive(:reset_since_id)
+      expect(@bot).to receive(:reset_since_id_reply)
+      expect(@bot).to receive(:reset_since_id_home_timeline)
+      expect(@bot).to receive(:reset_since_id_dm)
+
+      @bot.reset_since_id_counters
+    end
+  end
+  
+  describe "reset_since_id" do
+    it "runs a search to get a new max_id" do
+      bot = test_bot
+
+      allow(bot).to receive(:client).and_return(fake_search(100, 1))
+      expect(bot.client).to receive(:search).with("a")
+      bot.reset_since_id
+
+      expect(bot.config[:since_id]).to eq(100)
+    end
+  end
+
   describe "reset_since_id_reply" do
     it "gets the id of the last reply" do
       bot = test_bot
@@ -24,17 +60,28 @@ describe "Chatterbot::Client" do
     end
   end
 
-  describe "reset_since_id" do
-    it "runs a search to get a new max_id" do
+  describe "reset_since_id_home_timeline" do
+    it "gets the id of the last tweet in timeline" do
       bot = test_bot
+      allow(bot).to receive(:client).and_return(fake_home_timeline(3))
 
-      allow(bot).to receive(:client).and_return(fake_search(100, 1))
-      expect(bot.client).to receive(:search).with("a")
-      bot.reset_since_id
+      bot.reset_since_id_home_timeline
 
-      expect(bot.config[:since_id]).to eq(100)
+      expect(bot.config[:since_id_home_timeline]).to eq(3)
     end
   end
+
+  describe "reset_since_id_dm" do
+    it "gets the id of the last direct message" do
+      bot = test_bot
+      allow(bot).to receive(:client).and_return(fake_direct_messages(3))
+
+      bot.reset_since_id_dm
+
+      expect(bot.config[:since_id_dm]).to eq(3)
+    end
+  end
+
   
   it "runs init_client and login on #require_login" do
     expect(@bot).to receive(:init_client).and_return(true)

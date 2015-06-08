@@ -24,14 +24,16 @@ module Chatterbot
     end
 
     def reset!
-      config[:since_id] = 0
-      config[:since_id_reply] = 0
+      config[:since_id] = 1
+      config[:since_id_reply] = 1
     end
 
     def reset_since_id_counters
       reset!
       reset_since_id
       reset_since_id_reply
+      reset_since_id_home_timeline
+      reset_since_id_dm
     end
     
     #
@@ -53,7 +55,19 @@ module Chatterbot
       result = client.mentions_timeline.max_by(&:id)
       update_since_id_reply(result)
     end
-   
+
+    def reset_since_id_home_timeline
+      config[:since_id_reply] = 0
+      result = client.home_timeline.max_by(&:id)
+      update_since_id_home_timeline(result)
+    end
+
+    def reset_since_id_dm
+      config[:since_id_dm] = 0
+      result = client.direct_messages_received.max_by(&:id)
+      update_since_id_dm(result)
+    end
+    
 
     #
     # the URL we should use for api calls

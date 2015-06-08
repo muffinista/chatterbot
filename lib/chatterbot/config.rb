@@ -51,7 +51,6 @@ module Chatterbot
         EVAL
       end
 
-
       def attr_since_id(key = nil)
         attr_name = key.nil? ? "since_id" : ["since_id", key.to_s].join("_")
 			  class_eval <<-EVAL

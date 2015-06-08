@@ -19,9 +19,7 @@ module Chatterbot
       @current_tweet = nil
       results.each { |s|
         update_since_id_home_timeline(s)
-        if has_safelist? && !on_safelist?(s)
-          debug "skipping because user not on safelist"
-        elsif block_given? && !on_blocklist?(s) && !skip_me?(s)
+        if block_given? && valid_tweet?(s)
           @current_tweet = s
           yield s         
         end

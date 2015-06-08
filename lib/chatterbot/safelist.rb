@@ -13,9 +13,8 @@ module Chatterbot
     end
 
     def safelist=(b)
-      @safelist = b
-      @safelist = @safelist.flatten.collect { |e|
-        (e.is_a?(Twitter::User) ? from_user(e) : e).downcase
+      @safelist = b.flatten.collect { |e|
+        from_user(e).downcase
       }
       @safelist
     end
@@ -27,7 +26,7 @@ module Chatterbot
     #
     # Is this tweet from a user on our safelist?
     def on_safelist?(s)
-      search = (s.respond_to?(:user) ? from_user(s) : s).downcase
+      search = from_user(s).downcase
       safelist.any? { |b| search.include?(b.downcase) }
     end
   end

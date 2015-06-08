@@ -51,10 +51,6 @@ module Chatterbot
 
       @handlers = {}
     end
-
-    def reset!
-
-    end
     
     def stream!
       before_run

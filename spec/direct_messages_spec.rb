@@ -20,46 +20,54 @@ describe "Chatterbot::DirectMessages" do
     expect(bot.config[:since_id_dm]).to eq(1000)
   end
 
-  it "iterates results" do
-    bot = test_bot
-    expect(bot).to receive(:require_login).and_return(true)
-    allow(bot).to receive(:client).and_return(fake_direct_messages(3))
-    
-    expect(bot).to receive(:update_since_id_dm).exactly(3).times
-
-    indexes = []
-    bot.direct_messages do |x|
-      indexes << x[:id]
+  describe "results handling" do
+    before(:each) do
+      @bot = test_bot
+      expect(@bot).to receive(:require_login).and_return(true)
+      allow(@bot).to receive(:client).and_return(fake_direct_messages(3))
     end
 
-    expect(indexes).to eq([1,2,3])
-  end
+    it "iterates results" do
+     
+      expect(@bot).to receive(:update_since_id_dm).exactly(3).times
 
-  it "checks blocklist" do
-    bot = test_bot
-    expect(bot).to receive(:require_login).and_return(true)
-    allow(bot).to receive(:client).and_return(fake_direct_messages(3))
-    
-    allow(bot).to receive(:on_blocklist?).and_return(true, false, false)
+      indexes = []
+      @bot.direct_messages do |x|
+        indexes << x[:id]
+      end
 
-
-    indexes = []
-    bot.direct_messages do |x|
-      indexes << x[:id]
+      expect(indexes).to eq([1,2,3])
     end
 
-    expect(indexes).to eq([2,3])
-  end
+    it "checks blocklist" do
+      allow(@bot).to receive(:on_blocklist?).and_return(true, false, false)
+      indexes = []
+      @bot.direct_messages do |x|
+        indexes << x[:id]
+      end
+
+      expect(indexes).to eq([2,3])
+    end
+
+    it "checks safelist" do
+      allow(@bot).to receive(:has_safelist?).and_return(true)
+      allow(@bot).to receive(:on_safelist?).and_return(false, true, false)
+
+      indexes = []
+      @bot.direct_messages do |x|
+        indexes << x[:id]
+      end
+
+      expect(indexes).to eq([2])
+    end
 
 
-  it "passes along since_id_dm" do
-    bot = test_bot
-    expect(bot).to receive(:require_login).and_return(true)
-    allow(bot).to receive(:client).and_return(fake_direct_messages(100, 3))    
-    allow(bot).to receive(:since_id_dm).and_return(123)
-    
-    expect(bot.client).to receive(:direct_messages_received).with({:since_id => 123, :count => 200})
+    it "passes along since_id_dm" do
+      allow(@bot).to receive(:since_id_dm).and_return(123)
+      
+      expect(@bot.client).to receive(:direct_messages_received).with({:since_id => 123, :count => 200})
 
-    bot.direct_messages
+      @bot.direct_messages
+    end
   end
 end
