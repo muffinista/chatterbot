@@ -20,14 +20,7 @@ Gem::Specification.new do |s|
   s.require_paths = ["lib"]
   s.licenses = ["WTFPL"]
 
-  if RUBY_VERSION < "1.9" || RUBY_VERSION == "1.9.2"
-    s.add_dependency "activesupport", "~> 3.0.11"
-    s.add_development_dependency(%q<redcarpet>, ["2.3.0"])
-    s.add_development_dependency(%q<shoulda-matchers>, ["1.0.0"])
-  else
-    s.add_development_dependency(%q<redcarpet>, [">= 0"])
-  end
-
+  s.add_development_dependency(%q<redcarpet>, [">= 0"])
   s.add_runtime_dependency(%q<oauth>, [">= 0.4.7"])
   s.add_runtime_dependency(%q<twitter>, ["5.8.0"])
   s.add_runtime_dependency(%q<launchy>, [">= 2.4.2"])
