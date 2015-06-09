@@ -41,7 +41,7 @@ describe "Chatterbot::Client" do
       bot = test_bot
 
       allow(bot).to receive(:client).and_return(fake_search(100, 1))
-      expect(bot.client).to receive(:search).with("a")
+      expect(bot.client).to receive(:search).with("a", anything)
       bot.reset_since_id
 
       expect(bot.config[:since_id]).to eq(100)

@@ -1,12 +1,13 @@
 module Chatterbot
   require 'yaml/store'
+
   class ConfigManager
     READ_ONLY_VARIABLES = [:consumer_key, :consumer_secret, :access_token, :access_token_secret, :log_dest]
     attr_accessor :no_update
 
     def initialize(dest, read_only={}, no_update=false)
       @read_only = read_only
-      @store = YAML::Store.new(dest)
+      @store = YAML::Store.new(dest, true)
       @no_update = no_update
     end
    

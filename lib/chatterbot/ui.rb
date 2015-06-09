@@ -8,6 +8,7 @@ module Chatterbot
     API_SIGNUP_URL = "https://twitter.com/apps/new"
 
     
+    #:nocov:
     def red(str)
       puts str.colorize(:red)
     end
@@ -16,6 +17,7 @@ module Chatterbot
       puts str.colorize(:green)
     end
 
+    # print out a deprecation notice
     def deprecated(msg, src)
       red(msg)
       green("Called from " + src)
@@ -25,7 +27,6 @@ module Chatterbot
     # print out a message about getting a PIN from twitter, then output
     # the URL the user needs to visit to authorize
     #
-    #:nocov:
     def get_oauth_verifier
       green "****************************************"
       green "****************************************"

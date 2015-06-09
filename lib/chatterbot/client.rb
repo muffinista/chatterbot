@@ -43,7 +43,9 @@ module Chatterbot
     #
     def reset_since_id
       config[:since_id] = 1
-      result = client.search("a")
+      # do a search of recent tweets with the letter 'a' in them to
+      # get a rough max tweet id
+      result = client.search("a", since:Time.now - 10).max_by(&:id)
       update_since_id(result)
     end
 
