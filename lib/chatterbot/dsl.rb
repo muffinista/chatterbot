@@ -331,13 +331,15 @@ module Chatterbot
     # set the consumer secret
     # @param s [String] the consumer secret
     def consumer_secret(s)
+      bot.deprecated "Setting consumer_secret outside of your config file is deprecated!", Kernel.caller.first
       bot.config[:consumer_secret] = s
     end
-
+    
     #
     # set the consumer key
     # @param k [String] the consumer key
     def consumer_key(k)
+      bot.deprecated "Setting consumer_key outside of your config file is deprecated!",  Kernel.caller.first
       bot.config[:consumer_key] = k
     end
 
@@ -345,14 +347,16 @@ module Chatterbot
     # set the secret
     # @param s [String] the secret
     def secret(s)
-      bot.config[:secret] = s
+      bot.deprecated "Setting access_token_secret outside of your config file is deprecated!", Kernel.caller.first
+      bot.config[:access_token_secret] = s
     end
 
     #
     # set the token
     # @param s [String] the token
     def token(s)
-      bot.config[:token] = s
+      bot.deprecated "Setting access_token outside of your config file is deprecated!", Kernel.caller.first
+      bot.config[:access_token] = s
     end
 
     #

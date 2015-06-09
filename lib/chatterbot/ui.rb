@@ -15,6 +15,11 @@ module Chatterbot
     def green(str)
       puts str.colorize(:green)
     end
+
+    def deprecated(msg, src)
+      red(msg)
+      green("Called from " + src)
+    end
     
     #
     # print out a message about getting a PIN from twitter, then output

@@ -212,10 +212,21 @@ describe "Chatterbot::DSL" do
     end
     
     context "setters" do
-      [:consumer_secret, :consumer_key, :token, :secret].each do |k|
-        it "should be able to set #{k}" do
-          send(k, "foo")
-          expect(@bot.config[k]).to eq("foo")
+      before(:each) do
+        allow(@bot).to receive(:deprecated)
+      end
+      [
+        {:consumer_secret => :consumer_secret},
+        {:consumer_key => :consumer_key},
+        {:token => :access_token},
+        {:secret => :access_token_secret}
+      ].each do |k|
+        key = k.keys.first
+        value = k[key]
+
+        it "should be able to set #{key}" do
+          send(key, "foo")
+          expect(@bot.config[value]).to eq("foo")
         end
       end
     end
