@@ -21,7 +21,9 @@ module Chatterbot
           h.call(object)
         end
       when Twitter::DirectMessage
-        if (h = @handlers[:direct_messages])
+        if object.sender == authenticated_user
+          debug "skipping DM #{object} because it's from me"
+        elsif (h = @handlers[:direct_messages])
           @current_tweet = object
           update_since_id_dm(object)
           h.call(object)

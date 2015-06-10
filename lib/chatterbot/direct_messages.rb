@@ -1,9 +1,22 @@
 module Chatterbot
-
   #
   # handle Twitter DMs
   module DirectMessages
-    # internal search code
+    #
+    # send a direct message
+    #
+    def direct_message(txt, user=nil)
+      return unless require_login
+
+      if user.nil?
+        user = current_user
+      end
+      client.create_direct_message(user, txt)
+    end
+
+    #
+    # check direct messages for the bot
+    #
     def direct_messages(opts = {}, &block)
       return unless require_login
       debug "check for DMs since #{since_id_dm}"

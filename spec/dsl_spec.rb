@@ -191,6 +191,19 @@ describe "Chatterbot::DSL" do
       reply "hello sailor!", { :source => "source "}
     end
 
+    describe "#direct_message" do
+      it "passes along to bot object" do
+        expect(@bot).to receive(:direct_message).with("hello sailor!", nil)
+        direct_message "hello sailor!"
+      end
+
+      it "passes along to bot object with user, if specified" do
+        user = fake_user("DM user")
+        expect(@bot).to receive(:direct_message).with("hello sailor!", user)
+        direct_message "hello sailor!", user
+      end
+    end
+
     it "#profile_text setter passes along to bot object" do
       expect(@bot).to receive(:profile_text).with("hello sailor!")
       profile_text "hello sailor!"

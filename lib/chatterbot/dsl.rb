@@ -114,6 +114,10 @@ module Chatterbot
       bot.reply(txt, source)
     end
 
+    def direct_message(txt, user=nil)
+      bot.direct_message(txt, user)
+    end
+    
     #
     # handle getting/setting the profile text.
     # @param [p] p The new value for the profile. If this isn't passed in, the method will simply return the current value

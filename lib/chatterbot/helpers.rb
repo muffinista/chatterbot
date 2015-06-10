@@ -57,5 +57,14 @@ module Chatterbot
       end
     end
 
+    #
+    # find the user of the current tweet/object we are dealing with
+    #
+    def current_user
+      return nil if @current_tweet.nil?
+      return @current_tweet.sender if @current_tweet.respond_to?(:sender)
+      return @current_tweet.user
+    end
+   
   end
 end
