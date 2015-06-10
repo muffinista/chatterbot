@@ -308,24 +308,12 @@ to ignore tweets with links, you could do something like this:
 
     exclude "http://"
 
-TODO
-====
-
-* document DSL methods
-* document database setup
-* web-based frontend for tracking bot activity
-* opt-out system that adds people to blacklist if they reply to a bot
-  in the right way
-
 Contributing to Chatterbot
 --------------------------
 
-Since this code is based off of actual Twitter bots, it's mostly
-working the way I want it to, and I might prefer to keep it that way.
-But please, if there are bugs or things you would like to improve,
-fork the project and hack away.  I'll pull anything back that makes
-sense if requested.
-
+Pull requests for bug fixes and new features are eagerly accepted.
+Since this code is based off of actual Twitter bots, please try and
+maintain compatability with the existing codebase.
 
 Copyright/License
 -----------------
