@@ -330,8 +330,8 @@ sense if requested.
 Copyright/License
 -----------------
 
-Copyright (c) 2014 Colin Mitchell. Chatterbot is distributed under the
-WTFPL licence -- Please see LICENSE.txt for further details.
+Copyright (c) 2015 Colin Mitchell. Chatterbot is distributed under the
+MIT licence -- Please see LICENSE.txt for further details.
 
 http://muffinlabs.com
 
