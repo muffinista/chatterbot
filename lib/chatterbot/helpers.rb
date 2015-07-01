@@ -65,6 +65,5 @@ module Chatterbot
       return @current_tweet.sender if @current_tweet.respond_to?(:sender)
       return @current_tweet.user
     end
-   
   end
 end

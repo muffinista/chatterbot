@@ -94,7 +94,7 @@ module Chatterbot
     
     def register_handler(method, opts = nil, &block)
       if STREAMING_ONLY_HANDLERS.include?(method)
-        puts "Forcing usage of Streaming API to support #{method} usage"
+        puts "Forcing usage of Streaming API to support #{method} calls"
         self.streaming = true
       end
 
