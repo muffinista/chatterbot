@@ -27,6 +27,7 @@ module Chatterbot
   #
   # load in our assorted modules
   def self.load
+    require "chatterbot/config_manager"
     require "chatterbot/config"
     require "chatterbot/logging"
     require "chatterbot/blocklist"

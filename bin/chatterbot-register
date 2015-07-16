@@ -7,7 +7,6 @@ require 'optparse'
 
 include Chatterbot::Helpers
 include Chatterbot::Config
-include Chatterbot::DB
 include Chatterbot::Logging
 
 Chatterbot::from_helper = true
