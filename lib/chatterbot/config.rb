@@ -4,9 +4,7 @@ module Chatterbot
   # routines for storing config information for the bot
   module Config  
     attr_accessor :config
-    
-    COMMAND_LINE_VARIABLES = [:debug_mode, :no_update, :verbose]
-      
+
     #
     # the entire config for the bot, loaded from YAML files and the DB if applicable
     def config
@@ -14,6 +12,12 @@ module Chatterbot
     end   
 
     class << self
+      #
+      # simple boolean attribute generator. define the attribute and a
+      # default value and you get a setter and predicate method
+      #
+      # @param [Symbol] key the key for the variable
+      # @param [Boolean] default default value
       def attr_boolean(key, default=false)
 			  class_eval <<-EVAL
           attr_writer :#{key.to_s}
@@ -24,6 +28,12 @@ module Chatterbot
         EVAL
       end
 
+      #
+      # generate a set of methods to manage checks around the
+      # assortment of since_id values we use to track most recent data
+      # retrieve from twitter
+      #
+      # @param [Symbol] key the key for the variable
       def attr_since_id(key = nil)
         attr_name = key.nil? ? "since_id" : ["since_id", key.to_s].join("_")
 			  class_eval <<-EVAL
@@ -53,10 +63,15 @@ module Chatterbot
     attr_since_id :home_timeline
     attr_since_id :reply
     attr_since_id :dm
-    
+
+    #
+    # should we update our config values?
+    # @param [Boolean] val true/false
     def no_update=(val)
       config.no_update = val
     end
+
+    # should we update our config values?
     def no_update?
       config.no_update || false
     end
@@ -102,7 +117,11 @@ module Chatterbot
     def log_dest
       config[:log_dest]
     end
-    
+
+    #
+    # given an array or object, return the highest id we can find
+    # @param [Enumerable] s the array to check
+    #
     def max_id_from(s)
       if ! s.respond_to?(:max)
         if s.respond_to?(:id)

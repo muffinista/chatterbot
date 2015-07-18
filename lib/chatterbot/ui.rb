@@ -4,7 +4,7 @@ module Chatterbot
   # routines for outputting setup instructions
   #
   module UI
-
+    # Where to send users who need to get API keys
     API_SIGNUP_URL = "https://twitter.com/apps/new"
 
     
@@ -13,6 +13,7 @@ module Chatterbot
       puts str.colorize(:red)
     end
 
+    #:nocov:
     def green(str)
       puts str.colorize(:green)
     end

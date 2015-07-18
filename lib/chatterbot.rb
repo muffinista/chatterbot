@@ -50,10 +50,12 @@ module Chatterbot
     require "chatterbot/bot"
   end
 
+  # setter to track if we're being called from a helper script
   def self.from_helper=(x)
     @@from_helper = x
   end
 
+  # are we being called from a helper script?
   def self.from_helper
     @@from_helper
   end

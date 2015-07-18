@@ -4,21 +4,30 @@ module Chatterbot
   # handle Twitter searches
   module Search
 
+    # set a reasonable limit on the maximum number of tweets we will
+    # ever return. otherwise it is possible to exceed Twitter's rate limits
     MAX_SEARCH_TWEETS = 1000
     
     @skip_retweets = true
     
     #
-    # modify a query string to exclude retweets from searches
+    # exclude retweets from searches
     #
     def exclude_retweets
       @skip_retweets = true
     end
 
+    #
+    # include retweets from searches
+    #
     def include_retweets
       @skip_retweets = false
     end
 
+
+    #
+    # check if this is a retweet that we want to skip
+    #
     def skippable_retweet?(t)
       @skip_retweets && t.retweeted_status?
     end

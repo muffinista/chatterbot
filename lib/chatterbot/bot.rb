@@ -23,7 +23,10 @@ module Chatterbot
     include Client
     include Helpers
 
+    # handlers that can use the REST API
     HANDLER_CALLS = [:direct_messages, :home_timeline, :replies, :search]
+
+    # handlers that require the Streaming API
     STREAMING_ONLY_HANDLERS = [:favorited, :followed, :deleted]
     
     #
@@ -52,6 +55,9 @@ module Chatterbot
       @handlers = {}
     end
 
+    #
+    # determine the right API to use and run the bot
+    #
     def run_or_stream
       @run_count += 1
       if streaming?
@@ -60,7 +66,10 @@ module Chatterbot
         run!
       end
     end
-    
+
+    #
+    # run the bot with the Streaming API
+    #
     def stream!
       before_run
       streaming_client.user do |object|
@@ -68,7 +77,10 @@ module Chatterbot
       end
       after_run
     end
-    
+
+    #
+    # run the bot with the REST API
+    #
     def run!
       before_run
 
@@ -84,6 +96,7 @@ module Chatterbot
       after_run
     end
 
+
     def before_run
       @run_count = @run_count + 1
     end
@@ -91,7 +104,7 @@ module Chatterbot
     def after_run
 
     end
-    
+
     def register_handler(method, opts = nil, &block)
       if STREAMING_ONLY_HANDLERS.include?(method)
         puts "Forcing usage of Streaming API to support #{method} calls"

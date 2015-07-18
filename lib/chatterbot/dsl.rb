@@ -14,12 +14,9 @@ module Chatterbot
     #
     # search twitter for the specified terms, then pass any matches to
     # the block.
-    # @param opts [Hash] options. these will be passed directly to
+    # @param args [Hash] options. these will be passed directly to
     # Twitter via the twitter gem. You can see the possible arguments
     # at http://www.rubydoc.info/gems/twitter/Twitter/REST/Search#search-instance_method
-    # There is one extra argument:
-    # @option options [Integer] :limit limit the number of tweets to
-    # return per search
     #
     # @example
     #   search("chatterbot is cool!") do |tweet|
@@ -68,6 +65,7 @@ module Chatterbot
     def direct_messages(&block)
       bot.register_handler(:direct_messages, block)
     end
+    
     
     #
     # handle notifications of bot tweets favorited by other users.
@@ -147,9 +145,15 @@ module Chatterbot
       bot.reply(txt, source)
     end
 
+    #
+    # send a direct message to the specified user
+    # 
+    # @param [String] txt the text you want to tweet
+    # @param [User] user to send the DM to
     def direct_message(txt, user=nil)
       bot.direct_message(txt, user)
     end
+
     
     #
     # handle getting/setting the profile text.
@@ -165,7 +169,7 @@ module Chatterbot
 
     #
     # handle getting/setting the profile website
-    # @param [p] p The new value for the website. If this isn't passed in, the method will simply return the current value
+    # @param [w] w The new value for the website. If this isn't passed in, the method will simply return the current value
     # @return profile website
     def profile_website(w=nil)
       if w.nil?
@@ -300,6 +304,10 @@ module Chatterbot
       end
     end
 
+    #
+    # specify that the bot should only reply to tweets from users that
+    # are followers, basically making interactions opt-in
+    #
     def only_interact_with_followers
       bot.config[:only_interact_with_followers] = true
     end

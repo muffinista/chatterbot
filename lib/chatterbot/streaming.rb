@@ -3,6 +3,12 @@ module Chatterbot
   #
   # simple twitter stream handler
   module Streaming
+
+    #
+    # Take the passed in object and call the appropriate bot method
+    # for it
+    # @param [Class] object a streaming API object
+    #
     def handle_streaming_object(object)
       debug object
 

@@ -1,4 +1,8 @@
 module Chatterbot
+
+  #
+  # methods related to following other users
+  #
   module Followers
     
     #

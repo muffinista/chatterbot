@@ -15,19 +15,29 @@ module Chatterbot
       @client ||= Twitter::REST::Client.new(client_params)
     end
 
+    #
+    # interace to the Streaming API
+    #
     def streaming_client
       @streaming_client ||= Twitter::Streaming::Client.new(client_params)
     end
 
+    #
+    # return the currently authenticated User
+    #
     def authenticated_user
       @user ||= client.user
     end
 
+    #
+    # reset a few tweet_id trackers
+    #
     def reset!
       config[:since_id] = 1
       config[:since_id_reply] = 1
     end
 
+    # reset all since_id counters
     def reset_since_id_counters
       reset!
       reset_since_id
@@ -58,12 +68,17 @@ module Chatterbot
       update_since_id_reply(result)
     end
 
+    #
+    # resets the home_timeline_id_reply for this bot to the last tweet
+    # on the timeline
+    #
     def reset_since_id_home_timeline
       config[:since_id_reply] = 0
       result = client.home_timeline.max_by(&:id)
       update_since_id_home_timeline(result)
     end
 
+    # reset to the last DM received
     def reset_since_id_dm
       config[:since_id_dm] = 0
       result = client.direct_messages_received.max_by(&:id)
@@ -146,6 +161,7 @@ module Chatterbot
       "#{base_url}#{request.path}?#{params}"
     end
 
+    # grab a OAuth request token
     def request_token
       @request_token ||= consumer.get_request_token
     end
@@ -173,7 +189,7 @@ module Chatterbot
       end
 
       if needs_auth_token?
-        pin = get_oauth_verifier #(request_token)
+        pin = get_oauth_verifier
         return false if pin.nil?
 
 

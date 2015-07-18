@@ -1,8 +1,16 @@
 module Chatterbot
   require 'yaml/store'
 
+  #
+  # wrap YAML::Store to maintain config but have a few read-only
+  # variables which we will never set/override
+  #
   class ConfigManager
+
+    # list of vars that shouldn't ever be written
     READ_ONLY_VARIABLES = [:consumer_key, :consumer_secret, :access_token, :access_token_secret, :log_dest]
+
+    # if true, we will never actually update the config file
     attr_accessor :no_update
 
     def initialize(dest, read_only={}, no_update=false)
@@ -11,13 +19,15 @@ module Chatterbot
       @no_update = no_update
     end
 
+    # delete a key from the config
     def delete(key)
       return if @no_update == true
       @store.transaction do
         @store.delete(key)
       end
     end
-    
+
+    # set/update a key
     def []=(key, value)
       return if @no_update == true
       @store.transaction do
@@ -25,6 +35,7 @@ module Chatterbot
       end
     end
 
+    # retrieve a key
     def [](key)
       if READ_ONLY_VARIABLES.include?(key)
         return @read_only[key]

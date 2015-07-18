@@ -3,6 +3,11 @@ module Chatterbot
   #
   # a bunch of helper routines for bots
   module Helpers
+
+    #
+    # Set the username of the bot. This is used when generating
+    # config/skeleton file during registration
+    #
     def botname=(b)
       @botname = b
     end
