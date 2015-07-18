@@ -50,8 +50,7 @@ module Chatterbot
         end
         
         raise $! if $!
-      end  
-
+      end
       @handlers = {}
     end
 

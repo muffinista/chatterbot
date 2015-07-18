@@ -21,22 +21,21 @@ exclude "http://", "https://"
 
 blocklist "mean_user, private_user"
 
-streaming do
-  favorited do |user, tweet|
-    reply "@#{user.screen_name} thanks for the fave!", tweet
-  end
-
-  followed do |user|
-    tweet "@#{user.screen_name} just followed me!"
-    follow user
-  end
-
-  replies do |tweet|
-    favorite tweet
-
-    puts "It's a tweet!"
-    src = tweet.text.gsub(/@echoes_bot/, "#USER#")  
-    reply src, tweet
-  end
+favorited do |user, tweet|
+  reply "@#{user.screen_name} thanks for the fave!", tweet
 end
+
+followed do |user|
+  tweet "@#{user.screen_name} just followed me!"
+  follow user
+end
+
+replies do |tweet|
+  favorite tweet
+
+  puts "It's a tweet!"
+  src = tweet.text.gsub(/@echoes_bot/, "#USER#")  
+  reply src, tweet
+end
+
 

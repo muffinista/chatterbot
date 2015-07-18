@@ -26,7 +26,7 @@ replies do |tweet|
   # replace the incoming username with #USER#, which will be replaced
   # with the handle of the user who tweeted us by the
   # replace_variables helper
-  src = tweet[:text].gsub(/@echoes_bot/, "#USER#")  
+  src = tweet.text.gsub(/@echoes_bot/, "#USER#")  
 
   # send it back!
   reply src, tweet
