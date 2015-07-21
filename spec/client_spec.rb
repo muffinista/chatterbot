@@ -168,6 +168,13 @@ describe "Chatterbot::Client" do
     end
   end
   
+  describe "authenticated_user" do
+    let(:bot) { test_bot }
+    it "should get user from client" do
+      expect(bot.client).to receive(:user).and_return('user')
+      expect(bot.authenticated_user).to eql('user')
+    end
+  end
 
 
 end

@@ -39,4 +39,54 @@ describe "Chatterbot::Bot" do
       @bot.run_or_stream
     end
   end
+
+
+  
+  describe "stream!" do
+    before(:each) do
+      @sc = double(Twitter::Client)
+      expect(@bot).to receive(:streaming_client).and_return(@sc)
+    end
+
+    it "tweaks settings for searches" do
+      @bot.register_handler(:search, "hello") {}
+      expect(@sc).to receive(:filter)
+
+      @bot.stream!
+    end
+
+    it "calls :user for non-searches" do
+      @bot.register_handler(:home_timeline) {}
+      expect(@sc).to receive(:user)
+
+      @bot.stream!
+    end
+  end
+  
+  describe "streamify_search_options" do
+    it "works with string" do
+      expect( @bot.streamify_search_options("hello there") ).
+        to eql({track:"hello there"})
+
+
+      expect( @bot.streamify_search_options("hello there, friend") ).
+        to eql({track:"hello there, friend"})
+    end
+
+    it "works with array" do
+      expect( @bot.streamify_search_options(["hello there"]) ).
+        to eql({track:"hello there"})
+
+      expect( @bot.streamify_search_options(["hello there", "friend"]) ).
+        to eql({track:"hello there, friend"})
+    end
+
+    it "works with hash" do
+      opts = {filter:"hello"}
+      expect( @bot.streamify_search_options(opts) ).
+        to eql(opts)
+
+    end
+  end
+
 end

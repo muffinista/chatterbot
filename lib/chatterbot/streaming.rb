@@ -4,6 +4,12 @@ module Chatterbot
   # simple twitter stream handler
   module Streaming
 
+    def streaming_tweet_handler
+      usable_handlers = [:home_timeline, :search]
+      name, block = @handlers.find { |k, v| usable_handlers.include?(k) }
+      block
+    end
+    
     #
     # Take the passed in object and call the appropriate bot method
     # for it
@@ -16,9 +22,10 @@ module Chatterbot
       when Twitter::Tweet
         if object.user == authenticated_user
           debug "skipping #{object} because it's from me"
-        elsif (h = @handlers[:home_timeline]) && valid_tweet?(object)
+        elsif (h = streaming_tweet_handler) && valid_tweet?(object)
           @current_tweet = object
           update_since_id(object)
+
           h.call(object)
           @current_tweet = nil
         end

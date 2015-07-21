@@ -71,12 +71,38 @@ module Chatterbot
     #
     def stream!
       before_run
-      streaming_client.user do |object|
+
+      #
+      # figure out how we want to call streaming client
+      #
+      if @handlers[:search]
+        method = :filter
+        args = streamify_search_options(@handlers[:search].opts)
+      else
+        method = :user
+        args = nil
+      end
+      
+      streaming_client.send(method, args) do |object|
         handle_streaming_object(object)
       end
       after_run
     end
 
+    #
+    # the REST API and Streaming API have a slightly different format.
+    # tweak our search handler to switch from REST to Streaming
+    #
+    def streamify_search_options(opts)
+      if opts.is_a?(String)
+        { track: opts }
+      elsif opts.is_a?(Array)
+        { track: opts.join(", ") }
+      else
+        opts
+      end
+    end
+    
     #
     # run the bot with the REST API
     #

@@ -14,7 +14,7 @@ Features
 * Handles search queries and replies to your bot
 * Use a simple scripting language, or extend a Bot class if you need it
 * Wraps the Twitter gem so you have access to the entire Twitter API
-* Simple blacklistling system to limit your annoyance of users
+* Simple blocklist system to limit your annoyance of users
 * Avoid your bot making a fool of itself by ignoring tweets with
   certain bad words
 * Basic Streaming API support
@@ -23,7 +23,11 @@ Features
 Using Chatterbot
 ================
 
-Chatterbot has a [documentation website](http://muffinista.github.io/chatterbot/). It's a work-in-progress.
+Chatterbot has a [documentation
+website](http://muffinista.github.io/chatterbot/). It's a
+work-in-progress. You can also read the [gem
+documentation](http://www.rubydoc.info/gems/chatterbot/).
+
 
 
 Make a Twitter account
@@ -85,6 +89,30 @@ Chatterbot uses the the Twitter gem
 (https://github.com/sferik/twitter) to handle the underlying API
 calls. Any calls to the search/reply methods will return
 Twitter::Status objects, which are basically extended hashes.
+
+Streaming
+---------
+
+Chatterbot has some basic support for the Streaming API. If you want
+to do something complicated, you should probably consider using the
+[Twitter gem](https://github.com/sferik/twitter#streaming) directly. 
+
+Basic usage is very straightforward:
+
+    streaming true
+    home_timeline do |tweet|
+      puts "someone i follow tweeted! #{tweet.text}"
+    end
+
+
+You can also run a search:
+
+    streaming true
+    search("pizza") do |tweet|
+      puts "someone is talking about pizza! #{tweet.text}"
+    end
+
+
 
 What Can I Do?
 --------------
@@ -168,11 +196,9 @@ precaution if you want to avoid spreading spam), you could call:
 **followers** -- get a list of your followers. This is an experimental
   feature but should work for most purposes.
 
-For more details, check out dsl.rb in the source code.
-
-Streaming
----------
-
+For more details, check out
+[dsl.rb](https://github.com/muffinista/chatterbot/blob/master/lib/chatterbot/dsl.rb)
+in the source code.
 
 
 

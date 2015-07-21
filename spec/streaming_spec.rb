@@ -5,13 +5,29 @@ describe "Chatterbot::Streaming" do
   let(:user) { fake_user('user', 100) }
   let(:tweet) { fake_tweet(12345) }
 
-  describe "authenticated_user" do
-    it "should get user from client" do
-      expect(bot.client).to receive(:user).and_return('user')
-      expect(bot.authenticated_user).to eql('user')
+
+  describe "streaming_tweet_handler" do
+    before(:each) do
+      bot.skip_run = true
+      allow(bot.client).to receive(:user).and_return(user)
+    end
+
+    it "defaults to home_timeline" do
+      bot.register_handler(:home_timeline) { @result = :home_timeline }
+      bot.register_handler(:search, "foo") { @result = :search }
+
+      bot.handle_streaming_object(tweet)
+      expect(@result).to eql(:home_timeline)
+    end
+
+    it "will return search" do
+      bot.register_handler(:search, "foo") { @result = :search }
+
+      bot.handle_streaming_object(tweet)
+      expect(@result).to eql(:search)
     end
   end
-
+  
   describe "handle_streaming_object" do
     before(:each) {
       bot.skip_run = true
