@@ -19,14 +19,14 @@ puts "Loading echoes_bot.rb"
 ##
 exclude "http://"
 
-blacklist "mean_user, private_user"
+blocklist "mean_user, private_user"
 
 puts "checking for replies to me"
 replies do |tweet|
   # replace the incoming username with #USER#, which will be replaced
   # with the handle of the user who tweeted us by the
   # replace_variables helper
-  src = tweet[:text].gsub(/@echoes_bot/, "#USER#")  
+  src = tweet.text.gsub(/@echoes_bot/, "#USER#")  
 
   # send it back!
   reply src, tweet

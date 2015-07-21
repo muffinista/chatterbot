@@ -1,18 +1,9 @@
 require File.expand_path(File.dirname(__FILE__) + '/spec_helper')
 
-class StreamingHandler
-  attr_accessor :last_object
-end
-
 describe "Chatterbot::Streaming" do
   let(:bot) { test_bot }
   let(:user) { fake_user('user', 100) }
-  let(:handler) { StreamingHandler.new(test_bot) }
   let(:tweet) { fake_tweet(12345) }
-
-  def apply_to_handler(&block)
-    handler.apply block
-  end
 
   describe "authenticated_user" do
     it "should get user from client" do
@@ -21,46 +12,43 @@ describe "Chatterbot::Streaming" do
     end
   end
 
-  describe "do_streaming" do
-
-  end
-
   describe "handle_streaming_object" do
     before(:each) {
+      bot.skip_run = true
       allow(bot.client).to receive(:user).and_return(user)
     }
 
     describe "Twitter::Tweet" do
       it "works if no handler" do
-        bot.handle_streaming_object(tweet, handler)
+        bot.handle_streaming_object(tweet)
       end
 
       context "with handler" do
         before(:each) do
-          apply_to_handler { replies { |t| @last_object = t } }
+          bot.register_handler(:home_timeline) { |t| @last_object = t }
         end
 
         it "ignores tweets from authenticated user" do
           expect(tweet).to receive(:user).and_return(user)
-          bot.handle_streaming_object(tweet, handler)
-          expect(handler.last_object).to be_nil
+          bot.handle_streaming_object(tweet)
+          expect(@last_object).to be_nil
         end
         
         it "passes to handler" do
-          bot.handle_streaming_object(tweet, handler)
-          expect(handler.last_object).to eql(tweet)
+          bot.handle_streaming_object(tweet)
+          expect(@last_object).to eql(tweet)
         end
 
-        it "ignores tweets from blacklist" do
-          bot.blacklist = ['chatterbot']
-          bot.handle_streaming_object(tweet, handler)
-          expect(handler.last_object).to be_nil
+        it "ignores tweets from blocklist" do
+          bot.blocklist = ['chatterbot']
+          bot.handle_streaming_object(tweet)
+          expect(@last_object).to be_nil
         end
 
         it "ignores tweets if skip_me is true" do
           bot.exclude = ['tweet']
-          bot.handle_streaming_object(tweet, handler)
-          expect(handler.last_object).to be_nil         
+          bot.handle_streaming_object(tweet)
+          expect(@last_object).to be_nil         
         end
       end
     end
@@ -68,28 +56,28 @@ describe "Chatterbot::Streaming" do
     describe "Twitter::Streaming::DeletedTweet" do
       it "works if no handler" do
         obj = Twitter::Streaming::DeletedTweet.new(:id => 1)
-        bot.handle_streaming_object(obj, handler)
+        bot.handle_streaming_object(obj)
       end
 
       it "passes to handler" do
-        apply_to_handler { delete { |t| @last_object = t } }
+        bot.register_handler(:deleted) { |t| @last_object = t }
         obj = Twitter::Streaming::DeletedTweet.new(:id => 1)
-        bot.handle_streaming_object(obj, handler)
-        expect(handler.last_object).to eql(obj)
+        bot.handle_streaming_object(obj)
+        expect(@last_object).to eql(obj)
       end
     end
 
     describe "Twitter::DirectMessage" do
       it "works if no handler" do
         obj = Twitter::DirectMessage.new(:id => 1)
-        bot.handle_streaming_object(obj, handler)
+        bot.handle_streaming_object(obj)
       end
 
       it "passes to handler" do
-        apply_to_handler { direct_message { |t| @last_object = t } }
+        bot.register_handler(:direct_messages) { |t| @last_object = t }
         obj = Twitter::DirectMessage.new(:id => 1)
-        bot.handle_streaming_object(obj, handler)
-        expect(handler.last_object).to eql(obj)
+        bot.handle_streaming_object(obj)
+        expect(@last_object).to eql(obj)
       end
     end
 
@@ -100,9 +88,10 @@ describe "Chatterbot::Streaming" do
                                                :source => {:id => user.id, :name => 'name', :screen_name => 'name'},
                                                :target => {:id => user.id, :name => 'name', :screen_name => 'name'})
 
-        apply_to_handler { followed { |t| @last_object = t } }
-        bot.handle_streaming_object(event, handler)
-        expect(handler.last_object).to be_nil
+        bot.register_handler(:followed) { |t| @last_object = t }
+
+        bot.handle_streaming_object(event)
+        expect(@last_object).to be_nil
       end
 
       describe "follow" do
@@ -115,15 +104,15 @@ describe "Chatterbot::Streaming" do
         end
 
         it "works if no handler" do
-          bot.handle_streaming_object(@event, handler)
-          expect(handler.last_object).to be_nil
+          bot.handle_streaming_object(@event)
+          expect(@last_object).to be_nil
         end
 
         it "passes to handler" do
-          apply_to_handler { followed { |t| @last_object = t } }
-          bot.handle_streaming_object(@event, handler)
-          expect(handler.last_object.class).to be(Twitter::User)
-          expect(handler.last_object.id).to be(12345)
+          bot.register_handler(:followed) { |t| @last_object = t }
+          bot.handle_streaming_object(@event)
+          expect(@last_object.class).to be(Twitter::User)
+          expect(@last_object.id).to be(12345)
         end
       end
 
@@ -142,15 +131,15 @@ describe "Chatterbot::Streaming" do
         end
 
         it "works if no handler" do
-          bot.handle_streaming_object(@event, handler)
-          expect(handler.last_object).to be_nil
+          bot.handle_streaming_object(@event)
+          expect(@last_object).to be_nil
          end
 
         it "passes to handler" do
-          apply_to_handler { favorited { |_, t| @last_object = t } }
-          bot.handle_streaming_object(@event, handler)
-          expect(handler.last_object.class).to be(Twitter::Tweet)
-          expect(handler.last_object.text).to eq("I am a tweet!")
+          bot.register_handler(:favorited) { |_, t| @last_object = t }
+          bot.handle_streaming_object(@event)
+          expect(@last_object.class).to be(Twitter::Tweet)
+          expect(@last_object.text).to eq("I am a tweet!")
         end
       end
     end
@@ -158,14 +147,7 @@ describe "Chatterbot::Streaming" do
     describe "Twitter::Streaming::FriendList" do
       it "works if no handler" do
         obj = Twitter::Streaming::FriendList.new
-        bot.handle_streaming_object(obj, handler)
-      end
-
-      it "passes to handler" do
-        apply_to_handler { friends { |t| @last_object = t } }
-        obj = Twitter::Streaming::FriendList.new
-        bot.handle_streaming_object(obj, handler)
-        expect(handler.last_object).to eql(obj)
+        bot.handle_streaming_object(obj)
       end
     end
   end

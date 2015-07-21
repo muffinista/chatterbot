@@ -22,8 +22,12 @@ describe "Chatterbot::Search" do
     bot = test_bot
     
     allow(bot).to receive(:client).and_return(fake_search(100, 1))
-    expect(bot.client).to receive(:search).once.ordered.with("foo", {:result_type=>"recent"})
-    expect(bot.client).to receive(:search).once.ordered.with("bar", {:result_type=>"recent"})
+    expect(bot.client).to receive(:search).once.ordered.
+                           with("foo OR bar", {
+                                  :result_type=>"recent",
+                                  :since_id => 1,
+                                  :since_id_reply => 1
+                                })
 
     bot.search(["foo", "bar"])
   end
@@ -32,7 +36,13 @@ describe "Chatterbot::Search" do
     bot = test_bot
 
     allow(bot).to receive(:client).and_return(fake_search(100, 1))
-    expect(bot.client).to receive(:search).with("foo", {:lang => "en", :result_type=>"recent"})
+    expect(bot.client).to receive(:search).
+                           with("foo", {
+                                  :lang => "en",
+                                  :result_type=>"recent",
+                                  :since_id => 1,
+                                  :since_id_reply => 1
+                                })
 
     bot.search("foo", :lang => "en")
   end
@@ -41,7 +51,12 @@ describe "Chatterbot::Search" do
     bot = test_bot
 
     allow(bot).to receive(:client).and_return(fake_search(100, 1))
-    expect(bot.client).to receive(:search).with("foo", {:result_type=>"recent"})
+    expect(bot.client).to receive(:search).
+                           with("foo", {
+                                  :result_type=>"recent",
+                                  :since_id => 1,
+                                  :since_id_reply => 1
+                                })
 
     bot.search("foo")
   end
@@ -78,11 +93,11 @@ describe "Chatterbot::Search" do
     expect(indexes).to eq([100, 99, 98])
   end
 
-  it "checks blacklist" do
+  it "checks blocklist" do
     bot = test_bot
     allow(bot).to receive(:client).and_return(fake_search(100, 3))
     
-    allow(bot).to receive(:on_blacklist?).and_return(true, false)
+    allow(bot).to receive(:on_blocklist?).and_return(true, false)
     
     indexes = []
     bot.search("foo") do |x|
@@ -92,4 +107,48 @@ describe "Chatterbot::Search" do
     expect(indexes).to eq([99, 98])
   end
 
+
+  it "checks safelist" do
+    bot = test_bot
+    allow(bot).to receive(:client).and_return(fake_search(100, 3))
+    allow(bot).to receive(:has_safelist?).and_return(true)
+    allow(bot).to receive(:on_safelist?).and_return(true, false, false)
+
+    indexes = []
+    bot.search("foo") do |x|
+      indexes << x.attrs[:index]
+    end
+
+    expect(indexes).to eq([100])
+  end
+
+  
+  it "skips retweets" do
+    bot = test_bot
+    bot.exclude_retweets
+    allow(bot).to receive(:client).and_return(fake_search(100, 3))
+    allow_any_instance_of(Twitter::Tweet).to receive(:retweeted_status?) do |t|
+      (t.id % 2) == 0
+    end
+    
+    indexes = []
+    bot.search("foo") do |x|
+      indexes << x.attrs[:index]
+    end
+
+    expect(indexes).to eq([99])
+  end
+
+  it "includes retweets" do
+    bot = test_bot
+    bot.include_retweets
+    allow(bot).to receive(:client).and_return(fake_search(100, 3))
+    indexes = []
+    bot.search("foo") do |x|
+      indexes << x.attrs[:index]
+    end
+
+    expect(indexes).to eq([100, 99, 98])
+  end
+  
 end

@@ -1,16 +1,16 @@
 require File.expand_path(File.dirname(__FILE__) + '/spec_helper')
 
 describe "Chatterbot::Helpers" do
-  it "#tweet_user works with [:from_user]" do
+  it "#tweet_user works with Tweet" do
     bot = Chatterbot::Bot.new
-    expect(bot.tweet_user({:from_user => "foo"})).to eq("@foo")
-    expect(bot.tweet_user({:from_user => "@foo"})).to eq("@foo")    
+    t = Twitter::Tweet.new(:id => 1, :user => {:id => 1, :screen_name => "skippy"})
+    expect(bot.tweet_user(t)).to eq("@skippy")
   end
 
-  it "#tweet_user works with [:user][:screen_name]" do
+  it "#tweet_user works with User" do
     bot = Chatterbot::Bot.new
-    expect(bot.tweet_user({:user => {:screen_name => "foo"}})).to eq("@foo")
-    expect(bot.tweet_user({:user => {:screen_name => "@foo"}})).to eq("@foo")    
+    u = Twitter::User.new({:id => 1, :name => "skippy"})
+    expect(bot.tweet_user(u)).to eq("@skippy")
   end
    
   it "#tweet_user works with string" do
@@ -37,10 +37,6 @@ describe "Chatterbot::Helpers" do
       u = Twitter::User.new(:id => 123, :name => "x")
       expect(@bot.from_user(fake_user("x"))).to eq("x")
     end
-    
-    it "should accept :screen_name" do
-      expect(@bot.from_user(:user => {:screen_name => "x"})).to eq("x")
-    end
   end
   
   describe "#botname" do    
@@ -61,7 +57,7 @@ describe "Chatterbot::Helpers" do
     end
 
     it "calls botname for non-inherited bots" do
-      expect(File).to receive(:basename).and_return("bot")
+      allow(File).to receive(:basename).and_return("bot")
       expect(@bot.botname).to eq("bot")
     end
 

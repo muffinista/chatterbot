@@ -14,20 +14,17 @@ module Chatterbot
     #
     # search twitter for the specified terms, then pass any matches to
     # the block.
-    # @param opts [Hash] options. these will be passed directly to
+    # @param args [Hash] options. these will be passed directly to
     # Twitter via the twitter gem. You can see the possible arguments
     # at http://www.rubydoc.info/gems/twitter/Twitter/REST/Search#search-instance_method
-    # There is one extra argument:
-    # @option options [Integer] :limit limit the number of tweets to
-    # return per search
-
+    #
     # @example
     #   search("chatterbot is cool!") do |tweet|
     #     puts tweet.text # this is the actual tweeted text
     #     reply "I agree!", tweet
     #   end
-    def search(query, opts = {}, &block)
-      bot.search(query, opts, &block)
+    def search(*args, &block)
+      bot.register_handler(:search, args, &block)
     end
 
     #
@@ -39,8 +36,8 @@ module Chatterbot
     #     puts tweet.text # this is the actual tweeted text
     #     favorite tweet # i like to fave tweets
     #   end
-    def home_timeline(opts = {}, &block)
-      bot.home_timeline(opts, &block)
+    def home_timeline(&block)
+      bot.register_handler(:home_timeline, block)
     end
 
     #
@@ -53,23 +50,64 @@ module Chatterbot
     #     reply "Thanks for the mention!", tweet
     #   end
     def replies(&block)
-      bot.replies(&block)
+      bot.register_handler(:replies, block)
     end
 
-    def streaming(opts = {}, &block)
-      params = {
-        :endpoint => :user
-      }.merge(opts)
-
-      h = StreamingHandler.new(bot, params)
-      h.apply block
-
-      bot.do_streaming(h)
+    #
+    # handle direct messages sent to the bot. Each time this is called, chatterbot
+    # will pass any DMs since the last call to the specified block
+    #
+    # @example
+    #   direct_messages do |dm|
+    #     puts dm.text # this is the actual tweeted text
+    #     direct_message "Thanks for the mention!", dm.sender
+    #   end
+    def direct_messages(&block)
+      bot.register_handler(:direct_messages, block)
     end
     
-    def streaming_tweets(opts={}, &block)
-      bot.streaming_tweets(opts, &block)
+    
+    #
+    # handle notifications of bot tweets favorited by other users.
+    # Using this block will require usage of the Streaming API.
+    #
+    # @example
+    #   favorited do |tweet|
+    #     puts tweet.text # this is the actual tweeted text
+    #     reply "@#{user.screen_name} thanks for the fave!", tweet
+    #   end
+    def favorited(&block)
+      bot.register_handler(:favorited, block)
     end
+  
+    #
+    # handle notifications that the bot has a new follower.
+    # Using this block will require usage of the Streaming API.
+    #
+    # @example
+    #   followed do |user|
+    #     follow user
+    #   end
+    def followed(&block)
+      bot.register_handler(:followed, block)
+    end
+  
+    #
+    # handle notifications of tweets on the bot's timeline that were deleted.
+    # Using this block will require usage of the Streaming API.
+    def deleted(&block)
+      bot.register_handler(:deleted, block)
+    end
+
+
+    #
+    # enable or disable usage of the Streaming API
+    #
+    def streaming(s=nil)
+      s = true if s.nil?
+      bot.streaming = s
+    end
+    
     
     #
     # send a tweet
@@ -108,6 +146,16 @@ module Chatterbot
     end
 
     #
+    # send a direct message to the specified user
+    # 
+    # @param [String] txt the text you want to tweet
+    # @param [User] user to send the DM to
+    def direct_message(txt, user=nil)
+      bot.direct_message(txt, user)
+    end
+
+    
+    #
     # handle getting/setting the profile text.
     # @param [p] p The new value for the profile. If this isn't passed in, the method will simply return the current value
     # @return profile text
@@ -121,7 +169,7 @@ module Chatterbot
 
     #
     # handle getting/setting the profile website
-    # @param [p] p The new value for the website. If this isn't passed in, the method will simply return the current value
+    # @param [w] w The new value for the website. If this isn't passed in, the method will simply return the current value
     # @return profile website
     def profile_website(w=nil)
       if w.nil?
@@ -138,6 +186,7 @@ module Chatterbot
     def bot
       return @bot unless @bot.nil?
 
+      @bot_command = nil
       
       #
       # parse any command-line options and use them to initialize the bot
@@ -153,26 +202,24 @@ module Chatterbot
       opts.separator "Specific options:"
 
 
-      opts.on('-d', '--db [ARG]', "Specify a DB connection URI")    { |d| ENV["chatterbot_db"] = d }
       opts.on('-c', '--config [ARG]', "Specify a config file to use")    { |c| ENV["chatterbot_config"] = c }
       opts.on('-t', '--test', "Run the bot without actually sending any tweets") { params[:debug_mode] = true }
       opts.on('-v', '--verbose', "verbose output to stdout")    { params[:verbose] = true }
       opts.on('--dry-run', "Run the bot in test mode, and also don't update the database")    { params[:debug_mode] = true ; params[:no_update] = true }
-      opts.on('-s', '--since_id [ARG]', "Check for tweets since tweet id #[ARG]")    { |s| params[:since_id] = s.to_i }
-      opts.on('-m', '--since_id_reply [ARG]', "Check for mentions since tweet id #[ARG]")    { |s| params[:since_id_reply] = s.to_i }
+
       opts.on('-r', '--reset', "Reset your bot to ignore old tweets") {
-        params[:debug_mode] = true
-        params[:reset_since_id] = true
-      }
-      opts.on('--profile [ARG]', "get/set your bot's profile text") { |p| 
-        @handle_profile_text = true
-        @profile_text = p
-      }
-      opts.on('--website [ARG]', "get/set your bot's profile URL") { |u| 
-        @handle_profile_website = true
-        @profile_website = u
+        @bot_command = :reset_since_id_counters
       }
 
+      opts.on('--profile [ARG]', "get/set your bot's profile text") { |p| 
+        @bot_command = :profile_text
+        @bot_command_args = [ p ]
+      }
+
+      opts.on('--website [ARG]', "get/set your bot's profile URL") { |u| 
+        @bot_command = :profile_website
+        @bot_command_args = [ u ]
+      }
       
       opts.on_tail("-h", "--help", "Show this message") do
         puts opts
@@ -183,25 +230,10 @@ module Chatterbot
       #:nocov:
 
       @bot = Chatterbot::Bot.new(params)
-
-      if @handle_profile_text == true
-        if !@profile_text.nil?
-          @bot.profile_text @profile_text
-        else
-          puts @bot.profile_text
-        end
-      end
-
-      if @handle_profile_website == true
-        if !@profile_website.nil?
-          @bot.profile_website @profile_website
-        else
-          puts @bot.profile_website
-        end
-      end
-
-      if @handle_profile_website == true || @handle_profile_text == true
-        exit
+      if @bot_command != nil
+        @bot.skip_run = true
+        result = @bot.send(@bot_command, *@bot_command_args)
+        puts result
       end
 
       @bot
@@ -235,45 +267,49 @@ module Chatterbot
     end
 
     #
-    # specify a bot-specific blacklist of users.  accepts an array, or a
+    # specify a bot-specific blocklist of users.  accepts an array, or a
     # comma-delimited string. when called, any subsequent calls to
     # search or replies will filter out these users.
     #
     # @param [Array, String] args list of usernames
     # @example
-    #   blacklist "mean_user, private_user"
+    #   blocklist "mean_user, private_user"
     #
-    def blacklist(*args)
+    def blocklist(*args)
       list = flatten_list_of_strings(args)
 
       if list.nil? || list.empty?
-        bot.blacklist = []
+        bot.blocklist = []
       else
-        bot.blacklist += list
+        bot.blocklist += list
       end
     end
 
     #
-    # specify a bot-specific whitelist of users.  accepts an array, or a
+    # specify a bot-specific safelist of users.  accepts an array, or a
     # comma-delimited string. when called, any subsequent calls to
     # search or replies will only act upon these users.
     #
     # @param [Array, String] args list of usernames or Twitter::User objects
     # @example
-    #   whitelist "mean_user, private_user"
+    #   safelist "mean_user, private_user"
     #
-    def whitelist(*args)
+    def safelist(*args)
       list = flatten_list_of_strings(args)
 
       if list.nil? || list.empty?
-        bot.whitelist = []
+        bot.safelist = []
       else
-        bot.whitelist += list
+        bot.safelist += list
       end
     end
 
+    #
+    # specify that the bot should only reply to tweets from users that
+    # are followers, basically making interactions opt-in
+    #
     def only_interact_with_followers
-      whitelist followers
+      bot.config[:only_interact_with_followers] = true
     end
     
     #
@@ -299,10 +335,55 @@ module Chatterbot
     # lifted from https://github.com/dariusk/wordfilter/blob/master/lib/badwords.json
     #
     def bad_words
-      ["skank", "wetback", "bitch", "cunt", "dick", "douchebag", "dyke", "fag", "nigger", "tranny", "trannies",
-       "paki", "pussy", "retard", "slut", "titt", "tits", "wop", "whore", "chink", "fatass", "shemale", "daygo",
-       "dego", "dago", "gook", "kike", "kraut", "spic", "twat", "lesbo", "homo", "fatso", "lardass", "jap",
-       "biatch", "tard", "gimp", "gyp", "chinaman", "chinamen", "golliwog", "crip", "raghead" ]     
+      [
+        "biatch",
+        "bitch",
+        "chinaman",
+        "chinamen",
+        "chink",
+        "crip",
+        "cunt",
+        "dago",
+        "daygo",
+        "dego",
+        "dick",
+        "douchebag",
+        "dyke",
+        "fag",
+        "fatass",
+        "fatso",
+        "gash",
+        "gimp",
+        "golliwog",
+        "gook",
+        "gyp",
+        "homo",
+        "hooker",
+        "jap",
+        "kike",
+        "kraut",
+        "lardass",
+        "lesbo",
+        "negro",
+        "nigger",
+        "paki",
+        "pussy",
+        "raghead",
+        "retard",
+        "shemale",
+        "skank",
+        "slut",
+        "spic",
+        "tard",
+        "tits",
+        "titt",
+        "trannies",
+        "tranny",
+        "twat",
+        "wetback",
+        "whore",
+        "wop"
+      ]
     end
     
     #
@@ -338,13 +419,15 @@ module Chatterbot
     # set the consumer secret
     # @param s [String] the consumer secret
     def consumer_secret(s)
+      bot.deprecated "Setting consumer_secret outside of your config file is deprecated!", Kernel.caller.first
       bot.config[:consumer_secret] = s
     end
-
+    
     #
     # set the consumer key
     # @param k [String] the consumer key
     def consumer_key(k)
+      bot.deprecated "Setting consumer_key outside of your config file is deprecated!",  Kernel.caller.first
       bot.config[:consumer_key] = k
     end
 
@@ -352,14 +435,16 @@ module Chatterbot
     # set the secret
     # @param s [String] the secret
     def secret(s)
-      bot.config[:secret] = s
+      bot.deprecated "Setting access_token_secret outside of your config file is deprecated!", Kernel.caller.first
+      bot.config[:access_token_secret] = s
     end
 
     #
     # set the token
     # @param s [String] the token
     def token(s)
-      bot.config[:token] = s
+      bot.deprecated "Setting access_token outside of your config file is deprecated!", Kernel.caller.first
+      bot.config[:access_token] = s
     end
 
     #
@@ -377,15 +462,6 @@ module Chatterbot
       bot.update_config
     end
 
-    #
-    # return the bot's current database connection, if available.
-    # handy if you need to manage data with your bot
-    #
-    def db
-      bot.db
-    end
-
-    
     protected
     
     #

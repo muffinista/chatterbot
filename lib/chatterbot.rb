@@ -4,13 +4,6 @@ require 'twitter'
 require 'launchy'
 require 'colorize'
 
-#
-# Try and load Sequel, but don't freak out if it's not there
-begin
-  require 'sequel'
-rescue Exception
-end
-
 
 #
 # extend Hash class to turn keys into symbols
@@ -34,33 +27,35 @@ module Chatterbot
   #
   # load in our assorted modules
   def self.load
+    require "chatterbot/config_manager"
     require "chatterbot/config"
-    require "chatterbot/db"
     require "chatterbot/logging"
-    require "chatterbot/blacklist"
-    require "chatterbot/whitelist"
+    require "chatterbot/blocklist"
+    require "chatterbot/safelist"
     require "chatterbot/ui"
     require "chatterbot/client"    
     require "chatterbot/search"
+    require "chatterbot/direct_messages"    
     require "chatterbot/tweet"
     require "chatterbot/retweet"
     require "chatterbot/favorite"
     require "chatterbot/profile"
     require "chatterbot/reply"
     require "chatterbot/home_timeline"
-    require "chatterbot/streaming"
-    require "chatterbot/streaming_handler"
     require "chatterbot/followers"
     require "chatterbot/helpers"
     require "chatterbot/utils"
+    require "chatterbot/streaming"
 
     require "chatterbot/bot"
   end
 
+  # setter to track if we're being called from a helper script
   def self.from_helper=(x)
     @@from_helper = x
   end
 
+  # are we being called from a helper script?
   def self.from_helper
     @@from_helper
   end

@@ -18,13 +18,12 @@ Features
 * Avoid your bot making a fool of itself by ignoring tweets with
   certain bad words
 * Basic Streaming API support
-* Optionally log tweets to the database for metrics and tracking purposes
 
 
 Using Chatterbot
 ================
 
-**NEW!!** Chatterbot has a [documentation website](http://muffinista.github.io/chatterbot/). It's a work-in-progress.
+Chatterbot has a [documentation website](http://muffinista.github.io/chatterbot/). It's a work-in-progress.
 
 
 Make a Twitter account
@@ -69,10 +68,13 @@ end
 
 Or you can write a bot using more traditional ruby classes, extend it if needed, and use it like so:
 
-    bot = Chatterbot::Bot.new
-    bot.search("'surely you must be joking'") do |tweet|
-     bot.reply "@#{tweet_user(tweet)} I am serious, and don't call me Shirley!", tweet
+   class MyBot < Chatterbot::Bot
+     def do_stuff
+       search("'surely you must be joking'") do |tweet|
+        reply "@#{tweet_user(tweet)} I am serious, and don't call me Shirley!", tweet
+       end
     end
+  end
 
 Chatterbot can actually generate a template bot file for you, and will
 walk you through process of getting a bot authorized with Twitter.
@@ -91,8 +93,8 @@ Here's a list of the important methods in the Chatterbot DSL:
 
 **search** -- You can use this to perform a search on Twitter:
 
-    search("'surely you must be joking'") do |tweet|
-      reply "@#{tweet_user(tweet)} I am serious, and don't call me Shirley!", tweet
+    search("pizza") do |tweet|
+      tweet "I just read another tweet about pizza"
     end
 
 **replies** -- Use this to check for replies and mentions:
@@ -109,6 +111,16 @@ Note that the string #USER# will be replaced with the username of the person who
       favorite tweet # i like to fave tweets
     end
 
+**direct_messages** -- This will return any DMs for the bot:
+
+    direct_messages do |dm|
+      puts dm.text
+
+      # send a DM back to the user
+      direct_message "Hey, I got your message at #{Time.now.to_s}", dm.sender
+    end
+
+
 **tweet** -- send a Tweet out for this bot:
 
     tweet "I AM A BOT!!!"
@@ -124,6 +136,12 @@ Note that the string #USER# will be replaced with the username of the person who
     retweet(tweet[:id])
   end
 ```
+
+**direct_message** -- send a DM to a user:
+
+    direct_message "I am a bot sending you a direct message", user
+
+(NOTE: you'll need to make sure your bot has permission to send DMs)
 
 **blacklist** -- you can use this to specify a list of users you don't
   want to interact with. If you put the following line at the top of
@@ -152,6 +170,12 @@ precaution if you want to avoid spreading spam), you could call:
 
 For more details, check out dsl.rb in the source code.
 
+Streaming
+---------
+
+
+
+
 Direct Client Access
 --------------------
 
@@ -168,11 +192,6 @@ users who DM you:
 Authorization
 -------------
 
-If you only want to use Chatterbot to search for tweets, it will work
-out of the box without any authorization.  However, if you want to
-reply to tweets, or check for replies to your bot, you will have to
-jump through a few authorization hoops with Twitter.
-
 Before you setup a bot for the first time, you will need to register an
 application with Twitter.  Twitter requires all API communication to be via an
 app which is registered on Twitter. I would set one up and make it
@@ -185,7 +204,7 @@ The helper script `chatterbot-register` will walk you through most of
 this without too much hand-wringing. And, if you write a bot without
 `chatterbot-register`, you'll still be sent through the authorization
 process the first time you run your script.  But if you prefer, here's
-the instructions if you want to do it yourself:
+sthe instructions if you want to do it yourself:
 
 1. [Setup your own app](https://twitter.com/apps/new) on Twitter.
 
@@ -222,6 +241,9 @@ your bot:
 1. Your credentials can be stored as variables in the script itself.
    `chatterbot-register` will do this for you. If your bot is using
    replies or searches, that data will be written to a YAML file.
+   **NOTE** this is a bad practice for scripts that are stored in a
+   source control system such as git, or are publicly available on a
+   site like github.
 2. In a YAML file with the same name as the bot, so if you have
    botname.rb or a Botname class, store your config in botname.yaml
 3. In a global config file at `/etc/chatterbot.yml` -- values stored here
@@ -231,14 +253,6 @@ your bot:
 5. In a `global.yml` file in the same directory as your bot.  This
    gives you the ability to have a global configuration file, but keep
    it with your bots if desired.
-6. In a database.  You can store your configuration in a DB, and then
-   specify the connection string either in one of the global config
-   files by setting `:db_uri: postgres://username:password@host/database`, or on the command-line by using the `--db="db_uri"`
-   configuration option.  Any calls to the database are handled by the
-   Sequel gem, and MySQL and Sqlite should work.  The DB URI should
-   be in the form of `mysql://username:password@host/database` -- see
-   http://sequel.rubyforge.org/rdoc/files/doc/opening_databases_rdoc.html
-   for details.
 
 Running Your Bot
 ----------------
@@ -250,6 +264,9 @@ Run it on the command-line whenever you like. Whee!
 Run it via cron.  Here's an example of running a bot every two minutes
 
     */2 * * * * . ~/.bash_profile; cd /path/to/bot/;  ./bot.rb
+
+
+
 
 Run it as a background process.  Just put the guts of your bot in a loop like this:
 
@@ -265,38 +282,17 @@ loop do
     # do stuff
   end
 
-  # explicitly update our config
-  update_config
-
   sleep 60
 end
 ```
-
-**NOTE:** You need to call `update_config` to update the last tweet your script
-has processed -- if you don't have this call, you will get duplicate
-tweets.
-
-
-Database logging
-----------------
-
-Chatterbot can log tweet activity to the database if desired.  This
-can be handy for tracking what's going on with your bot.  See
-`Chatterbot::Logging` for details on this.
 
 
 Blacklists
 ----------
 
 Not everyone wants to hear from your bot.  To keep annoyances to a
-minimum, Chatterbot has a global blacklist option, as well as
-bot-specific blacklists if desired.  The global blacklist is stored in
-the database, and you can add entries to it by using the
-`chatterbot-blacklist` script included with the gem.
+minimum, Chatterbot has a simple blacklist tool. Using it is as simple as:
 
-You can also specify users to skip as part of the DSL:
-
-    require 'chatterbot'
     blacklist "mean_user, private_user"
 
 You should really respect the wishes of users who don't want to hear
@@ -308,30 +304,18 @@ to ignore tweets with links, you could do something like this:
 
     exclude "http://"
 
-TODO
-====
-
-* document DSL methods
-* document database setup
-* web-based frontend for tracking bot activity
-* opt-out system that adds people to blacklist if they reply to a bot
-  in the right way
-
 Contributing to Chatterbot
 --------------------------
 
-Since this code is based off of actual Twitter bots, it's mostly
-working the way I want it to, and I might prefer to keep it that way.
-But please, if there are bugs or things you would like to improve,
-fork the project and hack away.  I'll pull anything back that makes
-sense if requested.
-
+Pull requests for bug fixes and new features are eagerly accepted.
+Since this code is based off of actual Twitter bots, please try and
+maintain compatability with the existing codebase.
 
 Copyright/License
 -----------------
 
-Copyright (c) 2014 Colin Mitchell. Chatterbot is distributed under the
-WTFPL licence -- Please see LICENSE.txt for further details.
+Copyright (c) 2015 Colin Mitchell. Chatterbot is distributed under the
+MIT licence -- Please see LICENSE.txt for further details.
 
 http://muffinlabs.com
 

@@ -1,17 +1,42 @@
 require File.expand_path(File.dirname(__FILE__) + '/spec_helper')
 
 describe "Chatterbot::Bot" do
-  after(:each) do
-    b = Chatterbot::Bot.new(:reset_since_id => false)
+  before(:each) do
+    @bot = Chatterbot::Bot.new
   end
 
-  describe "reset_bot?" do
-    it "should call reset_since_id and update_config" do
-      expect_any_instance_of(Chatterbot::Bot).to receive(:reset_since_id)
-      expect_any_instance_of(Chatterbot::Bot).to receive(:update_config)
-      allow_any_instance_of(Chatterbot::Bot).to receive(:exit)
-      b = Chatterbot::Bot.new(:reset_since_id => true)
+  describe "Streaming API" do
+    it "should call streaming_client.user" do
+      expect(@bot.streaming_client).to receive(:user)
+      @bot.stream!
+    end
+  end
+
+  describe "REST API" do
+    it "should work" do
+      expect(@bot).to receive(:require_login).and_return(true)
+      expect(@bot).to receive(:client).and_return(fake_home_timeline(3))
+      @bot.register_handler(:home_timeline) {}
+      @bot.run!
+    end
+  end
+
+  describe "run_or_stream" do
+    it "should use streaming if specified" do
+      expect(@bot).to receive(:stream!)
+      @bot.streaming = true
+      @bot.run_or_stream
     end
 
+    it "should use streaming if required by handler" do
+      expect(@bot).to receive(:stream!)
+      @bot.register_handler(:deleted) {}
+      @bot.run_or_stream
+    end
+
+    it "should use REST if specified" do
+      expect(@bot).to receive(:run!)
+      @bot.run_or_stream
+    end
   end
 end

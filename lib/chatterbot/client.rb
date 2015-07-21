@@ -6,32 +6,44 @@ module Chatterbot
   # routines for connecting to Twitter and validating the bot
   #
   module Client
-    attr_accessor :screen_name, :client, :streaming_client, :search_client
+    attr_accessor :screen_name, :client, :streaming_client
 
     #
     # the main interface to the Twitter API
     #
     def client
-      @client ||= Twitter::REST::Client.new(
-                                           :consumer_key => client_params[:consumer_key],
-                                           :consumer_secret => client_params[:consumer_secret],
-                                           :access_token => client_params[:token],
-                                           :access_token_secret => client_params[:secret]
-                                           )
+      @client ||= Twitter::REST::Client.new(client_params)
     end
 
+    #
+    # interace to the Streaming API
+    #
     def streaming_client
-      @streaming_client ||= Twitter::Streaming::Client.new(
-                                                           :consumer_key => client_params[:consumer_key],
-                                                           :consumer_secret => client_params[:consumer_secret],
-                                                           :access_token => client_params[:token],
-                                                           :access_token_secret => client_params[:secret]
-                                                           )
+      @streaming_client ||= Twitter::Streaming::Client.new(client_params)
     end
 
+    #
+    # return the currently authenticated User
+    #
+    def authenticated_user
+      @user ||= client.user
+    end
+
+    #
+    # reset a few tweet_id trackers
+    #
     def reset!
-      config[:since_id] = 0
-      config[:since_id_reply] = 0
+      config[:since_id] = 1
+      config[:since_id_reply] = 1
+    end
+
+    # reset all since_id counters
+    def reset_since_id_counters
+      reset!
+      reset_since_id
+      reset_since_id_reply
+      reset_since_id_home_timeline
+      reset_since_id_dm
     end
     
     #
@@ -40,8 +52,10 @@ module Chatterbot
     # the max_id   
     #
     def reset_since_id
-      config[:tmp_since_id] = 0
-      result = client.search("a")
+      config[:since_id] = 1
+      # do a search of recent tweets with the letter 'a' in them to
+      # get a rough max tweet id
+      result = client.search("a", since:Time.now - 10).max_by(&:id)
       update_since_id(result)
     end
 
@@ -49,11 +63,28 @@ module Chatterbot
     # resets the since_id_reply for this bot to the last mention received
     #
     def reset_since_id_reply
-      config[:tmp_since_id_reply] = 0
+      config[:since_id_reply] = 0
       result = client.mentions_timeline.max_by(&:id)
       update_since_id_reply(result)
     end
-   
+
+    #
+    # resets the home_timeline_id_reply for this bot to the last tweet
+    # on the timeline
+    #
+    def reset_since_id_home_timeline
+      config[:since_id_reply] = 0
+      result = client.home_timeline.max_by(&:id)
+      update_since_id_home_timeline(result)
+    end
+
+    # reset to the last DM received
+    def reset_since_id_dm
+      config[:since_id_dm] = 0
+      result = client.direct_messages_received.max_by(&:id)
+      update_since_id_dm(result)
+    end
+    
 
     #
     # the URL we should use for api calls
@@ -130,6 +161,7 @@ module Chatterbot
       "#{base_url}#{request.path}?#{params}"
     end
 
+    # grab a OAuth request token
     def request_token
       @request_token ||= consumer.get_request_token
     end
@@ -157,7 +189,7 @@ module Chatterbot
       end
 
       if needs_auth_token?
-        pin = get_oauth_verifier #(request_token)
+        pin = get_oauth_verifier
         return false if pin.nil?
 
 

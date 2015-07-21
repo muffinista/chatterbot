@@ -3,7 +3,7 @@ require File.expand_path(File.dirname(__FILE__) + '/spec_helper')
 describe "Chatterbot::DSL" do
   describe "client routines" do
     before(:each) do
-      @bot = double(Chatterbot::Bot, :config => {})
+      @bot = instance_double(Chatterbot::Bot, :config => {})
       @bot.send :require, 'chatterbot/dsl'
 
       allow(Chatterbot::DSL).to receive(:bot).and_return(@bot)
@@ -15,46 +15,44 @@ describe "Chatterbot::DSL" do
       end
     end
 
-    describe "blacklist" do
-      it "#blacklist passes along to bot object" do
-        expect(@bot).to receive(:blacklist=).with(["foo"])
-        blacklist ["foo"]
+    describe "blocklist" do
+      it "#blocklist passes along to bot object" do
+        expect(@bot).to receive(:blocklist=).with(["foo"])
+        blocklist ["foo"]
       end
 
-      it "#blacklist turns single-string arg into an array" do
-        expect(@bot).to receive(:blacklist=).with(["foo"])
-        blacklist "foo"
+      it "#blocklist turns single-string arg into an array" do
+        expect(@bot).to receive(:blocklist=).with(["foo"])
+        blocklist "foo"
       end
 
-      it "#blacklist turns comma-delimited string arg into an array" do
-        expect(@bot).to receive(:blacklist=).with(["foo", "bar"])
-        blacklist "foo, bar"
+      it "#blocklist turns comma-delimited string arg into an array" do
+        expect(@bot).to receive(:blocklist=).with(["foo", "bar"])
+        blocklist "foo, bar"
       end
     end
 
-    describe "whitelist" do
-      it "#whitelist passes along to bot object" do
-        expect(@bot).to receive(:whitelist=).with(["foo"])
-        whitelist ["foo"]
+    describe "safelist" do
+      it "#safelist passes along to bot object" do
+        expect(@bot).to receive(:safelist=).with(["foo"])
+        safelist ["foo"]
       end
 
-      it "#whitelist turns single-string arg into an array" do
-        expect(@bot).to receive(:whitelist=).with(["foo"])
-        whitelist "foo"
+      it "#safelist turns single-string arg into an array" do
+        expect(@bot).to receive(:safelist=).with(["foo"])
+        safelist "foo"
       end
 
-      it "#whitelist turns comma-delimited string arg into an array" do
-        expect(@bot).to receive(:whitelist=).with(["foo", "bar"])
-        whitelist "foo, bar"
+      it "#safelist turns comma-delimited string arg into an array" do
+        expect(@bot).to receive(:safelist=).with(["foo", "bar"])
+        safelist "foo, bar"
       end
     end
 
     describe "only_interact_with_followers" do
-      it "sets whitelist to be the bot's followers" do
-        f = fake_follower
-        allow(@bot).to receive(:followers).and_return([f])
-        expect(@bot).to receive(:whitelist=).with([f])
+      it "sets flag" do
         only_interact_with_followers
+        expect(@bot.config[:only_interact_with_followers]).to eq(true)
       end
     end
 
@@ -101,20 +99,54 @@ describe "Chatterbot::DSL" do
 
     describe "search" do
       it "passes along to bot object" do
-        expect(@bot).to receive(:search).with("foo", { })
-        search("foo")
+        expect(@bot).to receive(:register_handler).with(:search, ["foo"])
+
+        search("foo") {}
       end
 
       it "passes multiple queries along to bot object" do
-        expect(@bot).to receive(:search).with(["foo","bar"], { })
-        search(["foo","bar"])
+        expect(@bot).to receive(:register_handler).with(:search, [["foo", "bar"]])
+        search(["foo","bar"]) {}
       end
     end
 
+    describe "direct_messages" do
+      it "passes along to bot object" do
+        expect(@bot).to receive(:register_handler).with(:direct_messages, instance_of(Proc))
+
+        direct_messages {}
+      end
+    end
+
+    describe "favorited" do
+      it "passes along to bot object" do
+        expect(@bot).to receive(:register_handler).with(:favorited, instance_of(Proc))
+
+        favorited {}
+      end
+    end
+
+    describe "followed" do
+      it "passes along to bot object" do
+        expect(@bot).to receive(:register_handler).with(:followed, instance_of(Proc))
+
+        followed {}
+      end
+    end
+
+    describe "deleted" do
+      it "passes along to bot object" do
+        expect(@bot).to receive(:register_handler).with(:deleted, instance_of(Proc))
+
+        deleted {}
+      end
+    end
+
+   
     describe "streaming" do
       it "passes along to bot object" do
-        expect(@bot).to receive(:do_streaming)
-        streaming {}
+        expect(@bot).to receive(:streaming=).with(true)
+        streaming
       end
     end
 
@@ -130,18 +162,13 @@ describe "Chatterbot::DSL" do
     end
     
     it "#replies passes along to bot object" do
-      expect(@bot).to receive(:replies)
-      replies
+      expect(@bot).to receive(:register_handler).with(:replies, instance_of(Proc))
+      replies {}
     end
     
     it "#home_timeline passes along to bot object" do
-      expect(@bot).to receive(:home_timeline)
-      home_timeline
-    end
-
-    it "#streaming_tweets passes along to bot object" do
-      expect(@bot).to receive(:streaming_tweets)
-      streaming_tweets
+      expect(@bot).to receive(:register_handler).with(:home_timeline, instance_of(Proc))
+      home_timeline { |x| "foo" }
     end
     
     it "#followers passes along to bot object" do
@@ -162,6 +189,19 @@ describe "Chatterbot::DSL" do
     it "#reply passes along to bot object" do
       expect(@bot).to receive(:reply).with("hello sailor!", { :source => "source "})
       reply "hello sailor!", { :source => "source "}
+    end
+
+    describe "#direct_message" do
+      it "passes along to bot object" do
+        expect(@bot).to receive(:direct_message).with("hello sailor!", nil)
+        direct_message "hello sailor!"
+      end
+
+      it "passes along to bot object with user, if specified" do
+        user = fake_user("DM user")
+        expect(@bot).to receive(:direct_message).with("hello sailor!", user)
+        direct_message "hello sailor!", user
+      end
     end
 
     it "#profile_text setter passes along to bot object" do
@@ -185,10 +225,21 @@ describe "Chatterbot::DSL" do
     end
     
     context "setters" do
-      [:consumer_secret, :consumer_key, :token, :secret].each do |k|
-        it "should be able to set #{k}" do
-          send(k, "foo")
-          expect(@bot.config[k]).to eq("foo")
+      before(:each) do
+        allow(@bot).to receive(:deprecated)
+      end
+      [
+        {:consumer_secret => :consumer_secret},
+        {:consumer_key => :consumer_key},
+        {:token => :access_token},
+        {:secret => :access_token_secret}
+      ].each do |k|
+        key = k.keys.first
+        value = k[key]
+
+        it "should be able to set #{key}" do
+          send(key, "foo")
+          expect(@bot.config[value]).to eq("foo")
         end
       end
     end
@@ -216,15 +267,6 @@ describe "Chatterbot::DSL" do
       it "should pass to bot object" do
         expect(@bot).to receive(:config).and_return({:since_id_reply => 1234})
         expect(since_id_reply).to eq(1234)
-      end
-    end
-
-    describe "db" do
-      it "should pass to bot object" do
-        bot_db = double(Object)
-        expect(@bot).to receive(:db).and_return(bot_db)
-
-        expect(db).to eql(bot_db)
       end
     end
 

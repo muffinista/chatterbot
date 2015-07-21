@@ -19,24 +19,30 @@ puts "Loading echoes_bot.rb using the streaming API"
 
 exclude "http://", "https://"
 
-blacklist "mean_user, private_user"
+blocklist "mean_user, private_user"
 
-streaming do
-  favorited do |user, tweet|
-    reply "@#{user.screen_name} thanks for the fave!", tweet
-  end
+streaming true
 
-  followed do |user|
-    tweet "@#{user.screen_name} just followed me!"
-    follow user
-  end
+favorited do |user, tweet|
+  reply "@#{user.screen_name} thanks for the fave!", tweet
+end
 
-  replies do |tweet|
-    favorite tweet
+followed do |user|
+  tweet "@#{user.screen_name} just followed me!"
+  follow user
+end
 
-    puts "It's a tweet!"
-    src = tweet.text.gsub(/@echoes_bot/, "#USER#")  
-    reply src, tweet
-  end
+replies do |tweet|
+  favorite tweet
+
+  puts "It's a tweet!"
+  src = tweet.text.gsub(/@echoes_bot/, "#USER#")  
+  reply src, tweet
+end
+
+direct_messages do |tweet|
+  puts "well, here i am #{tweet.text}"
+  puts tweet.inspect
+  direct_message "got it", tweet.sender
 end
 

@@ -19,14 +19,19 @@ RSpec.configure do |config|
     # cause any verifying double instantiation for a class that does not
     # exist to raise, protecting against incorrectly spelt names.
     mocks.verify_doubled_constant_names = true
+  end
 
+  config.after(:each) do
+    config_file = File.join(File.dirname($0), "#{File.basename($0, ".*")}.yml")
+    if File.exist?(config_file)
+      File.delete(config_file) rescue nil
+    end
   end
 end
 
 def test_bot
   bot = Chatterbot::Bot.new
   allow(bot).to receive(:load_config).and_return({})
-  allow(bot).to receive(:update_config_at_exit)
   bot.reset!
   bot
 end
@@ -54,6 +59,12 @@ def fake_replies(result_count = 0, id_base = 0)
   c
 end
 
+def fake_direct_messages(result_count = 0, id_base = 0)
+  c = stubbable_client
+  allow(c).to receive_messages(:direct_messages_received => 1.upto(result_count).collect { |i| fake_dm(i, id_base)})
+  c
+end
+
 def fake_home_timeline(result_count = 0, id_base = 0)
   c = stubbable_client
   allow(c).to receive_messages(:home_timeline => 1.upto(result_count).collect { |i| fake_tweet(i, id_base)})
@@ -77,6 +88,19 @@ def fake_tweet(index, id=0)
   }
 
   Twitter::Tweet.new(x)
+end
+
+def fake_dm(index, id=0)
+  id = index if id <= 0
+  x = {
+    :from_user => "chatterbot",
+    :index => index,
+    :id => id,
+    :text => "I am a direct message",
+    :user => { :id => 1, :screen_name => "chatterbot" }
+  }
+
+  Twitter::DirectMessage.new(x)
 end
 
 def fake_follower(index=0)

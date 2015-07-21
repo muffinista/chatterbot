@@ -3,6 +3,11 @@ module Chatterbot
   #
   # a bunch of helper routines for bots
   module Helpers
+
+    #
+    # Set the username of the bot. This is used when generating
+    # config/skeleton file during registration
+    #
     def botname=(b)
       @botname = b
     end
@@ -27,11 +32,9 @@ module Chatterbot
       when Twitter::Tweet
         s.user.screen_name
       when Twitter::User
-        s.screen_name
+        s.name
       when String
         s
-      else
-        s.has_key?(:from_user) ? s[:from_user] : s[:user][:screen_name]
       end
     end
 
@@ -59,5 +62,13 @@ module Chatterbot
       end
     end
 
+    #
+    # find the user of the current tweet/object we are dealing with
+    #
+    def current_user
+      return nil if @current_tweet.nil?
+      return @current_tweet.sender if @current_tweet.respond_to?(:sender)
+      return @current_tweet.user
+    end
   end
 end

@@ -8,7 +8,6 @@ module Chatterbot
     #
     def profile_text(p=nil)
       return if require_login == false
-
       if p.nil?
         client.user.description
       else

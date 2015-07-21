@@ -5,24 +5,21 @@ module Chatterbot
   module HomeTimeline
 
     # handle the bots timeline
-    def home_timeline(opts={}, &block)
+    def home_timeline(*args, &block)
       return unless require_login
 
       debug "check for home_timeline tweets since #{since_id}"
 
       opts = {
-        :since_id => since_id,
+        :since_id => since_id_home_timeline,
         :count => 200
-      }.merge(opts)
-
+      }
       results = client.home_timeline(opts)
 
       @current_tweet = nil
       results.each { |s|
-        update_since_id(s)
-        if has_whitelist? && !on_whitelist?(s)
-          debug "skipping because user not on whitelist"
-        elsif block_given? && !on_blacklist?(s) && !skip_me?(s)
+        update_since_id_home_timeline(s)
+        if block_given? && valid_tweet?(s)
           @current_tweet = s
           yield s         
         end
