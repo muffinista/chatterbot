@@ -88,7 +88,9 @@ That's it!
 Chatterbot uses the the Twitter gem
 (https://github.com/sferik/twitter) to handle the underlying API
 calls. Any calls to the search/reply methods will return
-Twitter::Status objects, which are basically extended hashes.
+Twitter::Status objects, which are basically extended hashes. If you
+find yourself pushing the limits of Chatterbot, it's very possible
+that you should just be using the Twitter gem directly.
 
 Streaming
 ---------
@@ -131,9 +133,13 @@ Here's a list of the important methods in the Chatterbot DSL:
       reply "#USER# Thanks for contacting me!", tweet
     end
 
-Note that the string #USER# will be replaced with the username of the person who sent the original tweet.
+Note that the string #USER# will be replaced with the username of the
+person who sent the original tweet.
 
-**home_timeline** -- This call will return tweets from the bot's home timeline -- this will include tweets from accounts the bot follows, as well as the bot's own tweets:
+**home_timeline** -- This call will return tweets from the bot's home
+  timeline -- this will include tweets from accounts the bot follows,
+  as well as the bot's own tweets:
+  
     home_timeline do |tweet|
       puts tweet.text # this is the actual tweeted text
       favorite tweet # i like to fave tweets
@@ -335,7 +341,9 @@ Contributing to Chatterbot
 
 Pull requests for bug fixes and new features are eagerly accepted.
 Since this code is based off of actual Twitter bots, please try and
-maintain compatability with the existing codebase.
+maintain compatability with the existing codebase. If you are
+comfortable writing a spec for any changed code, please do so. If not,
+I can work with you on that.
 
 Copyright/License
 -----------------
