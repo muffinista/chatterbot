@@ -284,7 +284,9 @@ module Chatterbot
         bot.blocklist += list
       end
     end
+    alias :blacklist :blocklist
 
+    
     #
     # specify a bot-specific safelist of users.  accepts an array, or a
     # comma-delimited string. when called, any subsequent calls to
@@ -303,7 +305,8 @@ module Chatterbot
         bot.safelist += list
       end
     end
-
+    alias :whitelist :safelist
+    
     #
     # specify that the bot should only reply to tweets from users that
     # are followers, basically making interactions opt-in
