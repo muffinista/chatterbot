@@ -46,7 +46,7 @@ module Chatterbot
 
           def update_#{attr_name}(input)
             max = max_id_from(input)
-            config[:#{attr_name}] = [config[:#{attr_name}].to_i, max].max
+            config[:#{attr_name}] = [config[:#{attr_name}].to_i, max.to_i].max
           end
         EVAL
       end  
