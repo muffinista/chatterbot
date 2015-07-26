@@ -112,7 +112,7 @@ module Chatterbot
       HANDLER_CALLS.each { |c|
         if (h = @handlers[c])
           puts "calling #{c} #{h.opts.inspect}"
-          send(c, h.opts) do |obj|
+          send(c, *(h.opts)) do |obj|
             h.call(obj)
           end
         end
