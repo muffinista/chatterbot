@@ -6,6 +6,8 @@ module Chatterbot
   #
   class Handler
     attr_reader :opts
+    attr_reader :last_ran_at
+
     def initialize(opts, &block)
       if block_given?
         @opts = *opts
@@ -20,6 +22,7 @@ module Chatterbot
     # call the block with the specified arguments
     #
     def call(*args)
+      @last_ran_at = Time.now
       @block.call(*args)
     end
   end

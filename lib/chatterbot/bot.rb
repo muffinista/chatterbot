@@ -45,7 +45,7 @@ module Chatterbot
       #
 
       at_exit do
-        if @run_count <= 0 && skip_run? != true
+        if !@handlers.empty? && @run_count <= 0 && skip_run? != true
           run_or_stream
         end
         

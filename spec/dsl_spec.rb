@@ -7,6 +7,7 @@ describe "Chatterbot::DSL" do
       @bot.send :require, 'chatterbot/dsl'
 
       allow(Chatterbot::DSL).to receive(:bot).and_return(@bot)
+      allow(Chatterbot::DSL).to receive(:call_if_immediate)
     end
 
     describe "client" do
@@ -99,8 +100,8 @@ describe "Chatterbot::DSL" do
 
     describe "search" do
       it "passes along to bot object" do
+        allow(@bot).to receive(:run_or_stream)
         expect(@bot).to receive(:register_handler).with(:search, ["foo"])
-
         search("foo") {}
       end
 
@@ -113,7 +114,6 @@ describe "Chatterbot::DSL" do
     describe "direct_messages" do
       it "passes along to bot object" do
         expect(@bot).to receive(:register_handler).with(:direct_messages, instance_of(Proc))
-
         direct_messages {}
       end
     end
