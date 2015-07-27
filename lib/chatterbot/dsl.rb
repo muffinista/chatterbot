@@ -12,7 +12,7 @@ module Chatterbot
     end
 
     def call_if_immediate(method, h)
-      if bot.streaming == false
+      if bot.streaming? == false
         send(method, *(h.opts)) do |obj|
           h.call(obj)
         end
