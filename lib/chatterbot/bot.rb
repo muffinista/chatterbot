@@ -130,15 +130,24 @@ module Chatterbot
 
     end
 
+    def call_api_immediately?
+      streaming?
+    end
+    
     def register_handler(method, opts = nil, &block)
-      if STREAMING_ONLY_HANDLERS.include?(method)
-        puts "Forcing usage of Streaming API to support #{method} calls"
-        self.streaming = true
-      end
-
       # @todo raise error if method already defined
       @handlers[method] = Handler.new(opts, &block)
 
+      if STREAMING_ONLY_HANDLERS.include?(method)
+        puts "Forcing usage of Streaming API to support #{method} calls"
+        self.streaming = true
+      elsif call_api_immediately?
+        h = @handlers[method]
+        send(method, *(h.opts)) do |obj|
+          h.call(obj)
+        end
+      end
+     
     end
   end
 end

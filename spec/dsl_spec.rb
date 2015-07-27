@@ -3,7 +3,7 @@ require File.expand_path(File.dirname(__FILE__) + '/spec_helper')
 describe "Chatterbot::DSL" do
   describe "client routines" do
     before(:each) do
-      @bot = instance_double(Chatterbot::Bot, :config => {}, :streaming? => true)
+      @bot = instance_double(Chatterbot::Bot, :config => {})
       @bot.send :require, 'chatterbot/dsl'
 
       allow(Chatterbot::DSL).to receive(:bot).and_return(@bot)
@@ -146,7 +146,7 @@ describe "Chatterbot::DSL" do
     describe "streaming" do
       it "passes along to bot object" do
         expect(@bot).to receive(:streaming=).with(true)
-        streaming
+        use_streaming
       end
     end
 

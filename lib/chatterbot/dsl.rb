@@ -10,16 +10,6 @@ module Chatterbot
     def client
       bot.client
     end
-
-    def call_if_immediate(method, h)
-      if bot.streaming? == false
-        send(method, *(h.opts)) do |obj|
-          h.call(obj)
-        end
-      end
-
-      h
-    end
     
     #
     # search twitter for the specified terms, then pass any matches to
@@ -34,7 +24,7 @@ module Chatterbot
     #     reply "I agree!", tweet
     #   end
     def search(*args, &block)
-      call_if_immediate :search, bot.register_handler(:search, args, &block)
+      bot.register_handler(:search, args, &block)
     end
 
     #
@@ -47,7 +37,7 @@ module Chatterbot
     #     favorite tweet # i like to fave tweets
     #   end
     def home_timeline(&block)
-      call_if_immediate :home_timeline, bot.register_handler(:home_timeline, block)
+      bot.register_handler(:home_timeline, block)
     end
 
     #
@@ -60,7 +50,7 @@ module Chatterbot
     #     reply "Thanks for the mention!", tweet
     #   end
     def replies(&block)
-      call_if_immediate :replies, bot.register_handler(:replies, block)
+      bot.register_handler(:replies, block)
     end
 
     #
@@ -73,7 +63,7 @@ module Chatterbot
     #     direct_message "Thanks for the mention!", dm.sender
     #   end
     def direct_messages(&block)
-      call_if_immediate :direct_messages, bot.register_handler(:direct_messages, block)
+      bot.register_handler(:direct_messages, block)
     end
     
     
@@ -113,7 +103,7 @@ module Chatterbot
     #
     # enable or disable usage of the Streaming API
     #
-    def streaming(s=nil)
+    def use_streaming(s=nil)
       s = true if s.nil?
       bot.streaming = s
     end
