@@ -15,7 +15,7 @@ describe "Chatterbot::DirectMessages" do
         allow(bot).to receive(:client).and_return(double(Twitter::Client))
         allow(bot).to receive(:debug_mode?).and_return(false)
       end
-    
+
       it "calls create_direct_message" do
         test_str = "test!"
         test_user = fake_user("DM Enthusiast")
@@ -55,7 +55,7 @@ describe "Chatterbot::DirectMessages" do
       results = fake_direct_messages(1, 1000)
 
       allow(bot).to receive(:client).and_return(results)
-      
+
       bot.direct_messages do
       end
 
@@ -69,12 +69,12 @@ describe "Chatterbot::DirectMessages" do
       end
 
       it "iterates results" do
-        
+
         expect(bot).to receive(:update_since_id_dm).exactly(3).times
 
         indexes = []
         bot.direct_messages do |x|
-          indexes << x[:id]
+          indexes << x.id
         end
 
         expect(indexes).to eq([1,2,3])
@@ -84,7 +84,7 @@ describe "Chatterbot::DirectMessages" do
         allow(bot).to receive(:on_blocklist?).and_return(true, false, false)
         indexes = []
         bot.direct_messages do |x|
-          indexes << x[:id]
+          indexes << x.id
         end
 
         expect(indexes).to eq([2,3])
@@ -96,7 +96,7 @@ describe "Chatterbot::DirectMessages" do
 
         indexes = []
         bot.direct_messages do |x|
-          indexes << x[:id]
+          indexes << x.id
         end
 
         expect(indexes).to eq([2])
@@ -105,7 +105,7 @@ describe "Chatterbot::DirectMessages" do
 
       it "passes along since_id_dm" do
         allow(bot).to receive(:since_id_dm).and_return(123)
-        
+
         expect(bot.client).to receive(:direct_messages_received).with({:since_id => 123, :count => 200})
 
         bot.direct_messages
