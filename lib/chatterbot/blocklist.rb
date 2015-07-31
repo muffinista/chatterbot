@@ -6,13 +6,13 @@ module Chatterbot
     attr_accessor :exclude, :blocklist
 
     alias :blacklist :blocklist
-    
+
     # return a list of text strings which we will check for in incoming tweets.
     # If the text is listed, we won't use this tweet
     def exclude
       @exclude || []
     end
-    
+
     # A list of Twitter users that don't want to hear from the bot.
     def blocklist
       @blocklist || []
@@ -20,7 +20,7 @@ module Chatterbot
     def blocklist=(b)
       @blocklist = b
     end
-    
+
     #
     # Based on the text of this tweet, should it be skipped?
     def skip_me?(s)
@@ -42,13 +42,13 @@ module Chatterbot
 
       !skippable_retweet?(object) && ! on_blocklist?(object) && ! skip_me?(object) && interact_with_user?(object)
     end
-    
+
     #
     # Is this tweet from a user on our blocklist?
     def on_blocklist?(s)
       search = if s.is_a?(Twitter::User)
                  s.name
-               elsif s.respond_to?(:user)
+               elsif s.respond_to?(:user) && !s.is_a?(Twitter::NullObject)
                  from_user(s)
                else
                  s
@@ -56,6 +56,6 @@ module Chatterbot
 
       blocklist.any? { |b| search.include?(b.downcase) }
     end
-    
+
   end
 end
