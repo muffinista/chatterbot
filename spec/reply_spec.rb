@@ -13,7 +13,7 @@ describe "Chatterbot::Reply" do
     results = fake_replies(1, 1000)
 
     allow(bot).to receive(:client).and_return(results)
-    
+
     bot.replies do
     end
 
@@ -24,12 +24,12 @@ describe "Chatterbot::Reply" do
     bot = test_bot
     expect(bot).to receive(:require_login).and_return(true)
     allow(bot).to receive(:client).and_return(fake_replies(3))
-    
+
     expect(bot).to receive(:update_since_id_reply).exactly(3).times
 
     indexes = []
     bot.replies do |x|
-      indexes << x[:id]
+      indexes << x.id
     end
 
     expect(indexes).to eq([1,2,3])
@@ -39,13 +39,13 @@ describe "Chatterbot::Reply" do
     bot = test_bot
     expect(bot).to receive(:require_login).and_return(true)
     allow(bot).to receive(:client).and_return(fake_replies(3))
-    
+
     allow(bot).to receive(:on_blocklist?).and_return(true, false, false)
 
 
     indexes = []
     bot.replies do |x|
-      indexes << x[:id]
+      indexes << x.id
     end
 
     expect(indexes).to eq([2,3])
@@ -55,9 +55,9 @@ describe "Chatterbot::Reply" do
   it "passes along since_id_reply" do
     bot = test_bot
     expect(bot).to receive(:require_login).and_return(true)
-    allow(bot).to receive(:client).and_return(fake_replies(100, 3))    
+    allow(bot).to receive(:client).and_return(fake_replies(100, 3))
     allow(bot).to receive(:since_id_reply).and_return(123)
-    
+
     expect(bot.client).to receive(:mentions_timeline).with({:since_id => 123, :count => 200})
 
     bot.replies

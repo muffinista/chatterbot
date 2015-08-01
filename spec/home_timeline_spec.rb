@@ -13,7 +13,7 @@ describe "Chatterbot::HomeTimeline" do
     results = fake_home_timeline(1, 1000)
 
     allow(@bot).to receive(:client).and_return(results)
-    
+
     @bot.home_timeline do
     end
 
@@ -26,24 +26,24 @@ describe "Chatterbot::HomeTimeline" do
       expect(@bot).to receive(:require_login).and_return(true)
       allow(@bot).to receive(:client).and_return(fake_home_timeline(3))
     end
-    
+
     it "iterates results" do
       expect(@bot).to receive(:update_since_id_home_timeline).exactly(3).times
-      
+
       indexes = []
       @bot.home_timeline do |x|
-        indexes << x[:id]
+        indexes << x.id
       end
-      
+
       expect(indexes).to eq([1,2,3])
     end
-    
+
     it "checks blocklist" do
       allow(@bot).to receive(:on_blocklist?).and_return(true, false, false)
-           
+
       indexes = []
       @bot.home_timeline do |x|
-        indexes << x[:id]
+        indexes << x.id
       end
 
       expect(indexes).to eq([2,3])
@@ -52,10 +52,10 @@ describe "Chatterbot::HomeTimeline" do
     it "checks safelist" do
       allow(@bot).to receive(:has_safelist?).and_return(true)
       allow(@bot).to receive(:on_safelist?).and_return(true, false, false)
-      
+
       indexes = []
       @bot.home_timeline do |x|
-        indexes << x[:id]
+        indexes << x.id
       end
 
       expect(indexes).to eq([1])
