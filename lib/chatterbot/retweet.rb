@@ -16,8 +16,12 @@ module Chatterbot
         return
       end
       #:nocov:
-      
-      client.retweet id
+
+      begin
+        client.retweet id
+      rescue StandardError => e
+        puts e.inspect
+      end
     end
   end
 end
