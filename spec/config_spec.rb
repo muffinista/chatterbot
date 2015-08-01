@@ -216,10 +216,20 @@ describe "Chatterbot::Config" do
 
     it "works with SearchResults" do
       s = Twitter::SearchResults.new(
-                                     {:search_metadata => {:max_id => 1000}},
-                                     double(Twitter::Request, :client => nil, :verb => nil, :path => nil, :options => nil)
-                                     )
-
+        double(Twitter::REST::Request,
+               :client => nil,
+               :verb => nil,
+               :path => nil,
+               :options => nil,
+               :perform => {
+                 :search_metadata => {
+                   :max_id => 1000
+                 }
+               }
+              )
+      )
+      
+      
       @bot.config[:tmp_since_id] = 100
       @bot.update_since_id(s)
       expect(@bot.config[:tmp_since_id]).to eq(1000)
