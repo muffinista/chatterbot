@@ -80,7 +80,9 @@ module Chatterbot
         args = streamify_search_options(@handlers[:search].opts)
       else
         method = :user
-        args = nil
+        args = {
+          stall_warnings: true
+        }
       end
       
       streaming_client.send(method, args) do |object|

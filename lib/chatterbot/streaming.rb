@@ -52,6 +52,8 @@ module Chatterbot
         end
       when Twitter::Streaming::FriendList
         debug "got friend list"
+      when Twitter::Streaming::StallWarning
+        debug "***** STALL WARNING *****"
       end
     end
 
