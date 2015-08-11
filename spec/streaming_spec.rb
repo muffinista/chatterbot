@@ -9,6 +9,7 @@ describe "Chatterbot::Streaming" do
   describe "streaming_tweet_handler" do
     before(:each) do
       bot.skip_run = true
+      bot.streaming = true
       allow(bot.client).to receive(:user).and_return(user)
     end
 
@@ -31,6 +32,7 @@ describe "Chatterbot::Streaming" do
   describe "handle_streaming_object" do
     before(:each) {
       bot.skip_run = true
+      bot.streaming = true
       allow(bot.client).to receive(:user).and_return(user)
     }
 

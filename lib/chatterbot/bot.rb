@@ -81,9 +81,10 @@ module Chatterbot
       else
         method = :user
         args = {
-          stall_warnings: true
+          stall_warnings: "true"
         }
       end
+
       
       streaming_client.send(method, args) do |object|
         handle_streaming_object(object)
@@ -133,7 +134,7 @@ module Chatterbot
     end
 
     def call_api_immediately?
-      streaming?
+      !streaming?
     end
     
     def register_handler(method, opts = nil, &block)
@@ -144,8 +145,9 @@ module Chatterbot
         puts "Forcing usage of Streaming API to support #{method} calls"
         self.streaming = true
       elsif call_api_immediately?
+        @run_count += 1
         h = @handlers[method]
-        send(method, *(h.opts)) do |obj|
+        self.send(method, *(h.opts)) do |obj|
           h.call(obj)
         end
       end
