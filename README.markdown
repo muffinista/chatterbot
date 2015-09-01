@@ -71,14 +71,15 @@ end
 ```
 
 Or you can write a bot using more traditional ruby classes, extend it if needed, and use it like so:
-
-   class MyBot < Chatterbot::Bot
+```
+  class MyBot < Chatterbot::Bot
      def do_stuff
        search("'surely you must be joking'") do |tweet|
         reply "@#{tweet_user(tweet)} I am serious, and don't call me Shirley!", tweet
        end
     end
   end
+```
 
 Chatterbot can actually generate a template bot file for you, and will
 walk you through process of getting a bot authorized with Twitter.
