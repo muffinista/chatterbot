@@ -168,7 +168,7 @@ person who sent the original tweet.
 
 ```rb
   search "xyzzy" do |tweet|
-    retweet(tweet[:id])
+    retweet(tweet.id)
   end
 ```
 
@@ -308,7 +308,7 @@ loop do
   search "twitter" do |tweet|
     # here you could do something with a tweet
     # if you want to retweet
-    retweet(tweet[:id])
+    retweet(tweet.id)
   end
 
   replies do |tweet|
