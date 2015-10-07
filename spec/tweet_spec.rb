@@ -41,7 +41,7 @@ describe "Chatterbot::Tweet" do
     it "calls require_login when replying" do
       bot = test_bot
       expect(bot).to receive(:require_login).and_return(false)
-      bot.reply "reply test!", {"id" => 100}
+      bot.reply "reply test!", fake_tweet(100)
     end
 
     it "calls client.update with the right values" do
@@ -53,11 +53,8 @@ describe "Chatterbot::Tweet" do
 
       test_str = "test!"
 
-      s = {
-        :id => 100
-      }
       expect(bot.client).to receive(:update).with(test_str, {:in_reply_to_status_id => 100})
-      bot.reply test_str, s
+      bot.reply test_str, fake_tweet(100, 100)
     end
 
 
@@ -69,7 +66,7 @@ describe "Chatterbot::Tweet" do
       allow(bot).to receive(:debug_mode?).and_return(true)
 
       expect(bot.client).not_to receive(:update)
-      bot.reply "no reply test!", {:id => 100}
+      bot.reply "no reply test!", fake_tweet(100)
     end
   end
 

@@ -22,10 +22,11 @@ module Chatterbot
       #:nocov:
     end
 
+    
     # reply to a tweet
     def reply(txt, source)
       debug txt
-      tweet txt, {:in_reply_to_status_id => source[:id]}, source
+      tweet txt, {:in_reply_to_status_id => source.id}, source
     end
   end
 end
