@@ -66,8 +66,11 @@ unless @bot.screen_name.nil?
 
   puts "Storing config info"
   puts @bot.config.inspect
-  @bot.update_config
-  @bot.config = nil
+
+  config_src = File.join(Dir.getwd, "tmp_bot_name.yml")
+  config_dest = File.join(Dir.getwd, "#{@bot.botname}.yml")
+  File.rename(config_src, config_dest)
+  
   
   if @skeleton
     skel_dest = File.join(Dir.getwd, "#{@bot.botname}.rb")

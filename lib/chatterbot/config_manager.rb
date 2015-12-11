@@ -27,6 +27,12 @@ module Chatterbot
       end
     end
 
+    def to_h
+      @store.transaction do
+        Hash[@store.roots.map { |k| [k, @store[k]] }]
+      end
+    end
+
     # set/update a key
     def []=(key, value)
       return if @no_update == true

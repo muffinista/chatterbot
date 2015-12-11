@@ -143,8 +143,8 @@ describe "Chatterbot::Client" do
       
       @bot.login
 
-      expect(@bot.config[:token]).to eq("access_token")
-      expect(@bot.config[:secret]).to eq("access_secret")     
+      expect(@bot.config[:access_token]).to eq("access_token")
+      expect(@bot.config[:access_token_secret]).to eq("access_secret")     
     end
 
     it "handles errors" do

@@ -13,7 +13,7 @@ module Chatterbot
         path = File.join(Chatterbot.libdir, "..", "templates", "skeleton.txt")
         src = File.read(path)
 
-        opts = bot.config.merge({
+        opts = bot.config.to_h.merge({
           :name => bot.botname,
           :timestamp => Time.now
         })
