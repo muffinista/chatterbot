@@ -43,7 +43,7 @@ module Chatterbot
 
     # retrieve a key
     def [](key)
-      if READ_ONLY_VARIABLES.include?(key)
+      if READ_ONLY_VARIABLES.include?(key) && @read_only[key]
         return @read_only[key]
       end
       @store.transaction do

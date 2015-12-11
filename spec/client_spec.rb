@@ -139,7 +139,6 @@ describe "Chatterbot::Client" do
         and_return(double(:token => "access_token", :secret => "access_secret"))
 
       expect(@bot).to receive(:get_screen_name)
-      expect(@bot).to receive(:update_config)
       
       @bot.login
 
