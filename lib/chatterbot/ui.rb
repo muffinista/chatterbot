@@ -5,7 +5,7 @@ module Chatterbot
   #
   module UI
     # Where to send users who need to get API keys
-    API_SIGNUP_URL = "https://twitter.com/apps/new"
+    API_SIGNUP_URL = "https://apps.twitter.com/app/new"
 
     
     #:nocov:
@@ -52,12 +52,12 @@ module Chatterbot
       # sleep here so that if launchy has any output (which it does
       # sometimes), it doesn't interfere with our input prompt
      
-      sleep(1)
+      sleep(2)
 
       puts "Paste your PIN and hit enter when you have completed authorization.\n\n"
       print "> "
 
-      STDIN.readline.chomp
+      STDIN.readline.chomp.strip
     rescue Interrupt => e
       exit
     end
@@ -81,19 +81,41 @@ module Chatterbot
       STDIN.readline
 
       Launchy.open(API_SIGNUP_URL)
+
       # pause to allow any launchy output
-      sleep(1)
+      sleep(2)
 
       puts "\n\n"
+
+
+      puts "Once you've filled out the app form, click on the 'Keys and Access Tokens' link"
+
       
-      print "\n\nPaste the 'API Key' here: "
+      print "\n\nPaste the 'Consumer Key' here: "
       STDOUT.flush
-      config[:consumer_key] = STDIN.readline.chomp
+      config[:consumer_key] = STDIN.readline.chomp.strip
 
-      print "Paste the 'API Secret' here: "
+      print "Paste the 'Consumer Secret' here: "
       STDOUT.flush
-      config[:consumer_secret] = STDIN.readline.chomp
+      config[:consumer_secret] = STDIN.readline.chomp.strip
 
+      puts "\n\n\n\n"
+
+      puts "Now, you can click the 'Create my access token' button to proceed."
+
+
+      puts "\n\n\n\n"
+
+      print "\n\nPaste the 'Access Token' here: "
+      STDOUT.flush
+      config[:access_token] = STDIN.readline.chomp.strip
+
+
+      print "\n\nPaste the 'Access Token Secret' here: "
+      STDOUT.flush
+      config[:access_token_secret] = STDIN.readline.chomp.strip
+      
+      
       # reset the client so we can re-init with new OAuth credentials
       reset_client
       
