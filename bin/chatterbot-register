@@ -58,6 +58,7 @@ end
 @bot.config.delete(:token)
 @bot.require_login(false)
 
+
 unless @bot.screen_name.nil?
   if @botname == "tmp_bot_name"
     puts "change botname to #{@bot.screen_name}"

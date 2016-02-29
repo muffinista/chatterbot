@@ -93,6 +93,7 @@ module Chatterbot
       config[:consumer_key].nil? || config[:consumer_secret].nil?
     end
 
+    
     #
     # has this script validated with Twitter OAuth?
     def needs_auth_token?

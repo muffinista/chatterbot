@@ -114,10 +114,14 @@ module Chatterbot
       print "\n\nPaste the 'Access Token Secret' here: "
       STDOUT.flush
       config[:access_token_secret] = STDIN.readline.chomp.strip
-      
+
       
       # reset the client so we can re-init with new OAuth credentials
       reset_client
+
+      # at this point we should have a fully validated client, so grab
+      # the screen name
+      @screen_name = client.user.screen_name rescue nil
       
       #
       # capture ctrl-c and exit without a stack trace
