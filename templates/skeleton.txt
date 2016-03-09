@@ -22,6 +22,23 @@ require 'chatterbot/dsl'
 
 
 #
+# These lines here are just to make sure you edit this file before
+# trying to run your bot. You can safely remove them once you've
+# looked through this file.
+#
+puts "========================"
+puts "========================"
+puts "========================"
+puts "\n\n\n"
+
+puts "Hey there! You should open %{name}.rb and take a look before running this script."
+
+puts "\n\n\n"
+exit
+
+
+
+#
 # Placing your security credentials right in a script like this is
 # handy, but potentially dangerous, especially if your code is
 # publicly available on github or somewhere else. However, if it is
@@ -100,19 +117,19 @@ use_streaming
 # Still here? Hopefully it's because you're going to do something cool
 # with the data that doesn't bother other people. Hooray!
 #
-search "chatterbot" do |tweet|
-  # here's the content of a tweet
-  puts tweets.text
-end
+#search "chatterbot" do |tweet|
+#  # here's the content of a tweet
+#  puts tweets.text
+#end
 
 #
 # this block responds to mentions of your bot
 #
-replies do |tweet|
-  # Any time you put the #USER# token in a tweet, Chatterbot will
-  # replace it with the handle of the user you are interacting with
-  reply "Yes #USER#, you are very kind to say that!", tweet
-end
+#replies do |tweet|
+#  # Any time you put the #USER# token in a tweet, Chatterbot will
+#  # replace it with the handle of the user you are interacting with
+#  reply "Yes #USER#, you are very kind to say that!", tweet
+#end
 
 #
 # this block handles incoming Direct Messages. if you want to do
