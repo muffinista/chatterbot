@@ -32,15 +32,8 @@ to do on Twitter.  You can get some ideas of things you can do on the
 [Examples](/examples.html) page.
 
     require 'chatterbot/dsl'
-    search("'surely you must be joking'") do |tweet|
-      reply "@#{tweet_user(tweet)} I am serious, and don't call me Shirley!", tweet
-    end
-
-Or, you can create a bot object yourself, extend it if needed, and use it like so:
-
-    bot = Chatterbot::Bot.new
-    bot.search("'surely you must be joking'") do |tweet|
-     bot.reply "@#{tweet_user(tweet)} I am serious, and don't call me Shirley!", tweet
+    replies do |tweet|
+      reply "@#{tweet_user(tweet)} I agree!", tweet
     end
 
 That's it!

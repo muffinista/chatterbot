@@ -18,6 +18,10 @@ bot to unfollow users who DM you:
 
 Storing Config in the Database
 ------------------------------
+
+**NOTE** this feature doesn't exist in chatterbot v2. If you need it,
+you will need to use chatterbot 1.0.
+
 Sometimes it is preferable to store the authorization credentials for
 your bot in a database. 
 

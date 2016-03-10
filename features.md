@@ -41,11 +41,11 @@ will only return tweets that were sent since the last run of the bot.
   end
 ```
 
-**blacklist** -- you can use this to specify a list of users you don't
+**blocklist** -- you can use this to specify a list of users you don't
   want to interact with. If you put the following line at the top of
   your bot:
   
-    blacklist "user1, user2, user3"
+    blocklist "user1, user2, user3"
     
 None of those users will trigger your bot if they come up in a
 search. However, if a user replies to one of your tweets or mentions

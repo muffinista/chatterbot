@@ -9,6 +9,11 @@ a something called [OAuth](https://dev.twitter.com/oauth) to validate
 requests, but it's a little more complicated than just specifying a
 username/password.
 
+Running `chatterbot-register` will walk you through all of these
+steps, and when you are done, you should have a working bot, but it's
+helpful to know exactly what is going on, so here goes:
+
+
 * Login to Twitter with your bot account
 
 * Go to https://apps.twitter.com/app/new
@@ -16,7 +21,6 @@ username/password.
 * Fill out the form. You need to put a name, description, and Website
   URL, although the URL doesn't need to exist. <img
   src="./images/01-create-application.png" />
-  
 
 * Save the form, and then click on the Permissions tab. You will need
   to specify what level of access is needed for your bot. <img
@@ -25,7 +29,7 @@ username/password.
   access DMs. If your bot isn't actually ever going to post to Twitter
   (for example, if you're just running a search to find interesting
   tweets), you can choose read-only. Otherwise, you should pick
-  read/write, or read/write/DMs. Chatterbot has limited support for
+  read/write, or read/write/DMs. Chatterbot has support for
   handling Direct Messages, but if you can imagine a situation where
   you might want to handle them, you should pick this option.
 
@@ -46,38 +50,25 @@ create access tokens for your bot via Twitter, or you can run the
 creating a template file for your bot, but if you don't want to do
 that, here are the steps for doing this manually:
   
-*  click the 'Keys and Access Tokens' link. You should see this: <img src="./images/04-access-token.png" />
+* click the 'Keys and Access Tokens' link. You should see this: <img src="./images/04-access-token.png" />
 * click the 'Create my access token' link. 
 * It might take a few minutes for Twitter to actually generate the
   token. You can refresh the page a couple times until they are there,
-  then you can copy the keys into your application. There's four keys
-  you will need for your bot, and a couple different ways to save
-  them:
+  then you can copy the keys into your application.
 
-**In a separate YAML config file**. Create a file named botname.yaml
-  -- the botname part must match your bot's username EXACTLY. Put the
-  following contents, pasting the credential values that you just
-  generated:
+
+Your config credentials go into their own YAML config file. Create a
+file named botname.yaml -- the botname part must match your bot's
+username EXACTLY. Put the following contents, pasting the credential
+values that you just generated:
 
 ```
   ---
   :consumer_secret: Consumer Secret (API Secret) GOES HERE
   :consumer_key: Consumer Key (API Key) GOES HERE
-  :token: Access Token GOES HERE
-  :secret: Access Token Secret GOES HERE
+  :access_token: Access Token GOES HERE
+  :access_token_secret: Access Token Secret GOES HERE
 ```
-
-**in the script**. Add some lines to your bot script like this:
-```
-consumer_key 'Consumer Secret (API Secret)'
-consumer_secret 'Consumer Key (API Key)'
-secret 'Access Token Secret'
-token 'Access Token'
-```
-
-**in a database**. If you've setup chatterbot to use a database, you
-  can store your configuration info in the **config** table.
-
 
 **NOTE** At this point, you can remove the phone number from the bot
   account if you like. From your bot's account, click 'Settings' ->

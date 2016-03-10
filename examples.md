@@ -37,7 +37,7 @@ puts "Loading echoes_bot.rb"
 ##
 exclude "http://"
 
-blacklist "mean_user, private_user"
+blocklist "mean_user, private_user"
 
 puts "checking for replies to me"
 replies do |tweet|
@@ -73,13 +73,6 @@ require 'spacejam'
 # this is the script for the twitter bot SpaceJamCheck
 # generated on 2013-11-04 16:24:46 -0500
 #
-
-consumer_key 'key'
-consumer_secret 'secret'
-
-secret 'secret'
-token 'token'
-
 
 check_url = "http://www2.warnerbros.com/spacejam/movie/jam.htm"
 check_string = "<title>Space Jam</title>"
@@ -134,35 +127,31 @@ Streaming Bot
 require 'rubygems'
 require 'chatterbot/dsl'
 
-consumer_secret 'foo'
-secret 'bar'
-token 'biz'
-consumer_key 'bam'
-
-
 puts "Loading echoes_bot.rb using the streaming API"
 
 exclude "http://", "https://"
 
-blacklist "mean_user, private_user"
+blocklist "mean_user, private_user"
 
-streaming do
-  favorited do |user, tweet|
-    reply "@#{user.screen_name} thanks for the fave!", tweet
-  end
+verbose
 
-  followed do |user|
-    tweet "@#{user.screen_name} just followed me!"
-    follow user
-  end
+use_streaming
 
-  replies do |tweet|
-    favorite tweet
+favorited do |user, tweet|
+  reply "@#{user.screen_name} thanks for the fave!", tweet
+end
 
-    puts "It's a tweet!"
-    src = tweet.text.gsub(/@echoes_bot/, "#USER#")  
-    reply src, tweet
-  end
+followed do |user|
+  tweet "@#{user.screen_name} just followed me!"
+  follow user
+end
+
+replies do |tweet|
+  favorite tweet
+
+  puts "It's a tweet!"
+  src = tweet.text.gsub(/@echoes_bot/, "#USER#")  
+  reply src, tweet
 end
 
 ```

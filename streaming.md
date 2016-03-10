@@ -24,75 +24,44 @@ Here's an example bot using the Streaming API:
 require 'rubygems'
 require 'chatterbot/dsl'
 
-consumer_secret 'foo'
-secret 'bar'
-token 'biz'
-consumer_key 'bam'
-
-
 puts "Loading echoes_bot.rb using the streaming API"
 
 exclude "http://", "https://"
 
-blacklist "mean_user, private_user"
+blocklist "mean_user, private_user"
 
-streaming do
-  favorited do |user, tweet|
-    reply "@#{user.screen_name} thanks for the fave!", tweet
-  end
+use_streaming
+favorited do |user, tweet|
+  reply "@#{user.screen_name} thanks for the fave!", tweet
+end
 
-  followed do |user|
-    tweet "@#{user.screen_name} just followed me!"
-    follow user
-  end
+followed do |user|
+  tweet "@#{user.screen_name} just followed me!"
+  follow user
+end
 
-  replies do |tweet|
-    favorite tweet
+replies do |tweet|
+  favorite tweet
 
-    puts "It's a tweet!"
-    src = tweet.text.gsub(/@echoes_bot/, "#USER#")  
-    reply src, tweet
-  end
+  puts "It's a tweet!"
+  src = tweet.text.gsub(/@echoes_bot/, "#USER#")  
+  reply src, tweet
 end
 ```
 
 By default, chatterbot will use the
 [user endpoint](https://dev.twitter.com/streaming/userstreams), which
-returns events for the bot -- mentions, follows, etc. If you want to
-perform a search, or use the sample endpoint, you will need to specify
-that:
-
-
-```
-#
-# sample the twitter stream
-#
-streaming(endpoint:"sample") do
-    sample do |tweet|
-      puts tweet.text
-    end
-end
-```
+returns events for the bot -- mentions, follows, etc. If you specify a
+`search` block in your bot, the filter endpoint will be used instead.
 
 
 ```
 #
 # run a search
 #
-streaming(endpoint:"search") do
-    search("Streaming API") do |tweet|
-      puts tweet.text
-    end
+use_streaming
+search("Streaming API") do |tweet|
+  puts tweet.text
 end
 ```
 
-```
-#
-# find geocoded tweets
-#
-streaming(endpoint: :filter, locations:"-180,-90,180,90") do
-    user do |tweet|
-      puts tweet.text
-    end
-end
-```
