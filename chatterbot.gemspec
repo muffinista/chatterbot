@@ -27,7 +27,7 @@ Gem::Specification.new do |s|
   s.add_runtime_dependency(%q<colorize>, [">= 0.7.3"])
   s.add_development_dependency(%q<yard>, [">= 0"])
   s.add_development_dependency(%q<shoulda>, [">= 0"])
-  s.add_development_dependency(%q<rake>, [">= 0"])
+  s.add_development_dependency(%q<rake>, ["< 11"])
   s.add_development_dependency(%q<rspec>, ["~> 3.0.0"])
   s.add_development_dependency(%q<rspec-mocks>, ["~> 3.0.2"])
   s.add_development_dependency(%q<rdoc>, [">= 0"])
