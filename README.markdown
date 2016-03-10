@@ -1,6 +1,11 @@
 Chatterbot
 ===========
 
+Hey! This is Chatterbot 2.0. There have been some breaking changes
+from older versions of the library, and it doesn't support MySQL
+anymore. If you are looking for the old version, 
+you can try the [1.0 branch](https://github.com/muffinista/chatterbot/tree/1.0.2)
+
 Chatterbot is a Ruby library for making bots on Twitter.  It's
 great for rapid development of bot ideas. It handles all of the basic
 Twitter API features -- searches, replies, tweets, retweets, etc. and has
@@ -51,7 +56,7 @@ A bot using chatterbot can be as simple as this:
 
 ```
 exclude "http://"
-blacklist "mean_user, private_user"
+blocklist "mean_user, private_user"
 
 puts "checking my timeline"
 home_timeline do |tweet|
@@ -102,7 +107,7 @@ to do something complicated, you should probably consider using the
 
 Basic usage is very straightforward:
 
-    streaming true
+    use_streaming true
     home_timeline do |tweet|
       puts "someone i follow tweeted! #{tweet.text}"
     end
@@ -110,7 +115,7 @@ Basic usage is very straightforward:
 
 You can also run a search:
 
-    streaming true
+    use_streaming true
     search("pizza") do |tweet|
       puts "someone is talking about pizza! #{tweet.text}"
     end
@@ -178,11 +183,11 @@ person who sent the original tweet.
 
 (NOTE: you'll need to make sure your bot has permission to send DMs)
 
-**blacklist** -- you can use this to specify a list of users you don't
+**blocklist** -- you can use this to specify a list of users you don't
   want to interact with. If you put the following line at the top of
   your bot:
   
-    blacklist "user1, user2, user3"
+    blocklist "user1, user2, user3"
     
 None of those users will trigger your bot if they come up in a
 search. However, if a user replies to one of your tweets or mentions
@@ -320,16 +325,16 @@ end
 ```
 
 
-Blacklists
+Blocklists
 ----------
 
 Not everyone wants to hear from your bot.  To keep annoyances to a
-minimum, Chatterbot has a simple blacklist tool. Using it is as simple as:
+minimum, Chatterbot has a simple blocklist tool. Using it is as simple as:
 
-    blacklist "mean_user, private_user"
+    blocklist "mean_user, private_user"
 
 You should really respect the wishes of users who don't want to hear
-from your bot, and add them to your blacklist whenever requested.
+from your bot, and add them to your blocklist whenever requested.
 
 There's also an 'exclude' method which can be used to add
 words/phrases you might want to ignore -- for example, if you wanted
@@ -349,7 +354,7 @@ I can work with you on that.
 Copyright/License
 -----------------
 
-Copyright (c) 2015 Colin Mitchell. Chatterbot is distributed under the
+Copyright (c) 2016 Colin Mitchell. Chatterbot is distributed under the
 MIT licence -- Please see LICENSE.txt for further details.
 
 http://muffinlabs.com
