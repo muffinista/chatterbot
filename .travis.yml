@@ -4,5 +4,8 @@ rvm:
   - 2.1.1
   - 2.2.0
   - ruby-head
+before_install:
+  - gem install bundler -v '~> 1.11'
+
 # uncomment this line if your project needs to run something other than `rake`:
 # script: bundle exec rspec spec

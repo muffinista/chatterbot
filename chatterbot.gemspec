@@ -20,8 +20,6 @@ Gem::Specification.new do |s|
   s.require_paths = ["lib"]
   s.licenses = ["MIT"]
 
-  s.add_runtime_dependency(%q<bundler>, ["~> 1.11.2"])
-  
   s.add_development_dependency(%q<redcarpet>, [">= 0"])
   s.add_runtime_dependency(%q<oauth>, ["~> 0.4.7"])
   s.add_runtime_dependency(%q<twitter>, ["~> 5.16.0"])
