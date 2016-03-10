@@ -62,17 +62,25 @@ module Chatterbot
       exit
     end
 
-    #
-    # Ask the user to get an API key from Twitter.
-    def get_api_key
-      green "****************************************"
-      green "****************************************"
-      green "****        API SETUP TIME!         ****"
-      green "****************************************"
-      green "****************************************"      
+    def ask_yes_no(q)
+      prompt = "> "
+      response = ""
 
+
+      while ! ["y", "n"].include?(response)
+        puts "#{q} [Y/N]"
+        print prompt
+        response = $stdin.gets.chomp.downcase[0]
+      end
       
-      puts "Hey, looks like you need to get an API key from Twitter before you can get started."
+      if response == "y"
+        true
+      else
+        false
+      end
+    end
+
+    def send_to_app_creation
       puts "Please hit enter, and I will send you to #{API_SIGNUP_URL} to start the process."
       puts "(If it doesn't work, you can open a browser and paste the URL in manually)"
 
@@ -89,6 +97,38 @@ module Chatterbot
 
 
       puts "Once you've filled out the app form, click on the 'Keys and Access Tokens' link"
+    end
+    
+    #
+    # Ask the user to get an API key from Twitter.
+    def get_api_key
+      
+      green "****************************************"
+      green "****************************************"
+      green "****        API SETUP TIME!         ****"
+      green "****************************************"
+      green "****************************************"      
+
+
+      puts "\n\nWelcome to Chatterbot. Let's walk through the steps to get a bot running.\n\n"
+
+
+      #
+      # At this point, we don't have any API credentials at all for
+      # this bot, but it's possible the user has already setup an app.
+      # Let's ask!
+      #
+      
+      puts "Hey, looks like you need to get an API key from Twitter before you can get started.\n\n"
+      
+      app_already_exists = ask_yes_no("Have you already set up an app with Twitter?")
+
+      if app_already_exists
+        puts "Terrific! Let's get your bot running!\n\n"
+      else
+        puts "OK, I can help with that!\n\n"
+        send_to_app_creation
+      end
 
       
       print "\n\nPaste the 'Consumer Key' here: "
@@ -99,29 +139,32 @@ module Chatterbot
       STDOUT.flush
       config[:consumer_secret] = STDIN.readline.chomp.strip
 
-      puts "\n\n\n\n"
 
-      puts "Now, you can click the 'Create my access token' button to proceed."
+      puts "\n\nNow it's time to authorize your bot!\n\n"
+      
+      if ! app_already_exists && ask_yes_no("Do you want to authorize a bot using the account that created the app?")
+        puts "OK, on the app page, you can click the 'Create my access token' button to proceed.\n\n"
+
+        print "Paste the 'Access Token' here: "
+        STDOUT.flush
+        config[:access_token] = STDIN.readline.chomp.strip
 
 
-      puts "\n\n\n\n"
-
-      print "\n\nPaste the 'Access Token' here: "
-      STDOUT.flush
-      config[:access_token] = STDIN.readline.chomp.strip
-
-
-      print "\n\nPaste the 'Access Token Secret' here: "
-      STDOUT.flush
-      config[:access_token_secret] = STDIN.readline.chomp.strip
+        print "\n\nPaste the 'Access Token Secret' here: "
+        STDOUT.flush
+        config[:access_token_secret] = STDIN.readline.chomp.strip
 
       
-      # reset the client so we can re-init with new OAuth credentials
-      reset_client
+        # reset the client so we can re-init with new OAuth credentials
+        reset_client
 
-      # at this point we should have a fully validated client, so grab
-      # the screen name
-      @screen_name = client.user.screen_name rescue nil
+        # at this point we should have a fully validated client, so grab
+        # the screen name
+        @screen_name = client.user.screen_name rescue nil
+      else
+        reset_client
+      end
+        
       
       #
       # capture ctrl-c and exit without a stack trace
