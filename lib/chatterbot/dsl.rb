@@ -121,6 +121,21 @@ module Chatterbot
       bot.tweet(txt, params, original)
     end
 
+
+    #
+    # sned a tweet with media
+    #
+    # @param [String] txt the text you want to tweet
+    # @param [media] a variable holding the file path of the media
+    # @param [Hash] params opts for the tweet
+    #   @see http://rdoc.info/gems/twitter/Twitter/API#update-instance_method
+    # @param [Tweet] original if this is a reply, the original tweet. this will
+    #   be used for variable substitution, and for logging
+    def tweet_with_media(txt, media, params = {}, original = nil)
+      bot.tweet_with_media(txt, media, params, original)
+    end
+
+
     #
     # retweet a tweet
     # @param [id] id A tweet or the ID of a tweet
