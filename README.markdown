@@ -164,6 +164,12 @@ person who sent the original tweet.
 **tweet** -- send a Tweet out for this bot:
 
     tweet "I AM A BOT!!!"
+    
+    
+**tweet_with_media** -- send a Tweet with media out for this bot:
+    media = "/path/to/file.jpg"
+    tweet_with_media "I AM A BOT!!!", media
+
 
 **reply** -- reply to another tweet:
 
