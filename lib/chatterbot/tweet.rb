@@ -22,6 +22,24 @@ module Chatterbot
       #:nocov:
     end
 
+
+    def tweet_with_media(txt, media, params = {}, original = nil)
+    
+      txt = replace_variables(txt, original)
+    
+      if debug_mode?
+        debug "I'm in debug mode, otherwise I would tweet: #{txt}"
+      else
+        debug txt
+        client.update_with_media(txt, File.new(media))
+      end
+    rescue Twitter::Error::Forbidden => e
+      #:nocov:
+      debug e
+      false
+      #:nocov:
+    end
+    
     
     # reply to a tweet
     def reply(txt, source)
