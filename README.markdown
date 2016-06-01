@@ -167,6 +167,7 @@ person who sent the original tweet.
     
     
 **tweet_with_media** -- send a Tweet with media out for this bot:
+
     media = "/path/to/file.jpg"
     tweet_with_media "I AM A BOT!!!", media
 
