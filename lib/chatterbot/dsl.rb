@@ -161,6 +161,16 @@ module Chatterbot
     end
 
     #
+    # reply_with_media to a tweet
+    #
+    # @param [String] txt the text you want to tweet
+    # @param [String] media the media you want to tweet
+    # @param [Tweet] source the original tweet you are replying to
+    def reply_with_media(txt, media, source)
+      bot.reply_with_media(txt, media, source)
+    end
+
+    #
     # send a direct message to the specified user
     # 
     # @param [String] txt the text you want to tweet
