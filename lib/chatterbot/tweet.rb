@@ -46,5 +46,11 @@ module Chatterbot
       debug txt
       tweet txt, {:in_reply_to_status_id => source.id}, source
     end
+    
+    # reply to a tweet with media
+    def reply_with_media(txt, media, source)
+      debug txt
+      client.update_with_media(txt, File.new(media), {:in_reply_to_status_id => source.id})
+    end
   end
 end
