@@ -79,8 +79,9 @@ Or you can write a bot using more traditional ruby classes, extend it if needed,
 ```
   class MyBot < Chatterbot::Bot
      def do_stuff
-       search("'surely you must be joking'") do |tweet|
-        reply "@#{tweet_user(tweet)} I am serious, and don't call me Shirley!", tweet
+       home_timeline do |tweet|
+         puts "I like to favorite things"
+         favorite tweet
        end
     end
   end

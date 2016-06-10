@@ -13,7 +13,16 @@ module Chatterbot
         debug "I'm in debug mode, otherwise I would tweet: #{txt}"
       else
         debug txt
-        client.update txt, params
+        if params.has_key?(:media)
+          file = params.delete(:media)
+          if ! file.is_a?(File)
+            file = File.new(file)
+          end
+
+          client.update_with_media txt, file, params
+        else
+          client.update txt, params
+        end
       end
     rescue Twitter::Error::Forbidden => e
       #:nocov:
@@ -24,9 +33,10 @@ module Chatterbot
 
     
     # reply to a tweet
-    def reply(txt, source)
+    def reply(txt, source, params = {})
       debug txt
-      tweet txt, {:in_reply_to_status_id => source.id}, source
+      params = {:in_reply_to_status_id => source.id}.merge(params)
+      tweet txt, params, source
     end
   end
 end

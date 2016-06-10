@@ -13,7 +13,6 @@ module Chatterbot
       puts str.colorize(:red)
     end
 
-    #:nocov:
     def green(str)
       puts str.colorize(:green)
     end

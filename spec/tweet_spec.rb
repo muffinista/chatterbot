@@ -11,29 +11,48 @@ describe "Chatterbot::Tweet" do
       @bot.tweet "tweet test!"
     end
 
-    it "calls client.update with the right values" do
-      bot = test_bot
-
-      expect(bot).to receive(:require_login).and_return(true)
-      allow(bot).to receive(:client).and_return(double(Twitter::Client))
-
-      allow(bot).to receive(:debug_mode?).and_return(false)
-
-      test_str = "test!"
-      expect(bot.client).to receive(:update).with(test_str, {})
-      bot.tweet test_str
-    end
-
-    it "doesn't tweet when debug_mode? is set" do
-      bot = test_bot
+    context "when authenticated" do
+      let(:bot) { test_bot }
+      before(:each) do
+        expect(bot).to receive(:require_login).and_return(true)
+        allow(bot).to receive(:client).and_return(double(Twitter::Client))
+      end
       
-      expect(bot).to receive(:require_login).and_return(true)
-      allow(bot).to receive(:client).and_return(double(Twitter::Client))
+      it "calls client.update with the right values" do
+        allow(bot).to receive(:debug_mode?).and_return(false)
 
-      allow(bot).to receive(:debug_mode?).and_return(true)
+        test_str = "test!"
+        expect(bot.client).to receive(:update).with(test_str, {})
+        bot.tweet test_str
+      end
 
-      expect(bot.client).not_to receive(:update)
-      bot.tweet "no tweet!"
+      it "calls client.update_with_media if media file is specified" do
+        allow(bot).to receive(:debug_mode?).and_return(false)
+
+        test_str = "test!"
+        path = File.join(File.dirname(__FILE__), "fixtures", "update_with_media.png")
+        media = File.new(path)
+        expect(bot.client).to receive(:update_with_media).with(test_str, media, {})
+        bot.tweet test_str, media:media
+      end
+
+      it "calls client.update_with_media if media file path is specified" do
+        allow(bot).to receive(:debug_mode?).and_return(false)
+
+        test_str = "test!"
+        path = File.join(File.dirname(__FILE__), "fixtures", "update_with_media.png")
+
+        expect(bot.client).to receive(:update_with_media).with(test_str, an_instance_of(File), {})
+        bot.tweet test_str, media:path
+      end
+
+      
+      it "doesn't tweet when debug_mode? is set" do
+        allow(bot).to receive(:debug_mode?).and_return(true)
+
+        expect(bot.client).not_to receive(:update)
+        bot.tweet "no tweet!"
+      end
     end
   end
 
@@ -44,30 +63,51 @@ describe "Chatterbot::Tweet" do
       bot.reply "reply test!", fake_tweet(100)
     end
 
-    it "calls client.update with the right values" do
-      bot = test_bot
-      expect(bot).to receive(:require_login).and_return(true)
-      allow(bot).to receive(:client).and_return(double(Twitter::Client))
+    context "when authenticated" do
+      let(:bot) { test_bot }
+      before(:each) do
+        expect(bot).to receive(:require_login).and_return(true)
+        allow(bot).to receive(:client).and_return(double(Twitter::Client))
+      end
 
-      allow(bot).to receive(:debug_mode?).and_return(false)
+      
+      it "calls client.update with the right values" do
+        allow(bot).to receive(:debug_mode?).and_return(false)
 
-      test_str = "test!"
+        test_str = "test!"
 
-      expect(bot.client).to receive(:update).with(test_str, {:in_reply_to_status_id => 100})
-      bot.reply test_str, fake_tweet(100, 100)
-    end
+        expect(bot.client).to receive(:update).with(test_str, {:in_reply_to_status_id => 100})
+        bot.reply test_str, fake_tweet(100, 100)
+      end
 
+      it "calls client.update_with_media if media file is specified" do
+        allow(bot).to receive(:debug_mode?).and_return(false)
 
-    it "doesn't reply when debug_mode? is set" do
-      bot = test_bot
-      expect(bot).to receive(:require_login).and_return(true)
-      allow(bot).to receive(:client).and_return(double(Twitter::Client))
+        test_str = "test!"
+        path = File.join(File.dirname(__FILE__), "fixtures", "update_with_media.png")
+        media = File.new(path)
 
-      allow(bot).to receive(:debug_mode?).and_return(true)
+        expect(bot.client).to receive(:update_with_media).with(test_str, media, {:in_reply_to_status_id => 100})
+        bot.reply test_str, fake_tweet(100, 100), media:media
+      end
 
-      expect(bot.client).not_to receive(:update)
-      bot.reply "no reply test!", fake_tweet(100)
+      it "calls client.update_with_media if media file path is specified" do
+        allow(bot).to receive(:debug_mode?).and_return(false)
+
+        test_str = "test!"
+        path = File.join(File.dirname(__FILE__), "fixtures", "update_with_media.png")
+
+        expect(bot.client).to receive(:update_with_media).with(test_str, an_instance_of(File), {:in_reply_to_status_id => 100})
+        bot.reply test_str, fake_tweet(100, 100), media:path
+      end
+
+      it "doesn't reply when debug_mode? is set" do
+        allow(bot).to receive(:debug_mode?).and_return(true)
+
+        expect(bot.client).not_to receive(:update_with_media)
+        bot.reply "no reply test!", fake_tweet(100)
+      end
     end
   end
-
+  
 end

@@ -85,7 +85,6 @@ module Chatterbot
         }
       end
 
-      
       streaming_client.send(method, args) do |object|
         handle_streaming_object(object)
       end
