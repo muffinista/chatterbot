@@ -187,10 +187,17 @@ describe "Chatterbot::DSL" do
     end
 
     it "#reply passes along to bot object" do
-      expect(@bot).to receive(:reply).with("hello sailor!", { :source => "source "})
-      reply "hello sailor!", { :source => "source "}
+      source = double(Twitter::Tweet)
+      expect(@bot).to receive(:reply).with("hello sailor!", source, {})
+      reply "hello sailor!", source
     end
 
+    it "#reply passes along to bot object with media" do
+      source = double(Twitter::Tweet)
+      expect(@bot).to receive(:reply).with("hello sailor!", source, {media:"/tmp/foo.jpg"})
+      reply "hello sailor!", source, media:"/tmp/foo.jpg"
+    end
+    
     describe "#direct_message" do
       it "passes along to bot object" do
         expect(@bot).to receive(:direct_message).with("hello sailor!", nil)
