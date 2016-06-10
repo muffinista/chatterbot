@@ -113,8 +113,13 @@ module Chatterbot
     # send a tweet
     #
     # @param [String] txt the text you want to tweet
-    # @param [Hash] params opts for the tweet
-    #   @see http://rdoc.info/gems/twitter/Twitter/API#update-instance_method
+    # @param [Hash] params options for the tweet. You can get an idea
+    #   of possible values you can send here from the underlying Twitter
+    #   gem docs: http://rdoc.info/gems/twitter/Twitter/API#update-instance_method
+    # @option params [String,File] :media Optional file object to send
+    #   with the tweet. Must be an image or video that will be accepted by
+    #   Twitter. You can pass a File object, or the path to a file
+    # @see http://rdoc.info/gems/twitter/Twitter/API#update-instance_method
     # @param [Tweet] original if this is a reply, the original tweet. this will
     #   be used for variable substitution, and for logging
     def tweet(txt, params = {}, original = nil)
@@ -141,8 +146,15 @@ module Chatterbot
     #
     # @param [String] txt the text you want to tweet
     # @param [Tweet] source the original tweet you are replying to
-    def reply(txt, source)
-      bot.reply(txt, source)
+    # @param [Hash] params options for the tweet. You can get an idea
+    #   of possible values you can send here from the underlying Twitter
+    #   gem docs: http://rdoc.info/gems/twitter/Twitter/API#update-instance_method
+    # @option params [String,File] :media Optional file object to send with the
+    #   tweet. Must be an image or video that will be accepted by
+    #   Twitter. You can pass a File object, or the path to a file
+    # @see http://rdoc.info/gems/twitter/Twitter/API#update-instance_method
+    def reply(txt, source, params={})
+      bot.reply(txt, source, params)
     end
 
     #
