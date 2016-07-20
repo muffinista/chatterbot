@@ -21,7 +21,7 @@ actual bot.
 When you run `chatterbot-register` it will walk you through the
 authorization process. If you prefer, you can do this manually. If
 you'd like to learn more about it, you can read the
-[Authorizing your Bot](/setup.html) section.
+[Authorizing your Bot](setup.html) section.
 
 Write your bot
 --------------
@@ -29,7 +29,7 @@ Write your bot
 Chatterbot is written in ruby, but it accepts some very simple
 scripting commands which can handle almost everything you might need
 to do on Twitter.  You can get some ideas of things you can do on the
-[Examples](/examples.html) page.
+[Examples](examples.html) page.
 
     require 'chatterbot/dsl'
     replies do |tweet|
