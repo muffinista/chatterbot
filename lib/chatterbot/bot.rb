@@ -54,6 +54,11 @@ module Chatterbot
       @handlers = {}
     end
 
+    def screen_name
+      @screen_name ||= client.settings.screen_name
+    end
+
+    
     #
     # determine the right API to use and run the bot
     #
@@ -113,7 +118,6 @@ module Chatterbot
 
       HANDLER_CALLS.each { |c|
         if (h = @handlers[c])
-          puts "calling #{c} #{h.opts.inspect}"
           send(c, *(h.opts)) do |obj|
             h.call(obj)
           end

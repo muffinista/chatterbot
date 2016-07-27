@@ -7,7 +7,18 @@ module Chatterbot
     def streaming_tweet_handler
       usable_handlers = [:home_timeline, :search]
       name, block = @handlers.find { |k, v| usable_handlers.include?(k) }
-      block
+
+       if block.nil? && ( block = @handlers[:replies] )
+         debug "No default handler, wrapping the replies handler"
+         return Proc.new { |tweet|
+           if tweet.text =~ /^@#{bot.screen_name}/i
+             block.call(tweet)
+           end
+         }
+       end
+
+       puts block.inspect
+       block
     end
     
     #
