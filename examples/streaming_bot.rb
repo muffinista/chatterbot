@@ -21,16 +21,7 @@ exclude "http://", "https://"
 
 blocklist "mean_user, private_user"
 
-streaming true
-
-favorited do |user, tweet|
-  reply "@#{user.screen_name} thanks for the fave!", tweet
-end
-
-followed do |user|
-  tweet "@#{user.screen_name} just followed me!"
-  follow user
-end
+use_streaming
 
 replies do |tweet|
   favorite tweet
@@ -45,4 +36,14 @@ direct_messages do |tweet|
   puts tweet.inspect
   direct_message "got it", tweet.sender
 end
+
+favorited do |user, tweet|
+  reply "@#{user.screen_name} thanks for the fave!", tweet
+end
+
+followed do |user|
+  tweet "@#{user.screen_name} just followed me!"
+  follow user
+end
+
 
