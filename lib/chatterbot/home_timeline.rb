@@ -7,7 +7,7 @@ module Chatterbot
     # handle the bots timeline
     def home_timeline(*args, &block)
       return unless require_login
-      debug "check for home_timeline tweets since #{since_id}"
+      debug "check for home_timeline tweets since #{since_id_home_timeline}"
 
       opts = {
         :since_id => since_id_home_timeline,
