@@ -1,0 +1,476 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+        <meta name="viewport" content="width=device-width">
+
+        <title>chatterbot : Advanced Features</title>
+        <meta name="description" content="twitter bots in ruby">
+
+        <link href="//netdna.bootstrapcdn.com/twitter-bootstrap/2.3.2/css/bootstrap-combined.no-icons.min.css" rel="stylesheet">
+        <link rel="stylesheet" href="/css/syntax.css">
+        <link rel="stylesheet" href="/css/main.css">
+    </head>
+    <body>
+
+        <div class="container">
+            <div class=row-fluid>
+                <div id=header class=span12>
+                    <h4><a class=brand href="/">chatterbot</a>
+    <small>twitter bots in ruby</small>
+</h4>
+
+
+                </div>
+            </div>
+
+            <div class=row-fluid>
+                
+                
+                    <div id=navigation class=span2>
+                        <ul class="nav nav-list">
+  <li><a href="/">Home</a></li>
+  
+    
+    
+    <li class=nav-header>Getting Started</li>
+    
+
+      
+
+    
+
+      
+
+    
+
+      
+
+    
+
+      
+
+    
+
+           
+        <li data-order="">
+          
+            <a href="/examples.html">Examples</a>
+          
+        </li>
+      
+
+    
+
+      
+
+    
+
+      
+
+    
+
+      
+
+    
+
+      
+
+    
+
+           
+        <li data-order="">
+          
+            <a href="/setup.html">Authorizing Your Bot</a>
+          
+        </li>
+      
+
+    
+
+      
+
+    
+
+      
+
+    
+
+      
+
+    
+
+           
+        <li data-order="">
+          
+            <a href="/walkthrough.html">Walkthrough</a>
+          
+        </li>
+      
+
+    
+  
+    
+    
+    <li class=nav-header>Documentation</li>
+    
+
+           
+        <li data-order="">
+          
+            <a href="/advanced.html">Advanced Features</a>
+          
+        </li>
+      
+
+    
+
+           
+        <li data-order="">
+          
+            <a href="/configuration.html">Configuration</a>
+          
+        </li>
+      
+
+    
+
+      
+
+    
+
+           
+        <li data-order="">
+          
+            <a href="/deploying.html">Running your Bot</a>
+          
+        </li>
+      
+
+    
+
+      
+
+    
+
+           
+        <li data-order="">
+          
+            <a href="/features.html">Basic Features</a>
+          
+        </li>
+      
+
+    
+
+      
+
+    
+
+      
+
+    
+
+      
+
+    
+
+      
+
+    
+
+           
+        <li data-order="">
+          
+            <a href="/streaming.html">Streaming API</a>
+          
+        </li>
+      
+
+    
+
+      
+
+    
+
+      
+
+    
+
+      
+
+    
+  
+    
+    
+    <li class=nav-header>Developers</li>
+    
+
+      
+
+    
+
+      
+
+    
+
+           
+        <li data-order="">
+          
+            <a href="/contributing.html">Contributing</a>
+          
+        </li>
+      
+
+    
+
+      
+
+    
+
+      
+
+    
+
+      
+
+    
+
+      
+
+    
+
+      
+
+    
+
+      
+
+    
+
+      
+
+    
+
+      
+
+    
+
+      
+
+    
+
+      
+
+    
+
+      
+
+    
+  
+    
+    
+    <li class=nav-header>Resources</li>
+    
+
+      
+
+    
+
+      
+
+    
+
+      
+
+    
+
+      
+
+    
+
+      
+
+    
+
+      
+
+    
+
+      
+
+    
+
+           
+        <li data-order="">
+          
+            <a href="/other-tools.html">Other Tools</a>
+          
+        </li>
+      
+
+    
+
+           
+        <li data-order="">
+          
+            <a href="http://rubydoc.info/gems/chatterbot">rdoc</a>
+          
+        </li>
+      
+
+    
+
+      
+
+    
+
+      
+
+    
+
+      
+
+    
+
+           
+        <li data-order="">
+          
+            <a href="https://dev.twitter.com/rest/public">Twitter API docs</a>
+          
+        </li>
+      
+
+    
+
+      
+
+    
+  
+<!-- List additional links. It is recommended to add a divider
+    e.g. <li class=divider></li> first to break up the content. -->
+</ul>
+
+                    </div>
+
+                    <div id=content class=span10>
+                        <div class=page-header>
+    <h2>Advanced Features
+        
+    </h2>
+</div>
+
+<h2 id="direct-client-access">Direct Client Access</h2>
+
+<p>If you want to do something not provided directly by Chatterbot, you
+have access to an instance of Twitter::Client provided by the
+<strong>client</strong> method. In theory, you can do something like this in your
+bot to unfollow users who DM you:</p>
+<div class="highlight"><pre><code class="language-text" data-lang="text">client.direct_messages_received(:since_id =&gt; since_id).each do |m|
+    client.unfollow(m.user.name)
+end
+</code></pre></div>
+<h2 id="storing-config-in-the-database">Storing Config in the Database</h2>
+
+<p>Sometimes it is preferable to store the authorization credentials for
+your bot in a database. </p>
+
+<p>Chatterbot can manage configurations that are stored in the database,
+but to do this you will need to specify how to connect to the
+database. You can do this by specifying the connection string
+either in one of the global config files by setting </p>
+<div class="highlight"><pre><code class="language-text" data-lang="text">:db_uri:mysql://username:password@host/database
+</code></pre></div>
+<p>Or you can specify the connection on the command-line by using the
+--db=&quot;db_uri&quot; configuration option. Any calls to the database are
+handled by the Sequel gem, and MySQL and Sqlite should work. The DB
+URI should be in the form of</p>
+<div class="highlight"><pre><code class="language-text" data-lang="text">mysql://username:password@host/database 
+</code></pre></div>
+<p>see <a href="http://sequel.rubyforge.org/rdoc/files/doc/opening_databases_rdoc.html">http://sequel.rubyforge.org/rdoc/files/doc/opening_databases_rdoc.html</a>
+for details.</p>
+
+<h2 id="logging-tweets-to-the-database">Logging Tweets to the Database</h2>
+
+<p>Chatterbot can log tweet activity to a database if desired. This can
+be handy for archival purposes, or for tracking what&#39;s going on with
+your bot. </p>
+
+<p>If you&#39;ve configured your bot for database access, you can store a
+tweet to the database by calling the <code>log</code> method like this:</p>
+<div class="highlight"><pre><code class="language-text" data-lang="text">search &quot;chatterbot&quot; do |tweet|
+    log tweet
+end
+</code></pre></div>
+<p>See <code>Chatterbot::Logging</code> for details on this.</p>
+
+<h2 id="streaming">Streaming</h2>
+
+<p>Chatterbot has basic support for Twitter&#39;s Streaming API. You can read
+more about it <a href="/streaming.html">here</a></p>
+
+
+                    </div>
+                
+            </div>
+
+            <div class=row-fluid>
+                <div id=footer class=span12>
+                    Documentation for <a href="https://github.com/muffinista/chatterbot">chatterbot</a>
+
+                </div>
+            </div>
+        </div>
+
+        <script>
+            function orderNav() {
+                var list,
+                    section,
+                    header,
+                    sections = [],
+                    lists = {},
+                    headers = {};
+
+                var navUl = document.querySelectorAll('#navigation ul')[0],
+                    navLis = document.querySelectorAll('#navigation ul li');
+
+                if (!navUl) return;
+
+                for (var i = 0; i < navLis.length; i++) {
+                    var order, li = navLis[i];
+
+                    if (li.classList.contains('nav-header')) {
+                        section = li.textContent || li.innerText;
+                        sections.push(section);
+                        headers[section] = li;
+                        continue;
+                    }
+
+                    if (!lists[section]) {
+                        lists[section] = [];
+                    }
+
+                    order = parseFloat(li.getAttribute('data-order'))
+                    lists[section].push([order, li]);
+                }
+
+                for (var i = 0; i < sections.length; i++) {
+                    section = sections[i];
+                    list = lists[section].sort(function(a, b) {
+                        return a[0] - b[0];
+                    });
+
+                    if (header = headers[section]) {
+                        navUl.appendChild(header);
+                    }
+                    for (var j = 0; j < list.length; j++) {
+                        navUl.appendChild(list[j][1]);
+                    }
+                }
+            }
+
+            if (document.querySelectorAll) orderNav();
+        </script>
+    </body>
+</html>

@@ -1,0 +1,500 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+        <meta name="viewport" content="width=device-width">
+
+        <title>chatterbot : Authorizing Your Bot</title>
+        <meta name="description" content="twitter bots in ruby">
+
+        <link href="//netdna.bootstrapcdn.com/twitter-bootstrap/2.3.2/css/bootstrap-combined.no-icons.min.css" rel="stylesheet">
+        <link rel="stylesheet" href="/css/syntax.css">
+        <link rel="stylesheet" href="/css/main.css">
+    </head>
+    <body>
+
+        <div class="container">
+            <div class=row-fluid>
+                <div id=header class=span12>
+                    <h4><a class=brand href="/">chatterbot</a>
+    <small>twitter bots in ruby</small>
+</h4>
+
+
+                </div>
+            </div>
+
+            <div class=row-fluid>
+                
+                
+                    <div id=navigation class=span2>
+                        <ul class="nav nav-list">
+  <li><a href="/">Home</a></li>
+  
+    
+    
+    <li class=nav-header>Getting Started</li>
+    
+
+      
+
+    
+
+      
+
+    
+
+      
+
+    
+
+      
+
+    
+
+           
+        <li data-order="">
+          
+            <a href="/examples.html">Examples</a>
+          
+        </li>
+      
+
+    
+
+      
+
+    
+
+      
+
+    
+
+      
+
+    
+
+      
+
+    
+
+           
+        <li data-order="">
+          
+            <a href="/setup.html">Authorizing Your Bot</a>
+          
+        </li>
+      
+
+    
+
+      
+
+    
+
+      
+
+    
+
+      
+
+    
+
+           
+        <li data-order="">
+          
+            <a href="/walkthrough.html">Walkthrough</a>
+          
+        </li>
+      
+
+    
+  
+    
+    
+    <li class=nav-header>Documentation</li>
+    
+
+           
+        <li data-order="">
+          
+            <a href="/advanced.html">Advanced Features</a>
+          
+        </li>
+      
+
+    
+
+           
+        <li data-order="">
+          
+            <a href="/configuration.html">Configuration</a>
+          
+        </li>
+      
+
+    
+
+      
+
+    
+
+           
+        <li data-order="">
+          
+            <a href="/deploying.html">Running your Bot</a>
+          
+        </li>
+      
+
+    
+
+      
+
+    
+
+           
+        <li data-order="">
+          
+            <a href="/features.html">Basic Features</a>
+          
+        </li>
+      
+
+    
+
+      
+
+    
+
+      
+
+    
+
+      
+
+    
+
+      
+
+    
+
+           
+        <li data-order="">
+          
+            <a href="/streaming.html">Streaming API</a>
+          
+        </li>
+      
+
+    
+
+      
+
+    
+
+      
+
+    
+
+      
+
+    
+  
+    
+    
+    <li class=nav-header>Developers</li>
+    
+
+      
+
+    
+
+      
+
+    
+
+           
+        <li data-order="">
+          
+            <a href="/contributing.html">Contributing</a>
+          
+        </li>
+      
+
+    
+
+      
+
+    
+
+      
+
+    
+
+      
+
+    
+
+      
+
+    
+
+      
+
+    
+
+      
+
+    
+
+      
+
+    
+
+      
+
+    
+
+      
+
+    
+
+      
+
+    
+
+      
+
+    
+  
+    
+    
+    <li class=nav-header>Resources</li>
+    
+
+      
+
+    
+
+      
+
+    
+
+      
+
+    
+
+      
+
+    
+
+      
+
+    
+
+      
+
+    
+
+      
+
+    
+
+           
+        <li data-order="">
+          
+            <a href="/other-tools.html">Other Tools</a>
+          
+        </li>
+      
+
+    
+
+           
+        <li data-order="">
+          
+            <a href="http://rubydoc.info/gems/chatterbot">rdoc</a>
+          
+        </li>
+      
+
+    
+
+      
+
+    
+
+      
+
+    
+
+      
+
+    
+
+           
+        <li data-order="">
+          
+            <a href="https://dev.twitter.com/rest/public">Twitter API docs</a>
+          
+        </li>
+      
+
+    
+
+      
+
+    
+  
+<!-- List additional links. It is recommended to add a divider
+    e.g. <li class=divider></li> first to break up the content. -->
+</ul>
+
+                    </div>
+
+                    <div id=content class=span10>
+                        <div class=page-header>
+    <h2>Authorizing Your Bot
+        
+    </h2>
+</div>
+
+<p>Getting a bot running on Twitter can be a little tricky. Twitter uses
+a something called <a href="https://dev.twitter.com/oauth">OAuth</a> to validate
+requests, but it&#39;s a little more complicated than just specifying a
+username/password.</p>
+
+<ul>
+<li><p>Login to Twitter with your bot account</p></li>
+<li><p>Go to <a href="https://apps.twitter.com/app/new">https://apps.twitter.com/app/new</a></p></li>
+<li><p>Fill out the form. You need to put a name, description, and Website
+URL, although the URL doesn&#39;t need to exist. <img
+src="/images/01-create-application.png" /></p></li>
+<li><p>Save the form, and then click on the Permissions tab. You will need
+to specify what level of access is needed for your bot. <img
+src="/images/02-application-permissions.png" /> You have three
+choices here: Read only, Read and Write, and Read and Write and
+access DMs. If your bot isn&#39;t actually ever going to post to Twitter
+(for example, if you&#39;re just running a search to find interesting
+tweets), you can choose read-only. Otherwise, you should pick
+read/write, or read/write/DMs. Chatterbot has limited support for
+handling Direct Messages, but if you can imagine a situation where
+you might want to handle them, you should pick this option.</p></li>
+<li><p><em>NOTE:</em> When you try and save this form, there&#39;s a good chance that
+you will get an error that tells you to add a mobile phone to your Twitter
+profile. It will look a lot like this: <img src="/images/03-mobile-number.png" /></p></li>
+</ul>
+
+<p>You can add your number here: <a href="https://twitter.com/settings/devices">https://twitter.com/settings/devices</a></p>
+
+<p>After you add the number, Twitter will ask you to send them a text
+  message. Once you do this, you can finish updating the settings for
+  your application. Later, we&#39;ll remove the mobile number.</p>
+
+<p>Once you&#39;ve registered your application, you have two options. You can
+create access tokens for your bot via Twitter, or you can run the
+<code>chatterbot-register</code> script. Running the script will take care of
+creating a template file for your bot, but if you don&#39;t want to do
+that, here are the steps for doing this manually:</p>
+
+<ul>
+<li> click the &#39;Keys and Access Tokens&#39; link. You should see this: <img src="/images/04-access-token.png" /></li>
+<li>click the &#39;Create my access token&#39; link. </li>
+<li>It might take a few minutes for Twitter to actually generate the
+token. You can refresh the page a couple times until they are there,
+then you can copy the keys into your application. There&#39;s four keys
+you will need for your bot, and a couple different ways to save
+them:</li>
+</ul>
+
+<p><strong>In a separate YAML config file</strong>. Create a file named botname.yaml
+  -- the botname part must match your bot&#39;s username EXACTLY. Put the
+  following contents, pasting the credential values that you just
+  generated:</p>
+<div class="highlight"><pre><code class="language-text" data-lang="text">  ---
+  :consumer_secret: Consumer Secret (API Secret) GOES HERE
+  :consumer_key: Consumer Key (API Key) GOES HERE
+  :token: Access Token GOES HERE
+  :secret: Access Token Secret GOES HERE
+</code></pre></div>
+<p><strong>in the script</strong>. Add some lines to your bot script like this:
+<code>
+consumer_key &#39;Consumer Secret (API Secret)&#39;
+consumer_secret &#39;Consumer Key (API Key)&#39;
+secret &#39;Access Token Secret&#39;
+token &#39;Access Token&#39;
+</code></p>
+
+<p><strong>in a database</strong>. If you&#39;ve setup chatterbot to use a database, you
+  can store your configuration info in the <strong>config</strong> table.</p>
+
+<p><strong>NOTE</strong> At this point, you can remove the phone number from the bot
+  account if you like. From your bot&#39;s account, click &#39;Settings&#39; -&gt;
+  &#39;Mobile&#39; -&gt; &#39;Delete my phone&#39;.</p>
+
+
+                    </div>
+                
+            </div>
+
+            <div class=row-fluid>
+                <div id=footer class=span12>
+                    Documentation for <a href="https://github.com/muffinista/chatterbot">chatterbot</a>
+
+                </div>
+            </div>
+        </div>
+
+        <script>
+            function orderNav() {
+                var list,
+                    section,
+                    header,
+                    sections = [],
+                    lists = {},
+                    headers = {};
+
+                var navUl = document.querySelectorAll('#navigation ul')[0],
+                    navLis = document.querySelectorAll('#navigation ul li');
+
+                if (!navUl) return;
+
+                for (var i = 0; i < navLis.length; i++) {
+                    var order, li = navLis[i];
+
+                    if (li.classList.contains('nav-header')) {
+                        section = li.textContent || li.innerText;
+                        sections.push(section);
+                        headers[section] = li;
+                        continue;
+                    }
+
+                    if (!lists[section]) {
+                        lists[section] = [];
+                    }
+
+                    order = parseFloat(li.getAttribute('data-order'))
+                    lists[section].push([order, li]);
+                }
+
+                for (var i = 0; i < sections.length; i++) {
+                    section = sections[i];
+                    list = lists[section].sort(function(a, b) {
+                        return a[0] - b[0];
+                    });
+
+                    if (header = headers[section]) {
+                        navUl.appendChild(header);
+                    }
+                    for (var j = 0; j < list.length; j++) {
+                        navUl.appendChild(list[j][1]);
+                    }
+                }
+            }
+
+            if (document.querySelectorAll) orderNav();
+        </script>
+    </body>
+</html>

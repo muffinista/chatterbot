@@ -1,0 +1,497 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+        <meta name="viewport" content="width=device-width">
+
+        <title>chatterbot : Basic Features</title>
+        <meta name="description" content="twitter bots in ruby">
+
+        <link href="//netdna.bootstrapcdn.com/twitter-bootstrap/2.3.2/css/bootstrap-combined.no-icons.min.css" rel="stylesheet">
+        <link rel="stylesheet" href="/css/syntax.css">
+        <link rel="stylesheet" href="/css/main.css">
+    </head>
+    <body>
+
+        <div class="container">
+            <div class=row-fluid>
+                <div id=header class=span12>
+                    <h4><a class=brand href="/">chatterbot</a>
+    <small>twitter bots in ruby</small>
+</h4>
+
+
+                </div>
+            </div>
+
+            <div class=row-fluid>
+                
+                
+                    <div id=navigation class=span2>
+                        <ul class="nav nav-list">
+  <li><a href="/">Home</a></li>
+  
+    
+    
+    <li class=nav-header>Getting Started</li>
+    
+
+      
+
+    
+
+      
+
+    
+
+      
+
+    
+
+      
+
+    
+
+           
+        <li data-order="">
+          
+            <a href="/examples.html">Examples</a>
+          
+        </li>
+      
+
+    
+
+      
+
+    
+
+      
+
+    
+
+      
+
+    
+
+      
+
+    
+
+           
+        <li data-order="">
+          
+            <a href="/setup.html">Authorizing Your Bot</a>
+          
+        </li>
+      
+
+    
+
+      
+
+    
+
+      
+
+    
+
+      
+
+    
+
+           
+        <li data-order="">
+          
+            <a href="/walkthrough.html">Walkthrough</a>
+          
+        </li>
+      
+
+    
+  
+    
+    
+    <li class=nav-header>Documentation</li>
+    
+
+           
+        <li data-order="">
+          
+            <a href="/advanced.html">Advanced Features</a>
+          
+        </li>
+      
+
+    
+
+           
+        <li data-order="">
+          
+            <a href="/configuration.html">Configuration</a>
+          
+        </li>
+      
+
+    
+
+      
+
+    
+
+           
+        <li data-order="">
+          
+            <a href="/deploying.html">Running your Bot</a>
+          
+        </li>
+      
+
+    
+
+      
+
+    
+
+           
+        <li data-order="">
+          
+            <a href="/features.html">Basic Features</a>
+          
+        </li>
+      
+
+    
+
+      
+
+    
+
+      
+
+    
+
+      
+
+    
+
+      
+
+    
+
+           
+        <li data-order="">
+          
+            <a href="/streaming.html">Streaming API</a>
+          
+        </li>
+      
+
+    
+
+      
+
+    
+
+      
+
+    
+
+      
+
+    
+  
+    
+    
+    <li class=nav-header>Developers</li>
+    
+
+      
+
+    
+
+      
+
+    
+
+           
+        <li data-order="">
+          
+            <a href="/contributing.html">Contributing</a>
+          
+        </li>
+      
+
+    
+
+      
+
+    
+
+      
+
+    
+
+      
+
+    
+
+      
+
+    
+
+      
+
+    
+
+      
+
+    
+
+      
+
+    
+
+      
+
+    
+
+      
+
+    
+
+      
+
+    
+
+      
+
+    
+  
+    
+    
+    <li class=nav-header>Resources</li>
+    
+
+      
+
+    
+
+      
+
+    
+
+      
+
+    
+
+      
+
+    
+
+      
+
+    
+
+      
+
+    
+
+      
+
+    
+
+           
+        <li data-order="">
+          
+            <a href="/other-tools.html">Other Tools</a>
+          
+        </li>
+      
+
+    
+
+           
+        <li data-order="">
+          
+            <a href="http://rubydoc.info/gems/chatterbot">rdoc</a>
+          
+        </li>
+      
+
+    
+
+      
+
+    
+
+      
+
+    
+
+      
+
+    
+
+           
+        <li data-order="">
+          
+            <a href="https://dev.twitter.com/rest/public">Twitter API docs</a>
+          
+        </li>
+      
+
+    
+
+      
+
+    
+  
+<!-- List additional links. It is recommended to add a divider
+    e.g. <li class=divider></li> first to break up the content. -->
+</ul>
+
+                    </div>
+
+                    <div id=content class=span10>
+                        <div class=page-header>
+    <h2>Basic Features
+        
+    </h2>
+</div>
+
+<p>Here&#39;s a list of some of the commonly-used methods in the Chatterbot DSL:</p>
+
+<p><strong>search</strong> -- You can use this to perform a search on Twitter:</p>
+<div class="highlight"><pre><code class="language-text" data-lang="text">search(&quot;&#39;surely you must be joking&#39;&quot;) do |tweet|
+  reply &quot;#USER# I am serious, and don&#39;t call me Shirley!&quot;, tweet
+end
+</code></pre></div>
+<p>By default, Chatterbot keeps track of the last time you ran the bot,
+and it will only search for new tweets.</p>
+
+<p><strong>replies</strong> -- Use this to check for replies and mentions:</p>
+<div class="highlight"><pre><code class="language-text" data-lang="text">replies do |tweet|
+  reply &quot;#USER# Thanks for contacting me!&quot;, tweet
+end
+</code></pre></div>
+<p>Note that the string <strong>#USER#</strong> is automatically replaced with the
+username of the person who sent the original tweet. Also, Chatterbot
+will only return tweets that were sent since the last run of the bot.</p>
+
+<p><strong>tweet</strong> -- send a Tweet out for this bot:</p>
+<div class="highlight"><pre><code class="language-text" data-lang="text">tweet &quot;I AM A BOT!!!&quot;
+</code></pre></div>
+<p><strong>reply</strong> -- reply to another tweet:</p>
+<div class="highlight"><pre><code class="language-text" data-lang="text">reply &quot;THIS IS A REPLY TO #USER#!&quot;, original_tweet
+</code></pre></div>
+<p><strong>retweet</strong> -- Chatterbot can retweet tweets as well:</p>
+<div class="highlight"><pre><code class="language-rb" data-lang="rb">  <span class="n">search</span> <span class="s2">&quot;xyzzy&quot;</span> <span class="k">do</span> <span class="o">|</span><span class="n">tweet</span><span class="o">|</span>
+    <span class="n">retweet</span><span class="p">(</span><span class="n">tweet</span><span class="o">[</span><span class="ss">:id</span><span class="o">]</span><span class="p">)</span>
+  <span class="k">end</span>
+</code></pre></div>
+<p><strong>blacklist</strong> -- you can use this to specify a list of users you don&#39;t
+  want to interact with. If you put the following line at the top of
+  your bot:</p>
+<div class="highlight"><pre><code class="language-text" data-lang="text">blacklist &quot;user1, user2, user3&quot;
+</code></pre></div>
+<p>None of those users will trigger your bot if they come up in a
+search. However, if a user replies to one of your tweets or mentions
+your bot in a tweet, you will still receive that tweet when checking
+for replies.</p>
+
+<p><strong>exclude</strong> -- similarly, you can specify a list of words/phrases
+  which shouldn&#39;t trigger your bot. If you use the following:</p>
+<div class="highlight"><pre><code class="language-text" data-lang="text">exclude &quot;spam&quot;
+</code></pre></div>
+<p>Any tweets or mentions with the word &#39;spam&#39; in them will be ignored by
+the bot. If you wanted to ignore any tweets with links in them (a wise
+precaution if you want to avoid spreading spam), you could call:</p>
+<div class="highlight"><pre><code class="language-text" data-lang="text">exclude &quot;http://&quot;
+</code></pre></div>
+<p>The library actually comes with a pre-defined list of &#39;bad words&#39;
+which you can exclude by default by calling:</p>
+<div class="highlight"><pre><code class="language-text" data-lang="text">exclude bad_words
+</code></pre></div>
+<p>The word list is from Darius Kazemi&#39;s
+<a href="https://github.com/dariusk/wordfilter">wordfilter</a>.</p>
+
+<p><strong>whitelist</strong></p>
+
+<p><strong>followers</strong> -- get a list of your followers. This is an experimental
+  feature but should work for most purposes.</p>
+
+<p><strong>follow</strong></p>
+
+<p><strong>profile_text</strong>
+<strong>profile_website</strong></p>
+
+<p>For more details, check out
+<a href="https://github.com/muffinista/chatterbot/blob/master/lib/chatterbot/dsl.rb">dsl.rb</a>
+in the source code.</p>
+
+
+                    </div>
+                
+            </div>
+
+            <div class=row-fluid>
+                <div id=footer class=span12>
+                    Documentation for <a href="https://github.com/muffinista/chatterbot">chatterbot</a>
+
+                </div>
+            </div>
+        </div>
+
+        <script>
+            function orderNav() {
+                var list,
+                    section,
+                    header,
+                    sections = [],
+                    lists = {},
+                    headers = {};
+
+                var navUl = document.querySelectorAll('#navigation ul')[0],
+                    navLis = document.querySelectorAll('#navigation ul li');
+
+                if (!navUl) return;
+
+                for (var i = 0; i < navLis.length; i++) {
+                    var order, li = navLis[i];
+
+                    if (li.classList.contains('nav-header')) {
+                        section = li.textContent || li.innerText;
+                        sections.push(section);
+                        headers[section] = li;
+                        continue;
+                    }
+
+                    if (!lists[section]) {
+                        lists[section] = [];
+                    }
+
+                    order = parseFloat(li.getAttribute('data-order'))
+                    lists[section].push([order, li]);
+                }
+
+                for (var i = 0; i < sections.length; i++) {
+                    section = sections[i];
+                    list = lists[section].sort(function(a, b) {
+                        return a[0] - b[0];
+                    });
+
+                    if (header = headers[section]) {
+                        navUl.appendChild(header);
+                    }
+                    for (var j = 0; j < list.length; j++) {
+                        navUl.appendChild(list[j][1]);
+                    }
+                }
+            }
+
+            if (document.querySelectorAll) orderNav();
+        </script>
+    </body>
+</html>
