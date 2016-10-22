@@ -64,5 +64,5 @@ Streaming
 ---------
 
 Chatterbot has basic support for Twitter's Streaming API. You can read
-more about it [here](/streaming.html)
+more about it [here](chatterbot/streaming.html)
 
