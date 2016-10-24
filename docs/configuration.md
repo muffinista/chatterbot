@@ -29,4 +29,4 @@ bunch of different methods of storing the config for your bot:
    gives you the ability to have a global configuration file, but keep
    it with your bots if desired.
 6. In a database.  You can read more about this on the [Advanced
-   Features](/advanced.html) page
+   Features](chatterbot/advanced.html) page
