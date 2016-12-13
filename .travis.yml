@@ -2,10 +2,11 @@ language: ruby
 rvm:
   - 2.0.0
   - 2.1.1
-  - 2.2.0
+  - 2.2.2
+  - 2.3.0
   - ruby-head
 before_install:
-  - gem install bundler -v '~> 1.11'
+  - echo "yes" | gem uninstall json; gem install bundler -v '~> 1.11'
 
 # uncomment this line if your project needs to run something other than `rake`:
 # script: bundle exec rspec spec
