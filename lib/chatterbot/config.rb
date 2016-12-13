@@ -212,7 +212,7 @@ module Chatterbot
         :consumer_key => ENV["chatterbot_consumer_key"],
         :consumer_secret => ENV["chatterbot_consumer_secret"],
         :access_token => ENV["chatterbot_access_token"],
-        :access_token_secret => ENV["chatterbot_access_secret"]
+        :access_token_secret => ENV["chatterbot_access_secret"] || ENV["chatterbot_access_token_secret"]
       }.delete_if { |k, v| v.nil? }.merge(slurp_file(config_file) || {})
     end
     
