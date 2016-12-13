@@ -20,12 +20,15 @@ Gem::Specification.new do |s|
   s.require_paths = ["lib"]
   s.licenses = ["MIT"]
 
+  # load activesupport but check ruby version along the way
+  s.extensions << 'ext/activesupport.rb'
+  
   s.add_development_dependency(%q<redcarpet>, [">= 0"])
   s.add_runtime_dependency(%q<oauth>, ["~> 0.4.7"])
   s.add_runtime_dependency(%q<twitter>, ["~> 5.16.0"])
   s.add_runtime_dependency(%q<launchy>, [">= 2.4.2"])
   s.add_runtime_dependency(%q<colorize>, [">= 0.7.3"])
-  s.add_runtime_dependency(%q<activesupport>, ["< 5.0.0"])
+
   s.add_development_dependency(%q<yard>, [">= 0"])
   s.add_development_dependency(%q<shoulda>, [">= 0"])
   s.add_development_dependency(%q<rake>, ["< 11"])
