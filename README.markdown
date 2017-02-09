@@ -165,10 +165,24 @@ person who sent the original tweet.
 **tweet** -- send a Tweet out for this bot:
 
     tweet "I AM A BOT!!!"
+    
+    
+**tweet_with_media** -- send a Tweet with media out for this bot:
+
+    media = "/path/to/file.jpg"
+    tweet_with_media "I AM A BOT!!!", media
+
 
 **reply** -- reply to another tweet:
 
-    reply "THIS IS A REPLY TO #USER#!", original_tweet
+    reply "THIS IS A REPLY TO #USER#!", tweet
+
+
+**reply_with_media** -- send a Tweet with media out for this bot:
+
+    media = "/path/to/file.jpg"
+    reply_with_media "THIS IS A REPLY TO @#{tweet.user.screen_name}", media, tweet
+
 
 **retweet** -- Chatterbot can retweet tweets as well:
 
