@@ -21,7 +21,7 @@ Gem::Specification.new do |s|
   s.licenses = ["MIT"]
 
   # load activesupport but check ruby version along the way
-  s.extensions << 'ext/activesupport.rb'
+  s.extensions << 'ext/mkrf_conf.rb'
   
   s.add_development_dependency(%q<redcarpet>, [">= 0"])
   s.add_runtime_dependency(%q<oauth>, ["~> 0.4.7"])
@@ -30,7 +30,6 @@ Gem::Specification.new do |s|
   s.add_runtime_dependency(%q<colorize>, [">= 0.7.3"])
 
   s.add_development_dependency(%q<yard>, [">= 0"])
-  s.add_development_dependency(%q<shoulda>, [">= 0"])
   s.add_development_dependency(%q<rake>, ["< 11"])
   s.add_development_dependency(%q<rspec>, ["~> 3.0.0"])
   s.add_development_dependency(%q<rspec-mocks>, ["~> 3.0.2"])

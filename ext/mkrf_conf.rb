@@ -9,7 +9,7 @@ di = Gem::DependencyInstaller.new
 
 begin
   if RUBY_VERSION >= '2.2'
-    di.install "activesupport"
+    di.install "activesupport", "~> 4.2.8"
   else
     di.install "activesupport", "< 5.0.0"
   end
