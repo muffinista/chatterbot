@@ -2,10 +2,7 @@
 require 'simplecov'
 SimpleCov.start
 
-require 'bundler/setup'
-Bundler.require
-
-require "twitter"
+require "chatterbot"
 
 # Requires supporting files with custom matchers and macros, etc,
 # in ./support/ and its subdirectories.
