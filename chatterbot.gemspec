@@ -1,5 +1,8 @@
 # -*- encoding: utf-8 -*-
-$:.push File.expand_path("../lib", __FILE__)
+lib = File.expand_path('../lib', __FILE__)
+$LOAD_PATH.unshift(lib) unless $LOAD_PATH.include?(lib)
+
+#$:.push File.expand_path("../lib", __FILE__)
 require "chatterbot/version"
 
 Gem::Specification.new do |s|
@@ -29,12 +32,6 @@ Gem::Specification.new do |s|
   s.add_runtime_dependency(%q<launchy>, [">= 2.4.2"])
   s.add_runtime_dependency(%q<colorize>, [">= 0.7.3"])
 
-  s.add_development_dependency(%q<yard>, [">= 0"])
-  s.add_development_dependency(%q<rake>, ["< 11"])
-  s.add_development_dependency(%q<rspec>, ["~> 3.0.0"])
-  s.add_development_dependency(%q<rspec-mocks>, ["~> 3.0.2"])
-  s.add_development_dependency(%q<rdoc>, [">= 0"])
-  s.add_development_dependency(%q<simplecov>, [">= 0"])
-  s.add_development_dependency(%q<observr>, [">= 0"])
+  s.add_development_dependency 'bundler', '~> 1.0'
 end
 

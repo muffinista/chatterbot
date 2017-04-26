@@ -17,7 +17,6 @@ module Chatterbot
          }
        end
 
-       puts block.inspect
        block
     end
     
