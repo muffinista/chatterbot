@@ -26,7 +26,6 @@ Gem::Specification.new do |s|
   # load activesupport but check ruby version along the way
   s.extensions << 'ext/mkrf_conf.rb'
   
-  s.add_development_dependency(%q<redcarpet>, [">= 0"])
   s.add_runtime_dependency(%q<oauth>, ["~> 0.4.7"])
   s.add_runtime_dependency(%q<twitter>, ["~> 6.1.0"])
   s.add_runtime_dependency(%q<launchy>, [">= 2.4.2"])
