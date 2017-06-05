@@ -50,5 +50,4 @@ Streaming
 
 Chatterbot has rough support for the Streaming API. If your bot can
 use it, it's a great option, because you get your data immediately.
-You can read more about setting up a bot to use [streaming](chatterbot/streaming.html).
-
+You can read more about setting up a bot to use [streaming](streaming.html).
