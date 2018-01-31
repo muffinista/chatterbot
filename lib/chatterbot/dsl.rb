@@ -14,6 +14,10 @@ module Chatterbot
     #
     # search twitter for the specified terms, then pass any matches to
     # the block.
+    # NOTE: by default, search terms are wrapped in quotes so the
+    # Twitter API will return tweets that include your exact query.
+    # You can disable this by passing exact:false as an option
+    #
     # @param args [Hash] options. these will be passed directly to
     # Twitter via the twitter gem. You can see the possible arguments
     # at http://www.rubydoc.info/gems/twitter/Twitter/REST/Search#search-instance_method

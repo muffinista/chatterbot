@@ -24,12 +24,20 @@ module Chatterbot
       @skip_retweets = false
     end
 
-
+    
     #
     # check if this is a retweet that we want to skip
     #
     def skippable_retweet?(t)
       @skip_retweets && t.retweeted_status?
+    end
+
+    def wrap_search_query(q)
+      if q =~ / /
+        ['"', q.gsub(/^"/, '').gsub(/"$/, ''), '"'].join("")
+      else
+        q
+      end
     end
     
     # internal search code
@@ -37,12 +45,26 @@ module Chatterbot
       debug "check for tweets since #{since_id}"
       
       max_tweets = opts.delete(:limit) || MAX_SEARCH_TWEETS
+      exact_match = if opts.key?(:exact)
+                      opts.delete(:exact)
+                    else
+                      true
+                    end
+        
       
       if queries.is_a?(String)
-        queries = [queries]
+        queries = [
+          queries
+        ]
       end
 
-      query = queries.join(" OR ")
+      query = queries.map { |q|
+        if exact_match == true
+          q = wrap_search_query(q)
+        end
+
+        q
+      }.join(" OR ")
       
       #
       # search twitter
@@ -50,6 +72,7 @@ module Chatterbot
 
       debug "search: #{query} #{default_opts.merge(opts)}"
       @current_tweet = nil
+
       client.search( query, default_opts.merge(opts) ).take(max_tweets).each { |s|
         update_since_id(s)
         debug s.text

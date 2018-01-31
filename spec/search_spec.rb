@@ -7,7 +7,6 @@ describe "Chatterbot::Search" do
     bot.search("foo")
   end
  
-
   it "calls update_since_id" do
     bot = test_bot
     
@@ -32,6 +31,46 @@ describe "Chatterbot::Search" do
     bot.search(["foo", "bar"])
   end
 
+  it "encloses search queries in quotes" do
+    bot = test_bot
+
+    allow(bot).to receive(:client).and_return(fake_search(100, 1))
+    expect(bot.client).to receive(:search).
+                           with("\"foo bar baz\"", {
+                                  :result_type=>"recent",
+                                  :since_id => 1,
+                                  :since_id_reply => 1
+                                })
+    
+    bot.search("foo bar baz")
+  end
+
+  it "doesn't enclose search queries in quotes if not exact" do
+    bot = test_bot
+
+    allow(bot).to receive(:client).and_return(fake_search(100, 1))
+    expect(bot.client).to receive(:search).
+                           with("foo bar baz", {
+                                  :result_type=>"recent",
+                                  :since_id => 1,
+                                  :since_id_reply => 1
+                                })
+    
+    bot.search("foo bar baz", exact:false)
+  end
+  
+  it "passes along since_id" do
+    bot = test_bot
+    allow(bot).to receive(:since_id).and_return(123)
+    allow(bot).to receive(:since_id_reply).and_return(456)
+    
+    allow(bot).to receive(:client).and_return(fake_search(100, 1))
+    expect(bot.client).to receive(:search).with("foo", {:since_id => 123, :result_type => "recent", :since_id_reply => 456})
+
+    bot.search("foo")
+  end
+
+  
   it "accepts extra params" do
     bot = test_bot
 
