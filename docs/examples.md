@@ -44,6 +44,7 @@ replies do |tweet|
   # replace the incoming username with #USER#, which will be replaced
   # with the handle of the user who tweeted us by the
   # replace_variables helper
+  # Note: reply tweets must begin with an @-mention of the original tweet's username otherwise the text will get tweeted from the bot account as a tweet, not a reply.
   src = tweet.text.gsub(/@echoes_bot/, "#USER#")  
 
   # send it back!
