@@ -341,7 +341,7 @@ I can work with you on that.
 Copyright/License
 -----------------
 
-Copyright (c) 2016 Colin Mitchell. Chatterbot is distributed under the
+Copyright (c) 2018 Colin Mitchell. Chatterbot is distributed under the
 MIT licence -- Please see LICENSE.txt for further details.
 
 http://muffinlabs.com

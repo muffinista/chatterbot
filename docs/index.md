@@ -61,9 +61,9 @@ calls. Any calls to the search/reply methods will return
 Copyright/License
 -----------------
 
-Copyright (c) 2014 Colin Mitchell. Chatterbot is distributed under the
-WTFPL license.
 
+Copyright (c) 2018 Colin Mitchell. Chatterbot is distributed under the
+MIT licence -- Please see LICENSE.txt for further details.
 
 http://muffinlabs.com
 
