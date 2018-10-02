@@ -9,15 +9,15 @@
         <meta name="description" content="twitter bots in ruby">
 
         <link href="//netdna.bootstrapcdn.com/twitter-bootstrap/2.3.2/css/bootstrap-combined.no-icons.min.css" rel="stylesheet">
-        <link rel="stylesheet" href="/css/syntax.css">
-        <link rel="stylesheet" href="/css/main.css">
+        <link rel="stylesheet" href="/chatterbot/css/syntax.css">
+        <link rel="stylesheet" href="/chatterbot/css/main.css">
     </head>
     <body>
 
         <div class="container">
             <div class=row-fluid>
                 <div id=header class=span12>
-                    <h4><a class=brand href="/">chatterbot</a>
+                    <h4><a class=brand href="/chatterbot/">chatterbot</a>
     <small>twitter bots in ruby</small>
 </h4>
 
@@ -30,7 +30,7 @@
                 
                     <div id=navigation class=span2>
                         <ul class="nav nav-list">
-  <li><a href="/">Home</a></li>
+  <li><a href="/chatterbot/">Home</a></li>
   
     
     
@@ -56,7 +56,7 @@
            
         <li data-order="">
           
-            <a href="/examples.html">Examples</a>
+            <a href="/chatterbot/examples.html">Examples</a>
           
         </li>
       
@@ -82,13 +82,9 @@
            
         <li data-order="">
           
-            <a href="/setup.html">Authorizing Your Bot</a>
+            <a href="/chatterbot/setup.html">Authorizing Your Bot</a>
           
         </li>
-      
-
-    
-
       
 
     
@@ -104,7 +100,7 @@
            
         <li data-order="">
           
-            <a href="/walkthrough.html">Walkthrough</a>
+            <a href="/chatterbot/walkthrough.html">Walkthrough</a>
           
         </li>
       
@@ -119,7 +115,7 @@
            
         <li data-order="">
           
-            <a href="/advanced.html">Advanced Features</a>
+            <a href="/chatterbot/advanced.html">Advanced Features</a>
           
         </li>
       
@@ -129,21 +125,7 @@
            
         <li data-order="">
           
-            <a href="/configuration.html">Configuration</a>
-          
-        </li>
-      
-
-    
-
-      
-
-    
-
-           
-        <li data-order="">
-          
-            <a href="/deploying.html">Running your Bot</a>
+            <a href="/chatterbot/configuration.html">Configuration</a>
           
         </li>
       
@@ -157,21 +139,9 @@
            
         <li data-order="">
           
-            <a href="/features.html">Basic Features</a>
+            <a href="/chatterbot/deploying.html">Running your Bot</a>
           
         </li>
-      
-
-    
-
-      
-
-    
-
-      
-
-    
-
       
 
     
@@ -183,9 +153,25 @@
            
         <li data-order="">
           
-            <a href="/streaming.html">Streaming API</a>
+            <a href="/chatterbot/features.html">Basic Features</a>
           
         </li>
+      
+
+    
+
+      
+
+    
+
+      
+
+    
+
+      
+
+    
+
       
 
     
@@ -218,13 +204,9 @@
            
         <li data-order="">
           
-            <a href="/contributing.html">Contributing</a>
+            <a href="/chatterbot/contributing.html">Contributing</a>
           
         </li>
-      
-
-    
-
       
 
     
@@ -305,7 +287,7 @@
            
         <li data-order="">
           
-            <a href="/other-tools.html">Other Tools</a>
+            <a href="/chatterbot/other-tools.html">Other Tools</a>
           
         </li>
       
@@ -318,10 +300,6 @@
             <a href="http://rubydoc.info/gems/chatterbot">rdoc</a>
           
         </li>
-      
-
-    
-
       
 
     
@@ -363,39 +341,43 @@
 
 <h2 id="make-a-twitter-account">Make a Twitter account</h2>
 
-<p>First thing you&#39;ll need to do is create an account for your bot on
-Twitter.  That&#39;s the easy part.</p>
+<p>First thing you’ll need to do is create an account for your bot on
+Twitter.  That’s the easy part.</p>
 
 <h2 id="run-the-generator">Run the generator</h2>
 
 <p>Chatterbot comes with a script named <code>chatterbot-register</code> which will
-handle two tasks -- it will authorize your bot with Twitter and it
+handle two tasks – it will authorize your bot with Twitter and it
 will generate a skeleton script, which you use to implement your
 actual bot.</p>
 
 <p>When you run <code>chatterbot-register</code> it will walk you through the
 authorization process. If you prefer, you can do this manually. If
-you&#39;d like to learn more about it, you can read the
-<a href="/setup.html">Authorizing your Bot</a> section.</p>
+you’d like to learn more about it, you can read the
+<a href="setup.html">Authorizing your Bot</a> section.</p>
 
 <h2 id="write-your-bot">Write your bot</h2>
 
 <p>Chatterbot is written in ruby, but it accepts some very simple
 scripting commands which can handle almost everything you might need
 to do on Twitter.  You can get some ideas of things you can do on the
-<a href="/examples.html">Examples</a> page.</p>
-<div class="highlight"><pre><code class="language-text" data-lang="text">require &#39;chatterbot/dsl&#39;
-search(&quot;&#39;surely you must be joking&#39;&quot;) do |tweet|
-  reply &quot;@#{tweet_user(tweet)} I am serious, and don&#39;t call me Shirley!&quot;, tweet
+<a href="examples.html">Examples</a> page.</p>
+
+<pre><code>require 'chatterbot/dsl'
+search("'surely you must be joking'") do |tweet|
+  reply "@#{tweet_user(tweet)} I am serious, and don't call me Shirley!", tweet
 end
-</code></pre></div>
+</code></pre>
+
 <p>Or, you can create a bot object yourself, extend it if needed, and use it like so:</p>
-<div class="highlight"><pre><code class="language-text" data-lang="text">bot = Chatterbot::Bot.new
-bot.search(&quot;&#39;surely you must be joking&#39;&quot;) do |tweet|
- bot.reply &quot;@#{tweet_user(tweet)} I am serious, and don&#39;t call me Shirley!&quot;, tweet
+
+<pre><code>bot = Chatterbot::Bot.new
+bot.search("'surely you must be joking'") do |tweet|
+ bot.reply "@#{tweet_user(tweet)} I am serious, and don't call me Shirley!", tweet
 end
-</code></pre></div>
-<p>That&#39;s it!</p>
+</code></pre>
+
+<p>That’s it!</p>
 
 
                     </div>
@@ -404,7 +386,9 @@ end
 
             <div class=row-fluid>
                 <div id=footer class=span12>
-                    Documentation for <a href="https://github.com/muffinista/chatterbot">chatterbot</a>
+                    <!--
+Documentation for <a href="https://github.com/muffinista/chatterbot">chatterbot</a>
+-->
 
                 </div>
             </div>

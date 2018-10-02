@@ -18,8 +18,6 @@ module Chatterbot
           :timestamp => Time.now
         })
 
-        puts opts.inspect
-        
         src % opts
       end
     end

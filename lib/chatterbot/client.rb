@@ -6,7 +6,7 @@ module Chatterbot
   # routines for connecting to Twitter and validating the bot
   #
   module Client
-    attr_accessor :screen_name, :client, :streaming_client
+    attr_accessor :screen_name, :client
 
     #
     # the main interface to the Twitter API
@@ -14,14 +14,7 @@ module Chatterbot
     def client
       @client ||= Twitter::REST::Client.new(client_params)
     end
-
-    #
-    # interace to the Streaming API
-    #
-    def streaming_client
-      @streaming_client ||= Twitter::Streaming::Client.new(client_params)
-    end
-
+    
     #
     # return the currently authenticated User
     #

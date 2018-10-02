@@ -45,7 +45,6 @@ module Chatterbot
     require "chatterbot/followers"
     require "chatterbot/helpers"
     require "chatterbot/utils"
-    require "chatterbot/streaming"
 
     require "chatterbot/bot"
   end

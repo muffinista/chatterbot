@@ -49,7 +49,6 @@ Features
 * Simple blacklistling system to limit your annoyance of users
 * Avoid your bot making a fool of itself by ignoring tweets with
   certain bad words
-* Basic Streaming API support
 * Optionally log tweets to the database for metrics and tracking purposes
 
 

@@ -55,7 +55,6 @@ module Chatterbot
     
     attr_boolean :debug_mode, false
     attr_boolean :verbose, false
-    attr_boolean :streaming, false
     attr_boolean :skip_run, false
     attr_boolean :only_interact_with_followers, false    
 

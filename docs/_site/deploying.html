@@ -9,15 +9,15 @@
         <meta name="description" content="twitter bots in ruby">
 
         <link href="//netdna.bootstrapcdn.com/twitter-bootstrap/2.3.2/css/bootstrap-combined.no-icons.min.css" rel="stylesheet">
-        <link rel="stylesheet" href="/css/syntax.css">
-        <link rel="stylesheet" href="/css/main.css">
+        <link rel="stylesheet" href="/chatterbot/css/syntax.css">
+        <link rel="stylesheet" href="/chatterbot/css/main.css">
     </head>
     <body>
 
         <div class="container">
             <div class=row-fluid>
                 <div id=header class=span12>
-                    <h4><a class=brand href="/">chatterbot</a>
+                    <h4><a class=brand href="/chatterbot/">chatterbot</a>
     <small>twitter bots in ruby</small>
 </h4>
 
@@ -30,7 +30,7 @@
                 
                     <div id=navigation class=span2>
                         <ul class="nav nav-list">
-  <li><a href="/">Home</a></li>
+  <li><a href="/chatterbot/">Home</a></li>
   
     
     
@@ -56,7 +56,7 @@
            
         <li data-order="">
           
-            <a href="/examples.html">Examples</a>
+            <a href="/chatterbot/examples.html">Examples</a>
           
         </li>
       
@@ -82,13 +82,9 @@
            
         <li data-order="">
           
-            <a href="/setup.html">Authorizing Your Bot</a>
+            <a href="/chatterbot/setup.html">Authorizing Your Bot</a>
           
         </li>
-      
-
-    
-
       
 
     
@@ -104,7 +100,7 @@
            
         <li data-order="">
           
-            <a href="/walkthrough.html">Walkthrough</a>
+            <a href="/chatterbot/walkthrough.html">Walkthrough</a>
           
         </li>
       
@@ -119,7 +115,7 @@
            
         <li data-order="">
           
-            <a href="/advanced.html">Advanced Features</a>
+            <a href="/chatterbot/advanced.html">Advanced Features</a>
           
         </li>
       
@@ -129,21 +125,7 @@
            
         <li data-order="">
           
-            <a href="/configuration.html">Configuration</a>
-          
-        </li>
-      
-
-    
-
-      
-
-    
-
-           
-        <li data-order="">
-          
-            <a href="/deploying.html">Running your Bot</a>
+            <a href="/chatterbot/configuration.html">Configuration</a>
           
         </li>
       
@@ -157,21 +139,9 @@
            
         <li data-order="">
           
-            <a href="/features.html">Basic Features</a>
+            <a href="/chatterbot/deploying.html">Running your Bot</a>
           
         </li>
-      
-
-    
-
-      
-
-    
-
-      
-
-    
-
       
 
     
@@ -183,9 +153,25 @@
            
         <li data-order="">
           
-            <a href="/streaming.html">Streaming API</a>
+            <a href="/chatterbot/features.html">Basic Features</a>
           
         </li>
+      
+
+    
+
+      
+
+    
+
+      
+
+    
+
+      
+
+    
+
       
 
     
@@ -218,13 +204,9 @@
            
         <li data-order="">
           
-            <a href="/contributing.html">Contributing</a>
+            <a href="/chatterbot/contributing.html">Contributing</a>
           
         </li>
-      
-
-    
-
       
 
     
@@ -305,7 +287,7 @@
            
         <li data-order="">
           
-            <a href="/other-tools.html">Other Tools</a>
+            <a href="/chatterbot/other-tools.html">Other Tools</a>
           
         </li>
       
@@ -318,10 +300,6 @@
             <a href="http://rubydoc.info/gems/chatterbot">rdoc</a>
           
         </li>
-      
-
-    
-
       
 
     
@@ -361,46 +339,49 @@
     </h2>
 </div>
 
-<p>There&#39;s a couple ways of running your bot:</p>
+<p>There’s a couple ways of running your bot:</p>
 
 <h2 id="manually">Manually</h2>
 
 <p>Run it on the command-line whenever you like. Whee!</p>
 
 <h2 id="cron">Cron</h2>
+<p>Run it via cron.  Here’s an example of running a bot every two minutes</p>
 
-<p>Run it via cron.  Here&#39;s an example of running a bot every two minutes</p>
-<div class="highlight"><pre><code class="language-text" data-lang="text">*/2 * * * * . ~/.bash_profile; cd /path/to/bot/;  ./bot.rb
-</code></pre></div>
+<pre><code>*/2 * * * * . ~/.bash_profile; cd /path/to/bot/;  ./bot.rb
+</code></pre>
+
 <h2 id="looping">Looping</h2>
-
 <p>Run it as a background process.  Just put the guts of your bot in a loop like this:</p>
-<div class="highlight"><pre><code class="language-rb" data-lang="rb"><span class="kp">loop</span> <span class="k">do</span>
-  <span class="n">search</span> <span class="s2">&quot;twitter&quot;</span> <span class="k">do</span> <span class="o">|</span><span class="n">tweet</span><span class="o">|</span>
-    <span class="c1"># here you could do something with a tweet</span>
-    <span class="c1"># if you want to retweet</span>
-    <span class="n">retweet</span><span class="p">(</span><span class="n">tweet</span><span class="o">[</span><span class="ss">:id</span><span class="o">]</span><span class="p">)</span>
-  <span class="k">end</span>
 
-  <span class="n">replies</span> <span class="k">do</span> <span class="o">|</span><span class="n">tweet</span><span class="o">|</span>
-    <span class="c1"># do stuff</span>
-  <span class="k">end</span>
+<p>```rb
+loop do
+  search “twitter” do |tweet|
+    # here you could do something with a tweet
+    # if you want to retweet
+    retweet(tweet[:id])
+  end</p>
 
-  <span class="c1"># explicitly update our config</span>
-  <span class="n">update_config</span>
+<p>replies do |tweet|
+    # do stuff
+  end</p>
 
-  <span class="nb">sleep</span> <span class="mi">60</span>
-<span class="k">end</span>
-</code></pre></div>
+<p># explicitly update our config
+  update_config</p>
+
+<p>sleep 60
+end
+```</p>
+
 <p><strong>NOTE:</strong> You need to call <code>update_config</code> to update the last tweet your script
-has processed -- if you don&#39;t have this call, you will get duplicate
+has processed – if you don’t have this call, you will get duplicate
 tweets.</p>
 
 <h2 id="streaming">Streaming</h2>
 
 <p>Chatterbot has rough support for the Streaming API. If your bot can
-use it, it&#39;s a great option, because you get your data immediately.
-You can read more about setting up a bot to use <a href="/streaming.html">streaming</a>.</p>
+use it, it’s a great option, because you get your data immediately.
+You can read more about setting up a bot to use <a href="streaming.html">streaming</a>.</p>
 
 
                     </div>
@@ -409,7 +390,9 @@ You can read more about setting up a bot to use <a href="/streaming.html">stream
 
             <div class=row-fluid>
                 <div id=footer class=span12>
-                    Documentation for <a href="https://github.com/muffinista/chatterbot">chatterbot</a>
+                    <!--
+Documentation for <a href="https://github.com/muffinista/chatterbot">chatterbot</a>
+-->
 
                 </div>
             </div>

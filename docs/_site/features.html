@@ -9,15 +9,15 @@
         <meta name="description" content="twitter bots in ruby">
 
         <link href="//netdna.bootstrapcdn.com/twitter-bootstrap/2.3.2/css/bootstrap-combined.no-icons.min.css" rel="stylesheet">
-        <link rel="stylesheet" href="/css/syntax.css">
-        <link rel="stylesheet" href="/css/main.css">
+        <link rel="stylesheet" href="/chatterbot/css/syntax.css">
+        <link rel="stylesheet" href="/chatterbot/css/main.css">
     </head>
     <body>
 
         <div class="container">
             <div class=row-fluid>
                 <div id=header class=span12>
-                    <h4><a class=brand href="/">chatterbot</a>
+                    <h4><a class=brand href="/chatterbot/">chatterbot</a>
     <small>twitter bots in ruby</small>
 </h4>
 
@@ -30,7 +30,7 @@
                 
                     <div id=navigation class=span2>
                         <ul class="nav nav-list">
-  <li><a href="/">Home</a></li>
+  <li><a href="/chatterbot/">Home</a></li>
   
     
     
@@ -56,7 +56,7 @@
            
         <li data-order="">
           
-            <a href="/examples.html">Examples</a>
+            <a href="/chatterbot/examples.html">Examples</a>
           
         </li>
       
@@ -82,13 +82,9 @@
            
         <li data-order="">
           
-            <a href="/setup.html">Authorizing Your Bot</a>
+            <a href="/chatterbot/setup.html">Authorizing Your Bot</a>
           
         </li>
-      
-
-    
-
       
 
     
@@ -104,7 +100,7 @@
            
         <li data-order="">
           
-            <a href="/walkthrough.html">Walkthrough</a>
+            <a href="/chatterbot/walkthrough.html">Walkthrough</a>
           
         </li>
       
@@ -119,7 +115,7 @@
            
         <li data-order="">
           
-            <a href="/advanced.html">Advanced Features</a>
+            <a href="/chatterbot/advanced.html">Advanced Features</a>
           
         </li>
       
@@ -129,21 +125,7 @@
            
         <li data-order="">
           
-            <a href="/configuration.html">Configuration</a>
-          
-        </li>
-      
-
-    
-
-      
-
-    
-
-           
-        <li data-order="">
-          
-            <a href="/deploying.html">Running your Bot</a>
+            <a href="/chatterbot/configuration.html">Configuration</a>
           
         </li>
       
@@ -157,21 +139,9 @@
            
         <li data-order="">
           
-            <a href="/features.html">Basic Features</a>
+            <a href="/chatterbot/deploying.html">Running your Bot</a>
           
         </li>
-      
-
-    
-
-      
-
-    
-
-      
-
-    
-
       
 
     
@@ -183,9 +153,25 @@
            
         <li data-order="">
           
-            <a href="/streaming.html">Streaming API</a>
+            <a href="/chatterbot/features.html">Basic Features</a>
           
         </li>
+      
+
+    
+
+      
+
+    
+
+      
+
+    
+
+      
+
+    
+
       
 
     
@@ -218,13 +204,9 @@
            
         <li data-order="">
           
-            <a href="/contributing.html">Contributing</a>
+            <a href="/chatterbot/contributing.html">Contributing</a>
           
         </li>
-      
-
-    
-
       
 
     
@@ -305,7 +287,7 @@
            
         <li data-order="">
           
-            <a href="/other-tools.html">Other Tools</a>
+            <a href="/chatterbot/other-tools.html">Other Tools</a>
           
         </li>
       
@@ -318,10 +300,6 @@
             <a href="http://rubydoc.info/gems/chatterbot">rdoc</a>
           
         </li>
-      
-
-    
-
       
 
     
@@ -361,65 +339,84 @@
     </h2>
 </div>
 
-<p>Here&#39;s a list of some of the commonly-used methods in the Chatterbot DSL:</p>
+<p>Here’s a list of some of the commonly-used methods in the Chatterbot DSL:</p>
 
-<p><strong>search</strong> -- You can use this to perform a search on Twitter:</p>
-<div class="highlight"><pre><code class="language-text" data-lang="text">search(&quot;&#39;surely you must be joking&#39;&quot;) do |tweet|
-  reply &quot;#USER# I am serious, and don&#39;t call me Shirley!&quot;, tweet
+<p><strong>search</strong> – You can use this to perform a search on Twitter:</p>
+
+<pre><code>search("'surely you must be joking'") do |tweet|
+  reply "#USER# I am serious, and don't call me Shirley!", tweet
 end
-</code></pre></div>
+</code></pre>
+
 <p>By default, Chatterbot keeps track of the last time you ran the bot,
 and it will only search for new tweets.</p>
 
-<p><strong>replies</strong> -- Use this to check for replies and mentions:</p>
-<div class="highlight"><pre><code class="language-text" data-lang="text">replies do |tweet|
-  reply &quot;#USER# Thanks for contacting me!&quot;, tweet
+<p><strong>replies</strong> – Use this to check for replies and mentions:</p>
+
+<pre><code>replies do |tweet|
+  reply "#USER# Thanks for contacting me!", tweet
 end
-</code></pre></div>
+</code></pre>
+
 <p>Note that the string <strong>#USER#</strong> is automatically replaced with the
 username of the person who sent the original tweet. Also, Chatterbot
 will only return tweets that were sent since the last run of the bot.</p>
 
-<p><strong>tweet</strong> -- send a Tweet out for this bot:</p>
-<div class="highlight"><pre><code class="language-text" data-lang="text">tweet &quot;I AM A BOT!!!&quot;
-</code></pre></div>
-<p><strong>reply</strong> -- reply to another tweet:</p>
-<div class="highlight"><pre><code class="language-text" data-lang="text">reply &quot;THIS IS A REPLY TO #USER#!&quot;, original_tweet
-</code></pre></div>
-<p><strong>retweet</strong> -- Chatterbot can retweet tweets as well:</p>
-<div class="highlight"><pre><code class="language-rb" data-lang="rb">  <span class="n">search</span> <span class="s2">&quot;xyzzy&quot;</span> <span class="k">do</span> <span class="o">|</span><span class="n">tweet</span><span class="o">|</span>
-    <span class="n">retweet</span><span class="p">(</span><span class="n">tweet</span><span class="o">[</span><span class="ss">:id</span><span class="o">]</span><span class="p">)</span>
-  <span class="k">end</span>
-</code></pre></div>
-<p><strong>blacklist</strong> -- you can use this to specify a list of users you don&#39;t
+<p><strong>tweet</strong> – send a Tweet out for this bot:</p>
+
+<pre><code>tweet "I AM A BOT!!!"
+</code></pre>
+
+<p><strong>reply</strong> – reply to another tweet:</p>
+
+<pre><code>reply "THIS IS A REPLY TO #USER#!", original_tweet
+</code></pre>
+
+<p><strong>retweet</strong> – Chatterbot can retweet tweets as well:</p>
+
+<p><code>rb
+  search "xyzzy" do |tweet|
+    retweet(tweet[:id])
+  end
+</code></p>
+
+<p><strong>blacklist</strong> – you can use this to specify a list of users you don’t
   want to interact with. If you put the following line at the top of
   your bot:</p>
-<div class="highlight"><pre><code class="language-text" data-lang="text">blacklist &quot;user1, user2, user3&quot;
-</code></pre></div>
+
+<pre><code>blacklist "user1, user2, user3"
+</code></pre>
+
 <p>None of those users will trigger your bot if they come up in a
 search. However, if a user replies to one of your tweets or mentions
 your bot in a tweet, you will still receive that tweet when checking
 for replies.</p>
 
-<p><strong>exclude</strong> -- similarly, you can specify a list of words/phrases
-  which shouldn&#39;t trigger your bot. If you use the following:</p>
-<div class="highlight"><pre><code class="language-text" data-lang="text">exclude &quot;spam&quot;
-</code></pre></div>
-<p>Any tweets or mentions with the word &#39;spam&#39; in them will be ignored by
+<p><strong>exclude</strong> – similarly, you can specify a list of words/phrases
+  which shouldn’t trigger your bot. If you use the following:</p>
+
+<pre><code>exclude "spam"
+</code></pre>
+
+<p>Any tweets or mentions with the word ‘spam’ in them will be ignored by
 the bot. If you wanted to ignore any tweets with links in them (a wise
 precaution if you want to avoid spreading spam), you could call:</p>
-<div class="highlight"><pre><code class="language-text" data-lang="text">exclude &quot;http://&quot;
-</code></pre></div>
-<p>The library actually comes with a pre-defined list of &#39;bad words&#39;
+
+<pre><code>exclude "http://"
+</code></pre>
+
+<p>The library actually comes with a pre-defined list of ‘bad words’
 which you can exclude by default by calling:</p>
-<div class="highlight"><pre><code class="language-text" data-lang="text">exclude bad_words
-</code></pre></div>
-<p>The word list is from Darius Kazemi&#39;s
+
+<pre><code>exclude bad_words
+</code></pre>
+
+<p>The word list is from Darius Kazemi’s
 <a href="https://github.com/dariusk/wordfilter">wordfilter</a>.</p>
 
 <p><strong>whitelist</strong></p>
 
-<p><strong>followers</strong> -- get a list of your followers. This is an experimental
+<p><strong>followers</strong> – get a list of your followers. This is an experimental
   feature but should work for most purposes.</p>
 
 <p><strong>follow</strong></p>
@@ -438,7 +435,9 @@ in the source code.</p>
 
             <div class=row-fluid>
                 <div id=footer class=span12>
-                    Documentation for <a href="https://github.com/muffinista/chatterbot">chatterbot</a>
+                    <!--
+Documentation for <a href="https://github.com/muffinista/chatterbot">chatterbot</a>
+-->
 
                 </div>
             </div>

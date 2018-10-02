@@ -100,7 +100,7 @@ describe "Chatterbot::DSL" do
 
     describe "search" do
       it "passes along to bot object" do
-        allow(@bot).to receive(:run_or_stream)
+        allow(@bot).to receive(:run!)
         expect(@bot).to receive(:register_handler).with(:search, ["foo"])
         search("foo") {}
       end
@@ -118,39 +118,7 @@ describe "Chatterbot::DSL" do
       end
     end
 
-    describe "favorited" do
-      it "passes along to bot object" do
-        expect(@bot).to receive(:register_handler).with(:favorited, instance_of(Proc))
-
-        favorited {}
-      end
-    end
-
-    describe "followed" do
-      it "passes along to bot object" do
-        expect(@bot).to receive(:register_handler).with(:followed, instance_of(Proc))
-
-        followed {}
-      end
-    end
-
-    describe "deleted" do
-      it "passes along to bot object" do
-        expect(@bot).to receive(:register_handler).with(:deleted, instance_of(Proc))
-
-        deleted {}
-      end
-    end
-
    
-    describe "streaming" do
-      it "passes along to bot object" do
-        expect(@bot).to receive(:streaming=).with(true)
-        use_streaming
-      end
-    end
-
-    
     it "#retweet passes along to bot object" do
       expect(@bot).to receive(:retweet).with(1234)
       retweet(1234)
