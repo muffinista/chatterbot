@@ -70,49 +70,6 @@ module Chatterbot
       bot.register_handler(:direct_messages, block)
     end
     
-    
-    #
-    # handle notifications of bot tweets favorited by other users.
-    # Using this block will require usage of the Streaming API.
-    #
-    # @example
-    #   favorited do |tweet|
-    #     puts tweet.text # this is the actual tweeted text
-    #     reply "@#{user.screen_name} thanks for the fave!", tweet
-    #   end
-    def favorited(&block)
-      bot.register_handler(:favorited, block)
-    end
-  
-    #
-    # handle notifications that the bot has a new follower.
-    # Using this block will require usage of the Streaming API.
-    #
-    # @example
-    #   followed do |user|
-    #     follow user
-    #   end
-    def followed(&block)
-      bot.register_handler(:followed, block)
-    end
-  
-    #
-    # handle notifications of tweets on the bot's timeline that were deleted.
-    # Using this block will require usage of the Streaming API.
-    def deleted(&block)
-      bot.register_handler(:deleted, block)
-    end
-
-
-    #
-    # enable or disable usage of the Streaming API
-    #
-    def use_streaming(s=nil)
-      s = true if s.nil?
-      bot.streaming = s
-    end
-    
-    
     #
     # send a tweet
     #

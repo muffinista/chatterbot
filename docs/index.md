@@ -49,7 +49,6 @@ Features
 * Simple blacklistling system to limit your annoyance of users
 * Avoid your bot making a fool of itself by ignoring tweets with
   certain bad words
-* Basic Streaming API support
 * Optionally log tweets to the database for metrics and tracking purposes
 
 
@@ -62,9 +61,9 @@ calls. Any calls to the search/reply methods will return
 Copyright/License
 -----------------
 
-Copyright (c) 2014 Colin Mitchell. Chatterbot is distributed under the
-WTFPL license.
 
+Copyright (c) 2018 Colin Mitchell. Chatterbot is distributed under the
+MIT licence -- Please see LICENSE.txt for further details.
 
 http://muffinlabs.com
 

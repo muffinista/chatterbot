@@ -9,15 +9,15 @@
         <meta name="description" content="twitter bots in ruby">
 
         <link href="//netdna.bootstrapcdn.com/twitter-bootstrap/2.3.2/css/bootstrap-combined.no-icons.min.css" rel="stylesheet">
-        <link rel="stylesheet" href="/css/syntax.css">
-        <link rel="stylesheet" href="/css/main.css">
+        <link rel="stylesheet" href="/chatterbot/css/syntax.css">
+        <link rel="stylesheet" href="/chatterbot/css/main.css">
     </head>
     <body>
 
         <div class="container">
             <div class=row-fluid>
                 <div id=header class=span12>
-                    <h4><a class=brand href="/">chatterbot</a>
+                    <h4><a class=brand href="/chatterbot/">chatterbot</a>
     <small>twitter bots in ruby</small>
 </h4>
 
@@ -30,7 +30,7 @@
                 
                     <div id=navigation class=span2>
                         <ul class="nav nav-list">
-  <li><a href="/">Home</a></li>
+  <li><a href="/chatterbot/">Home</a></li>
   
     
     
@@ -56,7 +56,7 @@
            
         <li data-order="">
           
-            <a href="/examples.html">Examples</a>
+            <a href="/chatterbot/examples.html">Examples</a>
           
         </li>
       
@@ -82,13 +82,9 @@
            
         <li data-order="">
           
-            <a href="/setup.html">Authorizing Your Bot</a>
+            <a href="/chatterbot/setup.html">Authorizing Your Bot</a>
           
         </li>
-      
-
-    
-
       
 
     
@@ -104,7 +100,7 @@
            
         <li data-order="">
           
-            <a href="/walkthrough.html">Walkthrough</a>
+            <a href="/chatterbot/walkthrough.html">Walkthrough</a>
           
         </li>
       
@@ -119,7 +115,7 @@
            
         <li data-order="">
           
-            <a href="/advanced.html">Advanced Features</a>
+            <a href="/chatterbot/advanced.html">Advanced Features</a>
           
         </li>
       
@@ -129,21 +125,7 @@
            
         <li data-order="">
           
-            <a href="/configuration.html">Configuration</a>
-          
-        </li>
-      
-
-    
-
-      
-
-    
-
-           
-        <li data-order="">
-          
-            <a href="/deploying.html">Running your Bot</a>
+            <a href="/chatterbot/configuration.html">Configuration</a>
           
         </li>
       
@@ -157,21 +139,9 @@
            
         <li data-order="">
           
-            <a href="/features.html">Basic Features</a>
+            <a href="/chatterbot/deploying.html">Running your Bot</a>
           
         </li>
-      
-
-    
-
-      
-
-    
-
-      
-
-    
-
       
 
     
@@ -183,9 +153,25 @@
            
         <li data-order="">
           
-            <a href="/streaming.html">Streaming API</a>
+            <a href="/chatterbot/features.html">Basic Features</a>
           
         </li>
+      
+
+    
+
+      
+
+    
+
+      
+
+    
+
+      
+
+    
+
       
 
     
@@ -218,13 +204,9 @@
            
         <li data-order="">
           
-            <a href="/contributing.html">Contributing</a>
+            <a href="/chatterbot/contributing.html">Contributing</a>
           
         </li>
-      
-
-    
-
       
 
     
@@ -305,7 +287,7 @@
            
         <li data-order="">
           
-            <a href="/other-tools.html">Other Tools</a>
+            <a href="/chatterbot/other-tools.html">Other Tools</a>
           
         </li>
       
@@ -318,10 +300,6 @@
             <a href="http://rubydoc.info/gems/chatterbot">rdoc</a>
           
         </li>
-      
-
-    
-
       
 
     
@@ -357,65 +335,64 @@
                     <div id=content class=span10>
                         <h1 id="chatterbot">Chatterbot</h1>
 
-<p>Chatterbot is a Ruby library for making bots on Twitter.  It&#39;s
+<p><a href="https://github.com/muffinista/chatterbot">Chatterbot</a> is a Ruby library for making bots on Twitter.  It’s
 great for rapid development of bot ideas. It handles all of the basic
-Twitter API features -- searches, replies, tweets, retweets, etc. and has
+Twitter API features – searches, replies, tweets, retweets, etc. and has
 a simple blacklist/whitelist system to help minimize spam and unwanted
 data.</p>
 
 <p>A bot using chatterbot can be as simple as this:</p>
-<div class="highlight"><pre><code class="language-text" data-lang="text">exclude &quot;http://&quot;
-blacklist &quot;mean_user, private_user&quot;
 
-puts &quot;checking my timeline&quot;
+<p>```
+exclude “http://”
+blacklist “mean_user, private_user”</p>
+
+<p>puts “checking my timeline”
 home_timeline do |tweet|
     # i like to favorite things
     favorite tweet
-end
+end</p>
 
-puts &quot;checking for replies to my tweets and mentions of me&quot;
+<p>puts “checking for replies to my tweets and mentions of me”
 replies do |tweet|
   text = tweet.text
-  puts &quot;message received: #{text}&quot;
-  src = text.gsub(/@echoes_bot/, &quot;#USER#&quot;)  
+  puts “message received: #{text}”
+  src = text.gsub(/@echoes_bot/, “#USER#”)  </p>
 
-  # send it back!
+<p># send it back!
   reply src, tweet
 end
-</code></pre></div>
+```</p>
+
 <p>Or you can write a bot using more traditional ruby classes.</p>
 
 <p>Chatterbot can actually generate a template bot file for you, and will
 walk you through process of getting a bot authorized with Twitter.</p>
 
 <h2 id="features">Features</h2>
-
 <ul>
-<li>Handles search queries and replies to your bot</li>
-<li>Use a simple scripting language, or extend a Bot class if you need it</li>
-<li>Wraps the Twitter gem so you have access to the entire Twitter API</li>
-<li>Simple blacklistling system to limit your annoyance of users</li>
-<li>Avoid your bot making a fool of itself by ignoring tweets with
+  <li>Handles search queries and replies to your bot</li>
+  <li>Use a simple scripting language, or extend a Bot class if you need it</li>
+  <li>Wraps the Twitter gem so you have access to the entire Twitter API</li>
+  <li>Simple blacklistling system to limit your annoyance of users</li>
+  <li>Avoid your bot making a fool of itself by ignoring tweets with
 certain bad words</li>
-<li>Basic Streaming API support</li>
-<li>Optionally log tweets to the database for metrics and tracking purposes</li>
+  <li>Basic Streaming API support</li>
+  <li>Optionally log tweets to the database for metrics and tracking purposes</li>
 </ul>
 
 <p>Chatterbot uses the the Twitter gem
-(<a href="https://github.com/sferik/twitter">https://github.com/sferik/twitter</a>) to handle the underlying API
+(https://github.com/sferik/twitter) to handle the underlying API
 calls. Any calls to the search/reply methods will return
 <code>Twitter::Tweet</code> objects.</p>
 
-<h2 id="copyright/license">Copyright/License</h2>
+<h2 id="copyrightlicense">Copyright/License</h2>
 
-<p>Copyright (c) 2014 Colin Mitchell. Chatterbot is distributed under a
-modified WTFPL licence -- it&#39;s the &#39;Do what the fuck you want to --
-but don&#39;t be an asshole&#39; public license.  Please see LICENSE.txt for
-further details. Basically, do whatever you want with this code, but
-don&#39;t be an asshole about it.  If you spam users inappropriately,
-expect your karma to suffer.</p>
+<p>Copyright (c) 2014 Colin Mitchell. Chatterbot is distributed under the
+WTFPL license.</p>
 
-<p><a href="http://muffinlabs.com">http://muffinlabs.com</a></p>
+<p>http://muffinlabs.com</p>
+
 
                     </div>
                 
@@ -423,7 +400,9 @@ expect your karma to suffer.</p>
 
             <div class=row-fluid>
                 <div id=footer class=span12>
-                    Documentation for <a href="https://github.com/muffinista/chatterbot">chatterbot</a>
+                    <!--
+Documentation for <a href="https://github.com/muffinista/chatterbot">chatterbot</a>
+-->
 
                 </div>
             </div>

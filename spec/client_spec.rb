@@ -8,9 +8,6 @@ describe "Chatterbot::Client" do
   it "should initialize client" do
     expect(@bot.client).to be_a(Twitter::REST::Client)
   end
-  it "should initialize streaming client" do
-    expect(@bot.streaming_client).to be_a(Twitter::Streaming::Client)
-  end
 
   describe "reset!" do
     it "should reset a bunch of stuff" do

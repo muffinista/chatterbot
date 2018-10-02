@@ -9,15 +9,15 @@
         <meta name="description" content="twitter bots in ruby">
 
         <link href="//netdna.bootstrapcdn.com/twitter-bootstrap/2.3.2/css/bootstrap-combined.no-icons.min.css" rel="stylesheet">
-        <link rel="stylesheet" href="/css/syntax.css">
-        <link rel="stylesheet" href="/css/main.css">
+        <link rel="stylesheet" href="/chatterbot/css/syntax.css">
+        <link rel="stylesheet" href="/chatterbot/css/main.css">
     </head>
     <body>
 
         <div class="container">
             <div class=row-fluid>
                 <div id=header class=span12>
-                    <h4><a class=brand href="/">chatterbot</a>
+                    <h4><a class=brand href="/chatterbot/">chatterbot</a>
     <small>twitter bots in ruby</small>
 </h4>
 
@@ -30,7 +30,7 @@
                 
                     <div id=navigation class=span2>
                         <ul class="nav nav-list">
-  <li><a href="/">Home</a></li>
+  <li><a href="/chatterbot/">Home</a></li>
   
     
     
@@ -56,7 +56,7 @@
            
         <li data-order="">
           
-            <a href="/examples.html">Examples</a>
+            <a href="/chatterbot/examples.html">Examples</a>
           
         </li>
       
@@ -82,13 +82,9 @@
            
         <li data-order="">
           
-            <a href="/setup.html">Authorizing Your Bot</a>
+            <a href="/chatterbot/setup.html">Authorizing Your Bot</a>
           
         </li>
-      
-
-    
-
       
 
     
@@ -104,7 +100,7 @@
            
         <li data-order="">
           
-            <a href="/walkthrough.html">Walkthrough</a>
+            <a href="/chatterbot/walkthrough.html">Walkthrough</a>
           
         </li>
       
@@ -119,7 +115,7 @@
            
         <li data-order="">
           
-            <a href="/advanced.html">Advanced Features</a>
+            <a href="/chatterbot/advanced.html">Advanced Features</a>
           
         </li>
       
@@ -129,21 +125,7 @@
            
         <li data-order="">
           
-            <a href="/configuration.html">Configuration</a>
-          
-        </li>
-      
-
-    
-
-      
-
-    
-
-           
-        <li data-order="">
-          
-            <a href="/deploying.html">Running your Bot</a>
+            <a href="/chatterbot/configuration.html">Configuration</a>
           
         </li>
       
@@ -157,21 +139,9 @@
            
         <li data-order="">
           
-            <a href="/features.html">Basic Features</a>
+            <a href="/chatterbot/deploying.html">Running your Bot</a>
           
         </li>
-      
-
-    
-
-      
-
-    
-
-      
-
-    
-
       
 
     
@@ -183,9 +153,25 @@
            
         <li data-order="">
           
-            <a href="/streaming.html">Streaming API</a>
+            <a href="/chatterbot/features.html">Basic Features</a>
           
         </li>
+      
+
+    
+
+      
+
+    
+
+      
+
+    
+
+      
+
+    
+
       
 
     
@@ -218,13 +204,9 @@
            
         <li data-order="">
           
-            <a href="/contributing.html">Contributing</a>
+            <a href="/chatterbot/contributing.html">Contributing</a>
           
         </li>
-      
-
-    
-
       
 
     
@@ -305,7 +287,7 @@
            
         <li data-order="">
           
-            <a href="/other-tools.html">Other Tools</a>
+            <a href="/chatterbot/other-tools.html">Other Tools</a>
           
         </li>
       
@@ -318,10 +300,6 @@
             <a href="http://rubydoc.info/gems/chatterbot">rdoc</a>
           
         </li>
-      
-
-    
-
       
 
     
@@ -367,48 +345,57 @@
 have access to an instance of Twitter::Client provided by the
 <strong>client</strong> method. In theory, you can do something like this in your
 bot to unfollow users who DM you:</p>
-<div class="highlight"><pre><code class="language-text" data-lang="text">client.direct_messages_received(:since_id =&gt; since_id).each do |m|
+
+<pre><code>client.direct_messages_received(:since_id =&gt; since_id).each do |m|
     client.unfollow(m.user.name)
 end
-</code></pre></div>
-<h2 id="storing-config-in-the-database">Storing Config in the Database</h2>
+</code></pre>
 
+<h2 id="storing-config-in-the-database">Storing Config in the Database</h2>
 <p>Sometimes it is preferable to store the authorization credentials for
-your bot in a database. </p>
+your bot in a database.</p>
 
 <p>Chatterbot can manage configurations that are stored in the database,
 but to do this you will need to specify how to connect to the
 database. You can do this by specifying the connection string
-either in one of the global config files by setting </p>
-<div class="highlight"><pre><code class="language-text" data-lang="text">:db_uri:mysql://username:password@host/database
-</code></pre></div>
+either in one of the global config files by setting</p>
+
+<p><code>
+:db_uri:mysql://username:password@host/database
+</code></p>
+
 <p>Or you can specify the connection on the command-line by using the
---db=&quot;db_uri&quot; configuration option. Any calls to the database are
+–db=”db_uri” configuration option. Any calls to the database are
 handled by the Sequel gem, and MySQL and Sqlite should work. The DB
 URI should be in the form of</p>
-<div class="highlight"><pre><code class="language-text" data-lang="text">mysql://username:password@host/database 
-</code></pre></div>
-<p>see <a href="http://sequel.rubyforge.org/rdoc/files/doc/opening_databases_rdoc.html">http://sequel.rubyforge.org/rdoc/files/doc/opening_databases_rdoc.html</a>
+
+<pre><code>mysql://username:password@host/database
+</code></pre>
+
+<p>see http://sequel.rubyforge.org/rdoc/files/doc/opening_databases_rdoc.html
 for details.</p>
 
 <h2 id="logging-tweets-to-the-database">Logging Tweets to the Database</h2>
 
 <p>Chatterbot can log tweet activity to a database if desired. This can
-be handy for archival purposes, or for tracking what&#39;s going on with
-your bot. </p>
+be handy for archival purposes, or for tracking what’s going on with
+your bot.</p>
 
-<p>If you&#39;ve configured your bot for database access, you can store a
+<p>If you’ve configured your bot for database access, you can store a
 tweet to the database by calling the <code>log</code> method like this:</p>
-<div class="highlight"><pre><code class="language-text" data-lang="text">search &quot;chatterbot&quot; do |tweet|
+
+<p><code>
+search "chatterbot" do |tweet|
     log tweet
 end
-</code></pre></div>
+</code></p>
+
 <p>See <code>Chatterbot::Logging</code> for details on this.</p>
 
 <h2 id="streaming">Streaming</h2>
 
-<p>Chatterbot has basic support for Twitter&#39;s Streaming API. You can read
-more about it <a href="/streaming.html">here</a></p>
+<p>Chatterbot has basic support for Twitter’s Streaming API. You can read
+more about it <a href="streaming.html">here</a></p>
 
 
                     </div>
@@ -417,7 +404,9 @@ more about it <a href="/streaming.html">here</a></p>
 
             <div class=row-fluid>
                 <div id=footer class=span12>
-                    Documentation for <a href="https://github.com/muffinista/chatterbot">chatterbot</a>
+                    <!--
+Documentation for <a href="https://github.com/muffinista/chatterbot">chatterbot</a>
+-->
 
                 </div>
             </div>

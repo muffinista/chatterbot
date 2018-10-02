@@ -9,15 +9,15 @@
         <meta name="description" content="twitter bots in ruby">
 
         <link href="//netdna.bootstrapcdn.com/twitter-bootstrap/2.3.2/css/bootstrap-combined.no-icons.min.css" rel="stylesheet">
-        <link rel="stylesheet" href="/css/syntax.css">
-        <link rel="stylesheet" href="/css/main.css">
+        <link rel="stylesheet" href="/chatterbot/css/syntax.css">
+        <link rel="stylesheet" href="/chatterbot/css/main.css">
     </head>
     <body>
 
         <div class="container">
             <div class=row-fluid>
                 <div id=header class=span12>
-                    <h4><a class=brand href="/">chatterbot</a>
+                    <h4><a class=brand href="/chatterbot/">chatterbot</a>
     <small>twitter bots in ruby</small>
 </h4>
 
@@ -30,7 +30,7 @@
                 
                     <div id=navigation class=span2>
                         <ul class="nav nav-list">
-  <li><a href="/">Home</a></li>
+  <li><a href="/chatterbot/">Home</a></li>
   
     
     
@@ -56,7 +56,7 @@
            
         <li data-order="">
           
-            <a href="/examples.html">Examples</a>
+            <a href="/chatterbot/examples.html">Examples</a>
           
         </li>
       
@@ -82,13 +82,9 @@
            
         <li data-order="">
           
-            <a href="/setup.html">Authorizing Your Bot</a>
+            <a href="/chatterbot/setup.html">Authorizing Your Bot</a>
           
         </li>
-      
-
-    
-
       
 
     
@@ -104,7 +100,7 @@
            
         <li data-order="">
           
-            <a href="/walkthrough.html">Walkthrough</a>
+            <a href="/chatterbot/walkthrough.html">Walkthrough</a>
           
         </li>
       
@@ -119,7 +115,7 @@
            
         <li data-order="">
           
-            <a href="/advanced.html">Advanced Features</a>
+            <a href="/chatterbot/advanced.html">Advanced Features</a>
           
         </li>
       
@@ -129,21 +125,7 @@
            
         <li data-order="">
           
-            <a href="/configuration.html">Configuration</a>
-          
-        </li>
-      
-
-    
-
-      
-
-    
-
-           
-        <li data-order="">
-          
-            <a href="/deploying.html">Running your Bot</a>
+            <a href="/chatterbot/configuration.html">Configuration</a>
           
         </li>
       
@@ -157,21 +139,9 @@
            
         <li data-order="">
           
-            <a href="/features.html">Basic Features</a>
+            <a href="/chatterbot/deploying.html">Running your Bot</a>
           
         </li>
-      
-
-    
-
-      
-
-    
-
-      
-
-    
-
       
 
     
@@ -183,9 +153,25 @@
            
         <li data-order="">
           
-            <a href="/streaming.html">Streaming API</a>
+            <a href="/chatterbot/features.html">Basic Features</a>
           
         </li>
+      
+
+    
+
+      
+
+    
+
+      
+
+    
+
+      
+
+    
+
       
 
     
@@ -218,13 +204,9 @@
            
         <li data-order="">
           
-            <a href="/contributing.html">Contributing</a>
+            <a href="/chatterbot/contributing.html">Contributing</a>
           
         </li>
-      
-
-    
-
       
 
     
@@ -305,7 +287,7 @@
            
         <li data-order="">
           
-            <a href="/other-tools.html">Other Tools</a>
+            <a href="/chatterbot/other-tools.html">Other Tools</a>
           
         </li>
       
@@ -318,10 +300,6 @@
             <a href="http://rubydoc.info/gems/chatterbot">rdoc</a>
           
         </li>
-      
-
-    
-
       
 
     
@@ -366,7 +344,7 @@ the OAuth credentials, timestamps, etc.  Chatterbot offers a whole
 bunch of different methods of storing the config for your bot:</p>
 
 <ol>
-<li>Your credentials can be stored as variables in the script itself.
+  <li>Your credentials can be stored as variables in the script itself.
 If you generate a bot via <code>chatterbot-register</code>, the file will have
 these variables specified. However, if your bot source code is
 going to be public, you should NOT do this. Anyone who has your
@@ -374,19 +352,19 @@ credentials can do nasty things with your Twitter account. Also, if
 your bot is using replies or searches, chatterbot will need to
 track some state information, and that data will be written to a
 YAML file.</li>
-<li>In a YAML file with the same name as the bot, so if you have
+  <li>In a YAML file with the same name as the bot, so if you have
 botname.rb or a Botname class, store your config in botname.yaml.
 <code>chatterbot-register</code> will also create this file. If you are using
 git or another source code control system, you should <strong>NOT</strong> store
 this file! It will be updated every time your bots run.</li>
-<li>In a global config file at <code>/etc/chatterbot.yml</code> -- values stored here
+  <li>In a global config file at <code>/etc/chatterbot.yml</code> – values stored here
 will apply to any bots you run.</li>
-<li>In another global config file specified in the environment variable
-<code>&#39;chatterbot_config&#39;</code>.</li>
-<li>In a <code>global.yml</code> file in the same directory as your bot.  This
+  <li>In another global config file specified in the environment variable
+<code>'chatterbot_config'</code>.</li>
+  <li>In a <code>global.yml</code> file in the same directory as your bot.  This
 gives you the ability to have a global configuration file, but keep
 it with your bots if desired.</li>
-<li>In a database.  You can read more about this on the <a href="/advanced.html">Advanced
+  <li>In a database.  You can read more about this on the <a href="advanced.html">Advanced
 Features</a> page</li>
 </ol>
 
@@ -397,7 +375,9 @@ Features</a> page</li>
 
             <div class=row-fluid>
                 <div id=footer class=span12>
-                    Documentation for <a href="https://github.com/muffinista/chatterbot">chatterbot</a>
+                    <!--
+Documentation for <a href="https://github.com/muffinista/chatterbot">chatterbot</a>
+-->
 
                 </div>
             </div>

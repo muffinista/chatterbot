@@ -22,7 +22,6 @@ Features
 * Simple blocklist system to limit your annoyance of users
 * Avoid your bot making a fool of itself by ignoring tweets with
   certain bad words
-* Basic Streaming API support
 
 
 Using Chatterbot
@@ -102,25 +101,12 @@ that you should just be using the Twitter gem directly.
 Streaming
 ---------
 
-Chatterbot has some basic support for the Streaming API. If you want
-to do something complicated, you should probably consider using the
-[Twitter gem](https://github.com/sferik/twitter#streaming) directly. 
-
-Basic usage is very straightforward:
-
-    use_streaming true
-    home_timeline do |tweet|
-      puts "someone i follow tweeted! #{tweet.text}"
-    end
-
-
-You can also run a search:
-
-    use_streaming true
-    search("pizza") do |tweet|
-      puts "someone is talking about pizza! #{tweet.text}"
-    end
-
+Chatterbot used to have some basic support for the Streaming API, but
+I've removed it because Twitter is removing and/or restricting access
+to those APIs. If you need the Streaming API, I highly recommend using
+the the [Twitter
+gem](https://github.com/sferik/twitter#streaming). Chatterbot is built
+on the Twitter gem, it works great, and has support for streaming.
 
 
 What Can I Do?
@@ -355,7 +341,7 @@ I can work with you on that.
 Copyright/License
 -----------------
 
-Copyright (c) 2016 Colin Mitchell. Chatterbot is distributed under the
+Copyright (c) 2018 Colin Mitchell. Chatterbot is distributed under the
 MIT licence -- Please see LICENSE.txt for further details.
 
 http://muffinlabs.com

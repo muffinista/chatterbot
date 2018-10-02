@@ -9,15 +9,15 @@
         <meta name="description" content="twitter bots in ruby">
 
         <link href="//netdna.bootstrapcdn.com/twitter-bootstrap/2.3.2/css/bootstrap-combined.no-icons.min.css" rel="stylesheet">
-        <link rel="stylesheet" href="/css/syntax.css">
-        <link rel="stylesheet" href="/css/main.css">
+        <link rel="stylesheet" href="/chatterbot/css/syntax.css">
+        <link rel="stylesheet" href="/chatterbot/css/main.css">
     </head>
     <body>
 
         <div class="container">
             <div class=row-fluid>
                 <div id=header class=span12>
-                    <h4><a class=brand href="/">chatterbot</a>
+                    <h4><a class=brand href="/chatterbot/">chatterbot</a>
     <small>twitter bots in ruby</small>
 </h4>
 
@@ -30,7 +30,7 @@
                 
                     <div id=navigation class=span2>
                         <ul class="nav nav-list">
-  <li><a href="/">Home</a></li>
+  <li><a href="/chatterbot/">Home</a></li>
   
     
     
@@ -56,7 +56,7 @@
            
         <li data-order="">
           
-            <a href="/examples.html">Examples</a>
+            <a href="/chatterbot/examples.html">Examples</a>
           
         </li>
       
@@ -82,13 +82,9 @@
            
         <li data-order="">
           
-            <a href="/setup.html">Authorizing Your Bot</a>
+            <a href="/chatterbot/setup.html">Authorizing Your Bot</a>
           
         </li>
-      
-
-    
-
       
 
     
@@ -104,7 +100,7 @@
            
         <li data-order="">
           
-            <a href="/walkthrough.html">Walkthrough</a>
+            <a href="/chatterbot/walkthrough.html">Walkthrough</a>
           
         </li>
       
@@ -119,7 +115,7 @@
            
         <li data-order="">
           
-            <a href="/advanced.html">Advanced Features</a>
+            <a href="/chatterbot/advanced.html">Advanced Features</a>
           
         </li>
       
@@ -129,21 +125,7 @@
            
         <li data-order="">
           
-            <a href="/configuration.html">Configuration</a>
-          
-        </li>
-      
-
-    
-
-      
-
-    
-
-           
-        <li data-order="">
-          
-            <a href="/deploying.html">Running your Bot</a>
+            <a href="/chatterbot/configuration.html">Configuration</a>
           
         </li>
       
@@ -157,21 +139,9 @@
            
         <li data-order="">
           
-            <a href="/features.html">Basic Features</a>
+            <a href="/chatterbot/deploying.html">Running your Bot</a>
           
         </li>
-      
-
-    
-
-      
-
-    
-
-      
-
-    
-
       
 
     
@@ -183,9 +153,25 @@
            
         <li data-order="">
           
-            <a href="/streaming.html">Streaming API</a>
+            <a href="/chatterbot/features.html">Basic Features</a>
           
         </li>
+      
+
+    
+
+      
+
+    
+
+      
+
+    
+
+      
+
+    
+
       
 
     
@@ -218,13 +204,9 @@
            
         <li data-order="">
           
-            <a href="/contributing.html">Contributing</a>
+            <a href="/chatterbot/contributing.html">Contributing</a>
           
         </li>
-      
-
-    
-
       
 
     
@@ -305,7 +287,7 @@
            
         <li data-order="">
           
-            <a href="/other-tools.html">Other Tools</a>
+            <a href="/chatterbot/other-tools.html">Other Tools</a>
           
         </li>
       
@@ -318,10 +300,6 @@
             <a href="http://rubydoc.info/gems/chatterbot">rdoc</a>
           
         </li>
-      
-
-    
-
       
 
     
@@ -361,153 +339,158 @@
     </h2>
 </div>
 
-<p>Here&#39;s a couple examples of working bots.</p>
+<p>Here’s a couple examples of working bots.</p>
 
-<h2 id="@echoes_bot">@echoes_bot</h2>
+<h2 id="echoesbot">@echoes_bot</h2>
 
 <p>This is a working bot. It responds to any mentions with the incoming
 text:</p>
 
 <blockquote class="twitter-tweet" lang="en"><p><a href="https://twitter.com/muffinista">@muffinista</a> hello there!</p>&mdash; Echo Echo (@echoes_bot) <a href="https://twitter.com/echoes_bot/status/515166110950256640">September 25, 2014</a></blockquote>
+<script async="" src="//platform.twitter.com/widgets.js" charset="utf-8"></script>
 
-<script async src="//platform.twitter.com/widgets.js" charset="utf-8"></script>
+<p>Here’s the code. This is right out of the git repo for chatterbot:</p>
 
-<p>Here&#39;s the code. This is right out of the git repo for chatterbot:</p>
-<div class="highlight"><pre><code class="language-text" data-lang="text">## This is a very simple working example of a bot you can build with
-## chatterbot. It looks for mentions of &#39;@echoes_bot&#39; (the twitter
+<p>```
+## This is a very simple working example of a bot you can build with
+## chatterbot. It looks for mentions of ‘@echoes_bot’ (the twitter
 ## handle the bot uses), and sends replies with the name switched to
-## the handle of the sending user
+## the handle of the sending user</p>
 
-#
+<p>#
 # require the dsl lib to include all the methods you see below.
 #
-require &#39;rubygems&#39;
-require &#39;chatterbot/dsl&#39;
+require ‘rubygems’
+require ‘chatterbot/dsl’</p>
 
-puts &quot;Loading echoes_bot.rb&quot;
+<p>puts “Loading echoes_bot.rb”</p>
 
+<h1 id="section">#</h1>
+<p>## If I wanted to exclude some terms from triggering this bot, I would list them here.
+## For now, we’ll block URLs to keep this from being a source of spam
 ##
-## If I wanted to exclude some terms from triggering this bot, I would list them here.
-## For now, we&#39;ll block URLs to keep this from being a source of spam
-##
-exclude &quot;http://&quot;
+exclude “http://”</p>
 
-blacklist &quot;mean_user, private_user&quot;
+<p>blacklist “mean_user, private_user”</p>
 
-puts &quot;checking for replies to me&quot;
+<p>puts “checking for replies to me”
 replies do |tweet|
   # replace the incoming username with #USER#, which will be replaced
   # with the handle of the user who tweeted us by the
   # replace_variables helper
-  src = tweet.text.gsub(/@echoes_bot/, &quot;#USER#&quot;)  
+  src = tweet.text.gsub(/@echoes_bot/, “#USER#”)  </p>
 
-  # send it back!
+<p># send it back!
   reply src, tweet
 end
-</code></pre></div>
-<h2 id="@spacejamcheck">@SpaceJamCheck</h2>
+```</p>
+
+<h2 id="spacejamcheck">@SpaceJamCheck</h2>
 
 <p>This is another working bot. It checks the website for the movie Space
 Jam to see if it is still online (it does this by using the spacejam
 gem), and tweets the results of that check.</p>
-<div class="highlight"><pre><code class="language-text" data-lang="text">#!/usr/bin/env ruby
 
-require &#39;rubygems&#39;
-require &#39;bundler/setup&#39;
+<p>```
+#!/usr/bin/env ruby</p>
 
-require &#39;chatterbot/dsl&#39;
-require &#39;spacejam&#39;
+<p>require ‘rubygems’
+require ‘bundler/setup’</p>
 
-#
+<p>require ‘chatterbot/dsl’
+require ‘spacejam’</p>
+
+<p>#
 # this is the script for the twitter bot SpaceJamCheck
 # generated on 2013-11-04 16:24:46 -0500
-#
+#</p>
 
-consumer_key &#39;key&#39;
-consumer_secret &#39;secret&#39;
+<p>consumer_key ‘key’
+consumer_secret ‘secret’</p>
 
-secret &#39;secret&#39;
-token &#39;token&#39;
+<p>secret ‘secret’
+token ‘token’</p>
 
+<p>check_url = “http://www2.warnerbros.com/spacejam/movie/jam.htm”
+check_string = “<title>Space Jam</title>”</p>
 
-check_url = &quot;http://www2.warnerbros.com/spacejam/movie/jam.htm&quot;
-check_string = &quot;&lt;title&gt;Space Jam&lt;/title&gt;&quot;
+<p>uptime_messages = [
+                   “Hooray! Space Jam is still online!”,
+                   “It’s #{Time.now.year} and the Space Jam website is still online”,
+                   “In case you were worried, Space Jam is still online”,
+                   “Looks like the Space Jam website is still there”,
+                   “Yes”,
+                   “Yep”,
+                   “Still Kickin”,
+                   “The Space Jam website is still online”,
+                   “Still Online”
+                  ]</p>
 
-uptime_messages = [
-                   &quot;Hooray! Space Jam is still online!&quot;,
-                   &quot;It&#39;s #{Time.now.year} and the Space Jam website is still online&quot;,
-                   &quot;In case you were worried, Space Jam is still online&quot;,
-                   &quot;Looks like the Space Jam website is still there&quot;,
-                   &quot;Yes&quot;,
-                   &quot;Yep&quot;,
-                   &quot;Still Kickin&quot;,
-                   &quot;The Space Jam website is still online&quot;,
-                   &quot;Still Online&quot;
-                  ]
+<p>downtime_messages = [
+                     “Hmm, looks like Space Jam isn’t online. Hopefully it’s a fluke ;(“
+                    ]</p>
 
-downtime_messages = [
-                     &quot;Hmm, looks like Space Jam isn&#39;t online. Hopefully it&#39;s a fluke ;(&quot;
-                    ]
+<p>x = Spacejam::HTTPCheck.new(url:check_url, body:check_string)</p>
 
-
-x = Spacejam::HTTPCheck.new(url:check_url, body:check_string)
-
-# pick a random tweet according to the website status
-result = if x.online?
+<h1 id="pick-a-random-tweet-according-to-the-website-status">pick a random tweet according to the website status</h1>
+<p>result = if x.online?
   uptime_messages
 else
   downtime_messages
-end.sample
+end.sample</p>
 
-# add a timestamp. this helps to prevent duplicate tweet issues
-result &lt;&lt; &quot; (#{Time.now.utc})&quot;
+<h1 id="add-a-timestamp-this-helps-to-prevent-duplicate-tweet-issues">add a timestamp. this helps to prevent duplicate tweet issues</h1>
+<p>result « ” (#{Time.now.utc})”</p>
 
-# tweet it out!
-tweet result
-</code></pre></div>
+<h1 id="tweet-it-out">tweet it out!</h1>
+<p>tweet result
+```</p>
+
 <h2 id="streaming-bot">Streaming Bot</h2>
-<div class="highlight"><pre><code class="language-text" data-lang="text">#!/usr/bin/env ruby
 
-## This is a very simple working example of a bot using the streaming
-## API. It&#39;s basically a copy of echoes_bot.rb, just using streaming.
+<p>```
+#!/usr/bin/env ruby</p>
 
-#
+<h2 id="this-is-a-very-simple-working-example-of-a-bot-using-the-streaming">This is a very simple working example of a bot using the streaming</h2>
+<p>## API. It’s basically a copy of echoes_bot.rb, just using streaming.</p>
+
+<p>#
 # require the dsl lib to include all the methods you see below.
 #
-require &#39;rubygems&#39;
-require &#39;chatterbot/dsl&#39;
+require ‘rubygems’
+require ‘chatterbot/dsl’</p>
 
-consumer_secret &#39;foo&#39;
-secret &#39;bar&#39;
-token &#39;biz&#39;
-consumer_key &#39;bam&#39;
+<p>consumer_secret ‘foo’
+secret ‘bar’
+token ‘biz’
+consumer_key ‘bam’</p>
 
+<p>puts “Loading echoes_bot.rb using the streaming API”</p>
 
-puts &quot;Loading echoes_bot.rb using the streaming API&quot;
+<p>exclude “http://”, “https://”</p>
 
-exclude &quot;http://&quot;, &quot;https://&quot;
+<p>blacklist “mean_user, private_user”</p>
 
-blacklist &quot;mean_user, private_user&quot;
-
-streaming do
+<p>streaming do
   favorited do |user, tweet|
-    reply &quot;@#{user.screen_name} thanks for the fave!&quot;, tweet
-  end
+    reply “@#{user.screen_name} thanks for the fave!”, tweet
+  end</p>
 
-  followed do |user|
-    tweet &quot;@#{user.screen_name} just followed me!&quot;
+<p>followed do |user|
+    tweet “@#{user.screen_name} just followed me!”
     follow user
-  end
+  end</p>
 
-  replies do |tweet|
-    favorite tweet
+<p>replies do |tweet|
+    favorite tweet</p>
 
-    puts &quot;It&#39;s a tweet!&quot;
-    src = tweet.text.gsub(/@echoes_bot/, &quot;#USER#&quot;)  
-    reply src, tweet
-  end
-end
-</code></pre></div>
+<pre><code>puts "It's a tweet!"
+src = tweet.text.gsub(/@echoes_bot/, "#USER#")  
+reply src, tweet   end end
+</code></pre>
+
+<p>```</p>
+
 
                     </div>
                 
@@ -515,7 +498,9 @@ end
 
             <div class=row-fluid>
                 <div id=footer class=span12>
-                    Documentation for <a href="https://github.com/muffinista/chatterbot">chatterbot</a>
+                    <!--
+Documentation for <a href="https://github.com/muffinista/chatterbot">chatterbot</a>
+-->
 
                 </div>
             </div>

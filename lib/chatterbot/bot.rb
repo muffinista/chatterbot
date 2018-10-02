@@ -5,7 +5,6 @@ module Chatterbot
   # primary Bot object, includes all the other modules
   class Bot
     include Utils
-    include Streaming
     include Blocklist
     include Safelist
     include Config
@@ -26,9 +25,6 @@ module Chatterbot
     # handlers that can use the REST API
     HANDLER_CALLS = [:direct_messages, :home_timeline, :replies, :search]
 
-    # handlers that require the Streaming API
-    STREAMING_ONLY_HANDLERS = [:favorited, :followed, :deleted]
-    
     #
     # Create a new bot. No options for now.
     def initialize(params={})
@@ -46,7 +42,7 @@ module Chatterbot
 
       at_exit do
         if !@handlers.empty? && @run_count <= 0 && skip_run? != true
-          run_or_stream
+          run!
         end
         
         raise $! if $!
@@ -58,58 +54,6 @@ module Chatterbot
       @screen_name ||= client.settings.screen_name
     end
 
-    
-    #
-    # determine the right API to use and run the bot
-    #
-    def run_or_stream
-      @run_count += 1
-      if streaming?
-        stream!
-      else
-        run!
-      end
-    end
-
-    #
-    # run the bot with the Streaming API
-    #
-    def stream!
-      before_run
-
-      #
-      # figure out how we want to call streaming client
-      #
-      if @handlers[:search]
-        method = :filter
-        args = streamify_search_options(@handlers[:search].opts)
-      else
-        method = :user
-        args = {
-          stall_warnings: "true"
-        }
-      end
-
-      streaming_client.send(method, args) do |object|
-        handle_streaming_object(object)
-      end
-      after_run
-    end
-
-    #
-    # the REST API and Streaming API have a slightly different format.
-    # tweak our search handler to switch from REST to Streaming
-    #
-    def streamify_search_options(opts)
-      if opts.is_a?(String)
-        { track: opts }
-      elsif opts.is_a?(Array)
-        { track: opts.join(", ") }
-      else
-        opts
-      end
-    end
-    
     #
     # run the bot with the REST API
     #
@@ -137,24 +81,17 @@ module Chatterbot
     end
 
     def call_api_immediately?
-      !streaming?
+      true
     end
     
     def register_handler(method, opts = nil, &block)
       # @todo raise error if method already defined
       @handlers[method] = Handler.new(opts, &block)
 
-      if STREAMING_ONLY_HANDLERS.include?(method)
-        puts "Forcing usage of Streaming API to support #{method} calls"
-        self.streaming = true
-      elsif call_api_immediately?
-        @run_count += 1
-        h = @handlers[method]
-        self.send(method, *(h.opts)) do |obj|
-          h.call(obj)
-        end
+      h = @handlers[method]
+      self.send(method, *(h.opts)) do |obj|
+        h.call(obj)
       end
-     
     end
   end
 end
