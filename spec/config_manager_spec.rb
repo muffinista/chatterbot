@@ -1,11 +1,16 @@
 require File.expand_path(File.dirname(__FILE__) + '/spec_helper')
 require 'tempfile'
+require 'tmpdir'
+
 
 describe "Chatterbot::ConfigManager" do
   before(:each) do
-    @tmp_config_dest = "/tmp/bot.yml"
+    tempdir = Dir.tmpdir
+
+    @tmp_config_dest = File.join(tempdir, 'bot.yml')
     @config = Chatterbot::ConfigManager.new(@tmp_config_dest, {:consumer_key => "bar"})
   end
+
   after(:each) do
     if File.exist?(@tmp_config_dest)
       File.unlink(@tmp_config_dest)
@@ -15,10 +20,6 @@ describe "Chatterbot::ConfigManager" do
   describe "delete" do
     it "deletes a key" do
       expect(@config.delete(:baz)).to be_nil
-    end
-
-    it "works with missing key" do
-
     end
 
     it "retains read-only data" do
