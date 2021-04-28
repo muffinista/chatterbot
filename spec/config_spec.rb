@@ -1,12 +1,15 @@
 require File.expand_path(File.dirname(__FILE__) + '/spec_helper')
 require 'tempfile'
+require 'tmpdir'
 
 describe "Chatterbot::Config" do
   before(:each) do
     @bot = Chatterbot::Bot.new
-    @tmp_config_dest = "/tmp/bot.yml"
+    tempdir = Dir.tmpdir
+    @tmp_config_dest = File.join(tempdir, 'bot.yml')
     allow(@bot).to receive(:config_file).and_return(@tmp_config_dest)
   end
+
   after(:each) do
     if File.exist?(@tmp_config_dest)
       File.unlink(@tmp_config_dest)
