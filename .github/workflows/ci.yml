@@ -1,19 +1,14 @@
+---
 name: Run tests
-on: push
+on: [push, pull_request]
 jobs:
   build:
-    runs-on: ${{ matrix.os }}
-    strategy:
-      matrix:
-        os: [ubuntu-latest]
+    runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
-      - name: Set up Ruby
-        uses: ruby/setup-ruby@v1
+      - uses: ruby/setup-ruby@v1
         with:
-          # Not needed with a .ruby-version file
           ruby-version: 2.7
-          # runs 'bundle install' and caches installed gems automatically
           bundler-cache: true
-    - name: rspec
-      run: bundle exec rake
+      - name: rspec
+        run: bundle exec rake
