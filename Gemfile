@@ -13,8 +13,8 @@ end
 
 
 group :test do
-  gem 'rspec', '~> 3.5.0'
-  gem 'rspec-mocks', '~> 3.5.0'
+  gem 'rspec', '~> 3.10.0'
+  gem 'rspec-mocks', '~> 3.10.0'
   gem 'simplecov', '>= 0'
   gem 'observr', '>= 0'
 end
