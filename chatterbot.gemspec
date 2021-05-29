@@ -29,8 +29,14 @@ Gem::Specification.new do |s|
   s.add_runtime_dependency(%q<twitter>, ["~> 7"])
   s.add_runtime_dependency(%q<launchy>, [">= 2.4.2"])
   s.add_runtime_dependency(%q<colorize>, [">= 0.7.3"])
-  s.add_runtime_dependency(%q<activesupport>, [">= 5.0.0"])
   
   s.add_development_dependency 'bundler', '~> 2.0'
+
+
+  s.post_install_message = %q{This version of chatterbot removes
+activesupport as a dependency -- if you are using it, you might need
+to install it separately!
+
+}
 end
 
