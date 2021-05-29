@@ -23,14 +23,20 @@ Gem::Specification.new do |s|
   s.require_paths = ["lib"]
   s.licenses = ["MIT"]
 
-  # load activesupport but check ruby version along the way
-  s.extensions << 'ext/mkrf_conf.rb'
+  s.required_ruby_version = '>= 2.2'
   
   s.add_runtime_dependency(%q<oauth>, ["~> 0.5.6"])
   s.add_runtime_dependency(%q<twitter>, ["~> 7"])
   s.add_runtime_dependency(%q<launchy>, [">= 2.4.2"])
   s.add_runtime_dependency(%q<colorize>, [">= 0.7.3"])
-
+  
   s.add_development_dependency 'bundler', '~> 2.0'
+
+
+  s.post_install_message = %q{This version of chatterbot removes
+activesupport as a dependency -- if you are using it, you might need
+to install it separately!
+
+}
 end
 
