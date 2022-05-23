@@ -341,7 +341,7 @@
 
 <p>Here’s a couple examples of working bots.</p>
 
-<h2 id="echoesbot">@echoes_bot</h2>
+<h2 id="echoes_bot">@echoes_bot</h2>
 
 <p>This is a working bot. It responds to any mentions with the incoming
 text:</p>
@@ -351,39 +351,38 @@ text:</p>
 
 <p>Here’s the code. This is right out of the git repo for chatterbot:</p>
 
-<p>```
-## This is a very simple working example of a bot you can build with
-## chatterbot. It looks for mentions of ‘@echoes_bot’ (the twitter
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>## This is a very simple working example of a bot you can build with
+## chatterbot. It looks for mentions of '@echoes_bot' (the twitter
 ## handle the bot uses), and sends replies with the name switched to
-## the handle of the sending user</p>
+## the handle of the sending user
 
-<p>#
+#
 # require the dsl lib to include all the methods you see below.
 #
-require ‘rubygems’
-require ‘chatterbot/dsl’</p>
+require 'rubygems'
+require 'chatterbot/dsl'
 
-<p>puts “Loading echoes_bot.rb”</p>
+puts "Loading echoes_bot.rb"
 
-<h1 id="section">#</h1>
-<p>## If I wanted to exclude some terms from triggering this bot, I would list them here.
-## For now, we’ll block URLs to keep this from being a source of spam
 ##
-exclude “http://”</p>
+## If I wanted to exclude some terms from triggering this bot, I would list them here.
+## For now, we'll block URLs to keep this from being a source of spam
+##
+exclude "http://"
 
-<p>blacklist “mean_user, private_user”</p>
+blacklist "mean_user, private_user"
 
-<p>puts “checking for replies to me”
+puts "checking for replies to me"
 replies do |tweet|
   # replace the incoming username with #USER#, which will be replaced
   # with the handle of the user who tweeted us by the
   # replace_variables helper
-  src = tweet.text.gsub(/@echoes_bot/, “#USER#”)  </p>
+  src = tweet.text.gsub(/@echoes_bot/, "#USER#")  
 
-<p># send it back!
+  # send it back!
   reply src, tweet
 end
-```</p>
+</code></pre></div></div>
 
 <h2 id="spacejamcheck">@SpaceJamCheck</h2>
 
@@ -391,105 +390,62 @@ end
 Jam to see if it is still online (it does this by using the spacejam
 gem), and tweets the results of that check.</p>
 
-<p>```
-#!/usr/bin/env ruby</p>
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>#!/usr/bin/env ruby
 
-<p>require ‘rubygems’
-require ‘bundler/setup’</p>
+require 'rubygems'
+require 'bundler/setup'
 
-<p>require ‘chatterbot/dsl’
-require ‘spacejam’</p>
+require 'chatterbot/dsl'
+require 'spacejam'
 
-<p>#
+#
 # this is the script for the twitter bot SpaceJamCheck
 # generated on 2013-11-04 16:24:46 -0500
-#</p>
+#
 
-<p>consumer_key ‘key’
-consumer_secret ‘secret’</p>
+consumer_key 'key'
+consumer_secret 'secret'
 
-<p>secret ‘secret’
-token ‘token’</p>
+secret 'secret'
+token 'token'
 
-<p>check_url = “http://www2.warnerbros.com/spacejam/movie/jam.htm”
-check_string = “<title>Space Jam</title>”</p>
 
-<p>uptime_messages = [
-                   “Hooray! Space Jam is still online!”,
-                   “It’s #{Time.now.year} and the Space Jam website is still online”,
-                   “In case you were worried, Space Jam is still online”,
-                   “Looks like the Space Jam website is still there”,
-                   “Yes”,
-                   “Yep”,
-                   “Still Kickin”,
-                   “The Space Jam website is still online”,
-                   “Still Online”
-                  ]</p>
+check_url = "http://www2.warnerbros.com/spacejam/movie/jam.htm"
+check_string = "&lt;title&gt;Space Jam&lt;/title&gt;"
 
-<p>downtime_messages = [
-                     “Hmm, looks like Space Jam isn’t online. Hopefully it’s a fluke ;(“
-                    ]</p>
+uptime_messages = [
+                   "Hooray! Space Jam is still online!",
+                   "It's #{Time.now.year} and the Space Jam website is still online",
+                   "In case you were worried, Space Jam is still online",
+                   "Looks like the Space Jam website is still there",
+                   "Yes",
+                   "Yep",
+                   "Still Kickin",
+                   "The Space Jam website is still online",
+                   "Still Online"
+                  ]
 
-<p>x = Spacejam::HTTPCheck.new(url:check_url, body:check_string)</p>
+downtime_messages = [
+                     "Hmm, looks like Space Jam isn't online. Hopefully it's a fluke ;("
+                    ]
 
-<h1 id="pick-a-random-tweet-according-to-the-website-status">pick a random tweet according to the website status</h1>
-<p>result = if x.online?
+
+x = Spacejam::HTTPCheck.new(url:check_url, body:check_string)
+
+# pick a random tweet according to the website status
+result = if x.online?
   uptime_messages
 else
   downtime_messages
-end.sample</p>
+end.sample
 
-<h1 id="add-a-timestamp-this-helps-to-prevent-duplicate-tweet-issues">add a timestamp. this helps to prevent duplicate tweet issues</h1>
-<p>result « ” (#{Time.now.utc})”</p>
+# add a timestamp. this helps to prevent duplicate tweet issues
+result &lt;&lt; " (#{Time.now.utc})"
 
-<h1 id="tweet-it-out">tweet it out!</h1>
-<p>tweet result
-```</p>
+# tweet it out!
+tweet result
+</code></pre></div></div>
 
-<h2 id="streaming-bot">Streaming Bot</h2>
-
-<p>```
-#!/usr/bin/env ruby</p>
-
-<h2 id="this-is-a-very-simple-working-example-of-a-bot-using-the-streaming">This is a very simple working example of a bot using the streaming</h2>
-<p>## API. It’s basically a copy of echoes_bot.rb, just using streaming.</p>
-
-<p>#
-# require the dsl lib to include all the methods you see below.
-#
-require ‘rubygems’
-require ‘chatterbot/dsl’</p>
-
-<p>consumer_secret ‘foo’
-secret ‘bar’
-token ‘biz’
-consumer_key ‘bam’</p>
-
-<p>puts “Loading echoes_bot.rb using the streaming API”</p>
-
-<p>exclude “http://”, “https://”</p>
-
-<p>blacklist “mean_user, private_user”</p>
-
-<p>streaming do
-  favorited do |user, tweet|
-    reply “@#{user.screen_name} thanks for the fave!”, tweet
-  end</p>
-
-<p>followed do |user|
-    tweet “@#{user.screen_name} just followed me!”
-    follow user
-  end</p>
-
-<p>replies do |tweet|
-    favorite tweet</p>
-
-<pre><code>puts "It's a tweet!"
-src = tweet.text.gsub(/@echoes_bot/, "#USER#")  
-reply src, tweet   end end
-</code></pre>
-
-<p>```</p>
 
 
                     </div>

@@ -348,40 +348,34 @@
 <h2 id="cron">Cron</h2>
 <p>Run it via cron.  Here’s an example of running a bot every two minutes</p>
 
-<pre><code>*/2 * * * * . ~/.bash_profile; cd /path/to/bot/;  ./bot.rb
-</code></pre>
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>*/2 * * * * . ~/.bash_profile; cd /path/to/bot/;  ./bot.rb
+</code></pre></div></div>
 
 <h2 id="looping">Looping</h2>
 <p>Run it as a background process.  Just put the guts of your bot in a loop like this:</p>
 
-<p>```rb
-loop do
-  search “twitter” do |tweet|
-    # here you could do something with a tweet
-    # if you want to retweet
-    retweet(tweet[:id])
-  end</p>
+<div class="language-rb highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kp">loop</span> <span class="k">do</span>
+  <span class="n">search</span> <span class="s2">"twitter"</span> <span class="k">do</span> <span class="o">|</span><span class="n">tweet</span><span class="o">|</span>
+    <span class="c1"># here you could do something with a tweet</span>
+    <span class="c1"># if you want to retweet</span>
+    <span class="n">retweet</span><span class="p">(</span><span class="n">tweet</span><span class="p">[</span><span class="ss">:id</span><span class="p">])</span>
+  <span class="k">end</span>
 
-<p>replies do |tweet|
-    # do stuff
-  end</p>
+  <span class="n">replies</span> <span class="k">do</span> <span class="o">|</span><span class="n">tweet</span><span class="o">|</span>
+    <span class="c1"># do stuff</span>
+  <span class="k">end</span>
 
-<p># explicitly update our config
-  update_config</p>
+  <span class="c1"># explicitly update our config</span>
+  <span class="n">update_config</span>
 
-<p>sleep 60
-end
-```</p>
+  <span class="nb">sleep</span> <span class="mi">60</span>
+<span class="k">end</span>
+</code></pre></div></div>
 
-<p><strong>NOTE:</strong> You need to call <code>update_config</code> to update the last tweet your script
+<p><strong>NOTE:</strong> You need to call <code class="language-plaintext highlighter-rouge">update_config</code> to update the last tweet your script
 has processed – if you don’t have this call, you will get duplicate
 tweets.</p>
 
-<h2 id="streaming">Streaming</h2>
-
-<p>Chatterbot has rough support for the Streaming API. If your bot can
-use it, it’s a great option, because you get your data immediately.
-You can read more about setting up a bot to use <a href="streaming.html">streaming</a>.</p>
 
 
                     </div>

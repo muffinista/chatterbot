@@ -381,13 +381,13 @@ your application. Later, we’ll remove the mobile number.</p>
 
 <p>Once you’ve registered your application, you have two options. You can
 create access tokens for your bot via Twitter, or you can run the
-<code>chatterbot-register</code> script. Running the script will take care of
+<code class="language-plaintext highlighter-rouge">chatterbot-register</code> script. Running the script will take care of
 creating a template file for your bot, but if you don’t want to do
 that, here are the steps for doing this manually:</p>
 
 <ul>
   <li>click the ‘Keys and Access Tokens’ link. You should see this: <img src="./images/04-access-token.png" /></li>
-  <li>click the ‘Create my access token’ link. </li>
+  <li>click the ‘Create my access token’ link.</li>
   <li>It might take a few minutes for Twitter to actually generate the
 token. You can refresh the page a couple times until they are there,
 then you can copy the keys into your application. There’s four keys
@@ -400,23 +400,14 @@ them:</li>
   following contents, pasting the credential values that you just
   generated:</p>
 
-<p><code>
-  ---
-  :consumer_secret: Consumer Secret (API Secret) GOES HERE
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>  ---
   :consumer_key: Consumer Key (API Key) GOES HERE
-  :token: Access Token GOES HERE
-  :secret: Access Token Secret GOES HERE
-</code></p>
+  :consumer_secret: Consumer Secret (API Secret) GOES HERE
+  :access_token: Access Token GOES HERE
+  :access_token_secret: Access Token Secret GOES HERE
+</code></pre></div></div>
 
-<p><strong>in the script</strong>. Add some lines to your bot script like this:
-<code>
-consumer_key 'Consumer Secret (API Secret)'
-consumer_secret 'Consumer Key (API Key)'
-secret 'Access Token Secret'
-token 'Access Token'
-</code></p>
-
-<p><strong>in a database</strong>. If you’ve setup chatterbot to use a database, you
+<p><strong>In a database</strong>. If you’ve setup chatterbot to use a database, you
   can store your configuration info in the <strong>config</strong> table.</p>
 
 <p><strong>NOTE</strong> At this point, you can remove the phone number from the bot

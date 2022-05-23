@@ -343,20 +343,20 @@
 
 <p><strong>search</strong> – You can use this to perform a search on Twitter:</p>
 
-<pre><code>search("'surely you must be joking'") do |tweet|
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>search("'surely you must be joking'") do |tweet|
   reply "#USER# I am serious, and don't call me Shirley!", tweet
 end
-</code></pre>
+</code></pre></div></div>
 
 <p>By default, Chatterbot keeps track of the last time you ran the bot,
 and it will only search for new tweets.</p>
 
 <p><strong>replies</strong> – Use this to check for replies and mentions:</p>
 
-<pre><code>replies do |tweet|
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>replies do |tweet|
   reply "#USER# Thanks for contacting me!", tweet
 end
-</code></pre>
+</code></pre></div></div>
 
 <p>Note that the string <strong>#USER#</strong> is automatically replaced with the
 username of the person who sent the original tweet. Also, Chatterbot
@@ -364,28 +364,27 @@ will only return tweets that were sent since the last run of the bot.</p>
 
 <p><strong>tweet</strong> – send a Tweet out for this bot:</p>
 
-<pre><code>tweet "I AM A BOT!!!"
-</code></pre>
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>tweet "I AM A BOT!!!"
+</code></pre></div></div>
 
 <p><strong>reply</strong> – reply to another tweet:</p>
 
-<pre><code>reply "THIS IS A REPLY TO #USER#!", original_tweet
-</code></pre>
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>reply "THIS IS A REPLY TO #USER#!", original_tweet
+</code></pre></div></div>
 
 <p><strong>retweet</strong> – Chatterbot can retweet tweets as well:</p>
 
-<p><code>rb
-  search "xyzzy" do |tweet|
-    retweet(tweet[:id])
-  end
-</code></p>
+<div class="language-rb highlighter-rouge"><div class="highlight"><pre class="highlight"><code>  <span class="n">search</span> <span class="s2">"xyzzy"</span> <span class="k">do</span> <span class="o">|</span><span class="n">tweet</span><span class="o">|</span>
+    <span class="n">retweet</span><span class="p">(</span><span class="n">tweet</span><span class="p">[</span><span class="ss">:id</span><span class="p">])</span>
+  <span class="k">end</span>
+</code></pre></div></div>
 
 <p><strong>blacklist</strong> – you can use this to specify a list of users you don’t
   want to interact with. If you put the following line at the top of
   your bot:</p>
 
-<pre><code>blacklist "user1, user2, user3"
-</code></pre>
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>blacklist "user1, user2, user3"
+</code></pre></div></div>
 
 <p>None of those users will trigger your bot if they come up in a
 search. However, if a user replies to one of your tweets or mentions
@@ -395,21 +394,21 @@ for replies.</p>
 <p><strong>exclude</strong> – similarly, you can specify a list of words/phrases
   which shouldn’t trigger your bot. If you use the following:</p>
 
-<pre><code>exclude "spam"
-</code></pre>
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>exclude "spam"
+</code></pre></div></div>
 
 <p>Any tweets or mentions with the word ‘spam’ in them will be ignored by
 the bot. If you wanted to ignore any tweets with links in them (a wise
 precaution if you want to avoid spreading spam), you could call:</p>
 
-<pre><code>exclude "http://"
-</code></pre>
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>exclude "http://"
+</code></pre></div></div>
 
 <p>The library actually comes with a pre-defined list of ‘bad words’
 which you can exclude by default by calling:</p>
 
-<pre><code>exclude bad_words
-</code></pre>
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>exclude bad_words
+</code></pre></div></div>
 
 <p>The word list is from Darius Kazemi’s
 <a href="https://github.com/dariusk/wordfilter">wordfilter</a>.</p>
