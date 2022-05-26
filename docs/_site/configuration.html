@@ -345,7 +345,7 @@ bunch of different methods of storing the config for your bot:</p>
 
 <ol>
   <li>Your credentials can be stored as variables in the script itself.
-If you generate a bot via <code>chatterbot-register</code>, the file will have
+If you generate a bot via <code class="language-plaintext highlighter-rouge">chatterbot-register</code>, the file will have
 these variables specified. However, if your bot source code is
 going to be public, you should NOT do this. Anyone who has your
 credentials can do nasty things with your Twitter account. Also, if
@@ -354,14 +354,14 @@ track some state information, and that data will be written to a
 YAML file.</li>
   <li>In a YAML file with the same name as the bot, so if you have
 botname.rb or a Botname class, store your config in botname.yaml.
-<code>chatterbot-register</code> will also create this file. If you are using
+<code class="language-plaintext highlighter-rouge">chatterbot-register</code> will also create this file. If you are using
 git or another source code control system, you should <strong>NOT</strong> store
 this file! It will be updated every time your bots run.</li>
-  <li>In a global config file at <code>/etc/chatterbot.yml</code> – values stored here
+  <li>In a global config file at <code class="language-plaintext highlighter-rouge">/etc/chatterbot.yml</code> – values stored here
 will apply to any bots you run.</li>
   <li>In another global config file specified in the environment variable
-<code>'chatterbot_config'</code>.</li>
-  <li>In a <code>global.yml</code> file in the same directory as your bot.  This
+<code class="language-plaintext highlighter-rouge">'chatterbot_config'</code>.</li>
+  <li>In a <code class="language-plaintext highlighter-rouge">global.yml</code> file in the same directory as your bot.  This
 gives you the ability to have a global configuration file, but keep
 it with your bots if desired.</li>
   <li>In a database.  You can read more about this on the <a href="advanced.html">Advanced

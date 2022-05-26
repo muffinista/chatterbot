@@ -343,26 +343,25 @@ data.</p>
 
 <p>A bot using chatterbot can be as simple as this:</p>
 
-<p>```
-exclude “http://”
-blacklist “mean_user, private_user”</p>
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>exclude "http://"
+blacklist "mean_user, private_user"
 
-<p>puts “checking my timeline”
+puts "checking my timeline"
 home_timeline do |tweet|
     # i like to favorite things
     favorite tweet
-end</p>
+end
 
-<p>puts “checking for replies to my tweets and mentions of me”
+puts "checking for replies to my tweets and mentions of me"
 replies do |tweet|
   text = tweet.text
-  puts “message received: #{text}”
-  src = text.gsub(/@echoes_bot/, “#USER#”)  </p>
+  puts "message received: #{text}"
+  src = text.gsub(/@echoes_bot/, "#USER#")  
 
-<p># send it back!
+  # send it back!
   reply src, tweet
 end
-```</p>
+</code></pre></div></div>
 
 <p>Or you can write a bot using more traditional ruby classes.</p>
 
@@ -377,19 +376,18 @@ walk you through process of getting a bot authorized with Twitter.</p>
   <li>Simple blacklistling system to limit your annoyance of users</li>
   <li>Avoid your bot making a fool of itself by ignoring tweets with
 certain bad words</li>
-  <li>Basic Streaming API support</li>
   <li>Optionally log tweets to the database for metrics and tracking purposes</li>
 </ul>
 
 <p>Chatterbot uses the the Twitter gem
 (https://github.com/sferik/twitter) to handle the underlying API
 calls. Any calls to the search/reply methods will return
-<code>Twitter::Tweet</code> objects.</p>
+<code class="language-plaintext highlighter-rouge">Twitter::Tweet</code> objects.</p>
 
 <h2 id="copyrightlicense">Copyright/License</h2>
 
-<p>Copyright (c) 2014 Colin Mitchell. Chatterbot is distributed under the
-WTFPL license.</p>
+<p>Copyright (c) 2018 Colin Mitchell. Chatterbot is distributed under the
+MIT licence – Please see LICENSE.txt for further details.</p>
 
 <p>http://muffinlabs.com</p>
 

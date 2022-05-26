@@ -346,12 +346,12 @@ Twitter.  That’s the easy part.</p>
 
 <h2 id="run-the-generator">Run the generator</h2>
 
-<p>Chatterbot comes with a script named <code>chatterbot-register</code> which will
+<p>Chatterbot comes with a script named <code class="language-plaintext highlighter-rouge">chatterbot-register</code> which will
 handle two tasks – it will authorize your bot with Twitter and it
 will generate a skeleton script, which you use to implement your
 actual bot.</p>
 
-<p>When you run <code>chatterbot-register</code> it will walk you through the
+<p>When you run <code class="language-plaintext highlighter-rouge">chatterbot-register</code> it will walk you through the
 authorization process. If you prefer, you can do this manually. If
 you’d like to learn more about it, you can read the
 <a href="setup.html">Authorizing your Bot</a> section.</p>
@@ -363,19 +363,19 @@ scripting commands which can handle almost everything you might need
 to do on Twitter.  You can get some ideas of things you can do on the
 <a href="examples.html">Examples</a> page.</p>
 
-<pre><code>require 'chatterbot/dsl'
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>require 'chatterbot/dsl'
 search("'surely you must be joking'") do |tweet|
   reply "@#{tweet_user(tweet)} I am serious, and don't call me Shirley!", tweet
 end
-</code></pre>
+</code></pre></div></div>
 
 <p>Or, you can create a bot object yourself, extend it if needed, and use it like so:</p>
 
-<pre><code>bot = Chatterbot::Bot.new
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>bot = Chatterbot::Bot.new
 bot.search("'surely you must be joking'") do |tweet|
  bot.reply "@#{tweet_user(tweet)} I am serious, and don't call me Shirley!", tweet
 end
-</code></pre>
+</code></pre></div></div>
 
 <p>That’s it!</p>
 
