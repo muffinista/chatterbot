@@ -1,6 +1,13 @@
 Chatterbot
 ===========
 
+Hi friends, I'm finally archiving this project as of March 2023. I really enjoyed using and maintaining Chatterbot, and I hope it was helpful for other people too. ❤️
+
+
+
+
+
+
 Hey! This is Chatterbot 2.0. There have been some breaking changes
 from older versions of the library, and it doesn't support MySQL
 anymore. If you are looking for the old version, 
